@@ -84,6 +84,9 @@ try
     " disable folding
     set nofoldenable
 
+     " Fix indentLine plugin for markdown backticks and invisible chars
+     let g:indentLine_fileTypeExclude = ['markdown']
+
     " Tab hotkeys
     map <leader>tb :tabprevious<cr>
     map <leader>tn :tabnext<cr>
