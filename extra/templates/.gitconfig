@@ -1,3 +1,19 @@
+[alias]
+    lo = log --oneline
+    lb = log --graph --pretty=tformat:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cd) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative -n 25
+    lg = log --all --graph --pretty=tformat:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cd) %C(bold blue)<%an>%Creset' --abbrev-commit --date=short -n 25
+    lgd = log --all --graph --pretty=tformat:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cd) %C(bold blue)(%an,%C(dim white) %ar)%Creset' --abbrev-commit --date=short -n 25
+    ll = log --all --stat --pretty=tformat:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cd) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative -n 15
+    compare = log --graph --decorate=short --color --format=format:'%C(bold blue)%h%C(reset) %C(red)%d%C(reset)%C(white)[%cr]%C(reset)  %x09%C(green)%an: %s %C(reset)'
+    l = log --all --graph --pretty=format:'%C(blue)%h%C(green)%d %s %C(dim white)(%aN, %ar)'
+    bl = log --graph --pretty=format:'%C(blue)%h%C(green)%d %s %C(dim white)(%aN, %ar)'
+    tree = log --all --graph --decorate=short --color --format=format:'%C(bold blue)%h%C(reset) %C(red)%d%C(reset)\n %C(white)[%cr]%C(reset)  %x09%C(green)%an: %s %C(reset)'
+    btree = log --graph --decorate=short --color --format=format:'%C(bold blue)%h%C(reset) %C(red)%d%C(reset)\n %C(white)[%cr]%C(reset)  %x09%C(green)%an: %s %C(reset)'
+    alias = config --get-regexp ^alias\\.
+
+[pull]
+    rebase = false
+
 [pager]
     diff = delta
     log = delta
@@ -20,5 +36,4 @@
     file-style = omit
     hunk-header-decoration-style = blue box
     hunk-header-file-style = red
-    hunk-header-line-number-style = "#067a00"
     hunk-header-style = file line-number syntax

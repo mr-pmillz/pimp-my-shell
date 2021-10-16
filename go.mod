@@ -9,5 +9,6 @@ require (
 	github.com/klauspost/cpuid/v2 v2.0.9
 	github.com/schollz/progressbar/v3 v3.8.3
 	github.com/tidwall/gjson v1.9.1
+	gopkg.in/ini.v1 v1.63.2
 	periph.io/x/periph v3.6.8+incompatible // indirect
 )
