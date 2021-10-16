@@ -1,5 +1,13 @@
 # Changelog
 
+## [v1.5.0](https://github.com/mr-pmillz/pimp-my-shell/tree/v1.5.0) (2021-10-16)
+
+[Full Changelog](https://github.com/mr-pmillz/pimp-my-shell/compare/v1.4.9...v1.5.0)
+
+**Implemented enhancements:**
+
+- Enhanced ini style config embedded file [\#1](https://github.com/mr-pmillz/pimp-my-shell/pull/1) ([mr-pmillz](https://github.com/mr-pmillz))
+
 ## [v1.4.9](https://github.com/mr-pmillz/pimp-my-shell/tree/v1.4.9) (2021-10-15)
 
 [Full Changelog](https://github.com/mr-pmillz/pimp-my-shell/compare/v1.4.8...v1.4.9)
