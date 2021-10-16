@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"pimp-my-shell/githubapi"
 	"pimp-my-shell/localio"
+	"gopkg.in/ini.v1"
 )
 
 //go:embed templates/*
@@ -130,14 +131,53 @@ func InstallExtraPackages(osType string, dirs *localio.Directories, packages *lo
 			}
 		}
 	}
+	if err := updateGitConfig(); err != nil {
+		return err
+	}
 
-	// update ~/.gitconfig with git-delta configurations
+	return nil
+}
+
+// updateGitConfig ...
+func updateGitConfig() error {
 	gitConfig, err := extraConfigs.ReadFile("templates/.gitconfig")
 	if err != nil {
 		return err
 	}
-	if err := localio.EmbedFileStringAppendToDest(gitConfig, "~/.gitconfig"); err != nil {
-		return err
+
+	exists, err := localio.Exists("~/.gitconfig")
+	if err == nil && !exists {
+		if err := localio.EmbedFileStringAppendToDest(gitConfig, "~/.gitconfig"); err != nil {
+			return err
+		}
+	} else if err == nil && exists {
+		gitConfigPath, err := localio.ResolveAbsPath("~/.gitconfig")
+		if err != nil {
+			return err
+		}
+
+		opts := ini.LoadOptions{PreserveSurroundedQuote: true}
+		embeddedConfig, err := ini.LoadSources(opts, gitConfig)
+		if err != nil {
+			return err
+		}
+
+		localGitConfig, err := ini.LoadSources(opts, gitConfigPath)
+		if err != nil {
+			return err
+		}
+
+		sections := embeddedConfig.Sections()
+		for _, section := range sections {
+			keys := section.Keys()
+			for _, key := range keys {
+				localGitConfig.Section(section.Name()).Key(key.Name()).SetValue(key.Value())
+			}
+		}
+
+		if err := localGitConfig.SaveToIndent(gitConfigPath, "    "); err != nil {
+			return err
+		}
 	}
 
 	return nil
