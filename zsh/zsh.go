@@ -3,9 +3,11 @@ package zsh
 import (
 	"embed"
 	"fmt"
+	"github.com/Masterminds/semver"
 	"io/ioutil"
 	"os"
 	"pimp-my-shell/localio"
+	"pimp-my-shell/osrelease"
 	"regexp"
 	"strings"
 )
@@ -53,6 +55,37 @@ func InstallOhMyZsh(osType string, dirs *localio.Directories) error {
 		if err = localio.DownloadFile(dest, ohMyZshInstallScriptURL); err != nil {
 			return err
 		}
+
+		switch osType {
+		case "linux":
+			if exists, err = localio.Exists(fmt.Sprintf("%s/.zshrc", dirs.HomeDir)); err == nil && exists {
+				// Kali linux weird zshrc constraint
+				osINFO, err := osrelease.Read()
+				if err != nil {
+					return err
+				}
+				if osINFO["ID"] == "kali" {
+					kaliZshConstraint, err := semver.NewConstraint(">= 2020.4")
+					if err != nil {
+						return err
+					}
+					currentOSReleaseID, err := semver.NewVersion(osINFO["VERSION"])
+					if err != nil {
+						return err
+					}
+					isKaliLaterThan20204 := kaliZshConstraint.Check(currentOSReleaseID)
+					if isKaliLaterThan20204 {
+						fmt.Println("Your Kali version >= 2020.4 has highly custom .zshrc. Moving to ~/.zshrc_pre_pimpmyshell.bak")
+						if err = os.Rename(fmt.Sprintf("%s/.zshrc", dirs.HomeDir), fmt.Sprintf("%s/.zshrc_pre_pimpmyshell.bak", dirs.HomeDir)); err != nil {
+							return err
+						}
+					}
+				}
+			}
+		default:
+			// Do Nothing
+		}
+		
 		if err = localio.RunCommandPipeOutput(fmt.Sprintf("cd %s && sh %s --keep-zshrc --unattended || true", dirs.HomeDir, dest)); err != nil {
 			return err
 		}

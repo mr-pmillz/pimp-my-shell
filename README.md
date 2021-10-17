@@ -2,6 +2,22 @@
 
 [![Donate](https://img.shields.io/badge/Donate-PayPal-yellow.svg)](https://www.paypal.com/donate?business=YR6C4WB5CDZZL&no_recurring=0&item_name=contribute+to+open+source&currency_code=USD)
 
+Table of Contents
+=================
+
+* [Pimp\-My\-Shell](#pimp-my-shell)
+  * [Install](#install)
+  * [Usage](#usage)
+  * [About](#about)
+  * [Resources](#resources)
+  * [Tmux Hotkeys](#tmux-hotkeys)
+  * [VIM Hotkeys](#vim-hotkeys)
+  * [Adjusting](#adjusting)
+  * [Custom Aliases](#custom-aliases)
+  * [Mac Fix Terminal bind keys](#mac-fix-terminal-bind-keys)
+  * [Enjoy](#enjoy)
+  
+
 ![pimp-my-shell.png](imgs/pimp-my-shell.png)
 
 ## Install
@@ -28,8 +44,7 @@ p10k configure
 
 ## About
 
-Pimp-My-Shell was created to auto configure various terminal apps that I've found myself having to manually setup many times.
-pimp-my-shell aims to automate this process.
+This project was designed to automate all the configurations that I typically set up for my terminal on Macos and Debian/Ubuntu Linux.
 
 - What it does
 
@@ -39,6 +54,7 @@ Currently, this will (if not already installed and setup)
 - install vim + awesome vim setup + plugins
 - install cheat + configure + community cheatsheets
 - fzf + bat for finding files fast + file preview CTRL+r search history stupendously
+- and various other dependencies
 
 ## Resources
 
