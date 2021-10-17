@@ -63,7 +63,6 @@ All these configurations can be modified to your needs
   - **Fonts**
     - [NerdFonts](https://github.com/ryanoasis/nerd-fonts)
       - In Iterm2 Preferences, Profiles -> Text -> Font
-      - ![imgs/enable-nerd-fonts-iterm2.png](imgs/enable-nerd-fonts-iterm2.png)
   - **CLI Tools**
     - [lsd](https://github.com/Peltoche/lsd)
     - [fzf](https://github.com/junegunn/fzf)
