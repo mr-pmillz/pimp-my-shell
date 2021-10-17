@@ -43,7 +43,7 @@ jobs:
       # Run Tests and Coverage
       - name: Run Tests and Coverage
         run: |
-          go test -v -coverprofile=coverage.out | tee test.out
+          go test -v -coverprofile=coverage.out ./... | tee test.out
           cat test.out | go-junit-report > coverage/report.xml
           gocov convert coverage.out | gocov-xml > coverage/report.xml
 
