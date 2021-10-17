@@ -1,6 +1,13 @@
 # Pimp-My-Shell
 
 [![Donate](https://img.shields.io/badge/Donate-PayPal-yellow.svg)](https://www.paypal.com/donate?business=YR6C4WB5CDZZL&no_recurring=0&item_name=contribute+to+open+source&currency_code=USD)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/cffe102aadbd4f4394754f0c259cc527)](https://www.codacy.com/gh/mr-pmillz/pimp-my-shell/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=mr-pmillz/pimp-my-shell&amp;utm_campaign=Badge_Grade)
+![GitHub all releases](https://img.shields.io/github/downloads/mr-pmillz/pimp-my-shell/total?style=social)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/mr-pmillz/pimp-my-shell/CI?style=plastic)
+![GitHub repo size](https://img.shields.io/github/repo-size/mr-pmillz/pimp-my-shell?style=plastic)
+![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/mr-pmillz/pimp-my-shell?style=plastic)
+![GitHub release (latest by date)](https://img.shields.io/github/v/release/mr-pmillz/pimp-my-shell?style=plastic)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/mr-pmillz/pimp-my-shell?style=plastic)
 
 Table of Contents
 =================
@@ -16,7 +23,7 @@ Table of Contents
   * [Custom Aliases](#custom-aliases)
   * [Mac Fix Terminal bind keys](#mac-fix-terminal-bind-keys)
   * [Enjoy](#enjoy)
-  
+
 
 ![pimp-my-shell.png](imgs/pimp-my-shell.png)
 
@@ -32,8 +39,10 @@ Download the latest release for your system from [Releases](https://github.com/m
 ```shell
 ./pimp-my-shell
 ```
+
 If you already have oh-my-zsh installed, don't worry! Your ~/.zshrc file will not be overridden install script
 The only thing that will change is your zsh theme and the following plugins will be merged into your existing plugins=() object
+
 - `git zsh-syntax-highlighting tmux zsh-autosuggestions virtualenv ansible docker docker-compose terraform helm kubectl fzf`
 
 After Installation, if you want to Customize Powerlevel10k zsh theme differently, run
@@ -46,9 +55,8 @@ p10k configure
 
 This project was designed to automate all the configurations that I typically set up for my terminal on Macos and Debian/Ubuntu Linux.
 
-- What it does
-
 Currently, this will (if not already installed and setup)
+
 - install oh-my-zsh + awesome plugins
 - install tmux + awesome mac config + plugins
 - install vim + awesome vim setup + plugins
@@ -182,7 +190,7 @@ alias fzfbat="fzf --preview 'bat --style numbers,changes --color=always {}' | he
 - because of a shortcut conflict with Mission Control/Spaces on MacOSX
 - make sure to uncheck these 2 options in
 - System Preferences -> Keyboard -> Shortcuts -> Mission Control, Move left/right a space
-![mac-bind-keys.png](imgs/mac-bind-keys.png)
+  ![mac-bind-keys.png](imgs/mac-bind-keys.png)
 
 
 ## Enjoy

@@ -1,6 +1,11 @@
 {
   "list": [
     {
+      "command": "python -c \"import pty;pty.spawn('\/bin\/bash')\"",
+      "name": "Upgrade Python2",
+      "type": "COMMAND"
+    },
+    {
       "command": "python3 -c \"import pty;pty.spawn('\/bin\/bash')\"",
       "name": "Upgrade Python3",
       "type": "COMMAND"
