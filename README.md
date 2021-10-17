@@ -8,6 +8,7 @@
 ![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/mr-pmillz/pimp-my-shell?style=plastic)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/mr-pmillz/pimp-my-shell?style=plastic)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/mr-pmillz/pimp-my-shell?style=plastic)
+[![Codacy Badge](https://app.codacy.com/project/badge/Coverage/cffe102aadbd4f4394754f0c259cc527)](https://www.codacy.com/gh/mr-pmillz/pimp-my-shell/dashboard?utm_source=github.com&utm_medium=referral&utm_content=mr-pmillz/pimp-my-shell&utm_campaign=Badge_Coverage)
 
 Table of Contents
 =================

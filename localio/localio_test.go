@@ -14,7 +14,7 @@ func TestResolveAbsPath(t *testing.T) {
 	type args struct {
 		path string
 	}
-	var tests = []struct {
+	tests := []struct {
 		name    string
 		args    args
 		want    string
@@ -41,7 +41,7 @@ func TestExists(t *testing.T) {
 	type args struct {
 		path string
 	}
-	var tests = []struct {
+	tests := []struct {
 		name    string
 		args    args
 		want    bool
