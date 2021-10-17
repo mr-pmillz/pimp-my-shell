@@ -9,46 +9,46 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      # Setup Go
-      - name: Setup Go
-        uses: actions/setup-go@v2
-        with:
-          go-version: 1.17.x
-
-      - name: Cache Go modules
-        uses: actions/cache@preview
-        with:
-          path: ~/go/pkg/mod
-          key: ${{ runner.os }}-build-${{ hashFiles('**/go.sum') }}
-          restore-keys: |
-            ${{ runner.OS }}-build-${{ env.cache-name }}-
-            ${{ runner.OS }}-build-
-            ${{ runner.OS }}-
-
-      # Install all the dependencies
-      - name: Install dependencies
-        run: |
-          go version
-          go install github.com/axw/gocov/gocov@latest
-          go install github.com/AlekSi/gocov-xml@latest
-          go get -u github.com/jstemmer/go-junit-report
-
-      # Run build of the application
-      - name: Run build
-        run: |
-          go env -w GOFLAGS=-mod=mod
-          go mod tidy
-          go build -v .
-
-      # Run Tests and Coverage
-      - name: Run Tests and Coverage
-        run: |
-          go test -v -coverprofile=coverage.out | tee test.out
-          cat test.out | go-junit-report > coverage/report.xml
-          gocov convert coverage.out | gocov-xml > coverage/report.xml
+#      # Setup Go
+#      - name: Setup Go
+#        uses: actions/setup-go@v2
+#        with:
+#          go-version: 1.17.x
+#
+#      - name: Cache Go modules
+#        uses: actions/cache@preview
+#        with:
+#          path: ~/go/pkg/mod
+#          key: ${{ runner.os }}-build-${{ hashFiles('**/go.sum') }}
+#          restore-keys: |
+#            ${{ runner.OS }}-build-${{ env.cache-name }}-
+#            ${{ runner.OS }}-build-
+#            ${{ runner.OS }}-
+#
+#      # Install all the dependencies
+#      - name: Install dependencies
+#        run: |
+#          go version
+#          go install github.com/axw/gocov/gocov@latest
+#          go install github.com/AlekSi/gocov-xml@latest
+#          go get -u github.com/jstemmer/go-junit-report
+#
+#      # Run build of the application
+#      - name: Run build
+#        run: |
+#          go env -w GOFLAGS=-mod=mod
+#          go mod tidy
+#          go build -v .
+#
+#      # Run Tests and Coverage
+#      - name: Run Tests and Coverage
+#        run: |
+#          go test -v -coverprofile=coverage.out | tee test.out
+#          cat test.out | go-junit-report > coverage/report.xml
+#          gocov convert coverage.out | gocov-xml > coverage/report.xml
 
       - name: Run codacy-coverage-reporter
         uses: codacy/codacy-coverage-reporter-action@v1
         with:
           project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-          coverage-reports: coverage/report.xml
+#          coverage-reports: coverage/report.xml
