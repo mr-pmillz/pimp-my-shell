@@ -107,9 +107,13 @@ func InstallExtraPackages(osType string, dirs *localio.Directories, packages *lo
 		if err := localio.RunCommandPipeOutput(fmt.Sprintf("mkdir -p %s/.local/bin", dirs.HomeDir)); err != nil {
 			return err
 		}
-		if err := localio.RunCommandPipeOutput(fmt.Sprintf("ln -s /usr/bin/batcat %s/.local/bin/bat", dirs.HomeDir)); err != nil {
-			return err
+
+		if exists, err := localio.Exists(fmt.Sprintf("%s/.local/bin/bat", dirs.HomeDir)); err == nil && !exists {
+			if err := localio.RunCommandPipeOutput(fmt.Sprintf("ln -sf /usr/bin/batcat %s/.local/bin/bat", dirs.HomeDir)); err != nil {
+				return err
+			}
 		}
+
 
 		// install fzf configuration
 		if exists, err := localio.Exists(fmt.Sprintf("%s/.fzf", dirs.HomeDir)); err == nil && !exists {

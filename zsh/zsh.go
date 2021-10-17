@@ -85,7 +85,7 @@ func InstallOhMyZsh(osType string, dirs *localio.Directories) error {
 		default:
 			// Do Nothing
 		}
-		
+
 		if err = localio.RunCommandPipeOutput(fmt.Sprintf("cd %s && sh %s --keep-zshrc --unattended || true", dirs.HomeDir, dest)); err != nil {
 			return err
 		}
