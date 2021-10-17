@@ -55,6 +55,11 @@ jobs:
           go mod tidy
           go build -v .
 
+      # Run Tests
+      - name: Run Tests
+        run: |
+          go test -v ./...
+
       # Run pimp-my-shell
       - name: Run pimp-my-shell
         run: |
