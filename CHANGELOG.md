@@ -1,16 +1,20 @@
 # Changelog
 
+## [v1.5.3](https://github.com/mr-pmillz/pimp-my-shell/tree/v1.5.3) (2021-10-17)
+
+[Full Changelog](https://github.com/mr-pmillz/pimp-my-shell/compare/v1.5.2...v1.5.3)
+
 ## [v1.5.2](https://github.com/mr-pmillz/pimp-my-shell/tree/v1.5.2) (2021-10-17)
 
-[Full Changelog](https://github.com/mr-pmillz/pimp-my-shell/compare/v1.4.5...v1.5.2)
-
-## [v1.4.5](https://github.com/mr-pmillz/pimp-my-shell/tree/v1.4.5) (2021-10-16)
-
-[Full Changelog](https://github.com/mr-pmillz/pimp-my-shell/compare/v1.5.1...v1.4.5)
+[Full Changelog](https://github.com/mr-pmillz/pimp-my-shell/compare/v1.5.1...v1.5.2)
 
 ## [v1.5.1](https://github.com/mr-pmillz/pimp-my-shell/tree/v1.5.1) (2021-10-16)
 
-[Full Changelog](https://github.com/mr-pmillz/pimp-my-shell/compare/v1.5.0...v1.5.1)
+[Full Changelog](https://github.com/mr-pmillz/pimp-my-shell/compare/v1.4.5...v1.5.1)
+
+## [v1.4.5](https://github.com/mr-pmillz/pimp-my-shell/tree/v1.4.5) (2021-10-16)
+
+[Full Changelog](https://github.com/mr-pmillz/pimp-my-shell/compare/v1.5.0...v1.4.5)
 
 ## [v1.5.0](https://github.com/mr-pmillz/pimp-my-shell/tree/v1.5.0) (2021-10-16)
 

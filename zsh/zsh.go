@@ -148,10 +148,12 @@ func InstallOhMyZsh(osType string, dirs *localio.Directories) error {
 			return err
 		}
 
-		zshExtraConfig, err := zshConfigs.ReadFile("templates/.zshrc_extra.zsh")
+		zshExtraConfigTemplate := fmt.Sprintf("templates/%s/.zshrc_extra.zsh", osType)
+		zshExtraConfig, err := zshConfigs.ReadFile(zshExtraConfigTemplate)
 		if err != nil {
 			return err
 		}
+
 		if err := localio.EmbedFileStringAppendToDest(zshExtraConfig, "~/.zshrc"); err != nil {
 			return err
 		}

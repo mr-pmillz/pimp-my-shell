@@ -114,7 +114,6 @@ func InstallExtraPackages(osType string, dirs *localio.Directories, packages *lo
 			}
 		}
 
-
 		// install fzf configuration
 		if exists, err := localio.Exists(fmt.Sprintf("%s/.fzf", dirs.HomeDir)); err == nil && !exists {
 			installString := fmt.Sprintf("git clone --depth 1 https://github.com/junegunn/fzf.git %s/.fzf && %s/.fzf/install --all", dirs.HomeDir, dirs.HomeDir)
