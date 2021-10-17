@@ -2,3 +2,8 @@
 pimp-my-shell
 .DS_STORE
 bin/*
+*.out
+*.cov
+*.html
+*.xml
+coverage/*

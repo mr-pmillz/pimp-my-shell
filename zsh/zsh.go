@@ -21,7 +21,7 @@ func updateZSHPlugins(dirs *localio.Directories) error {
 	if err != nil {
 		return err
 	}
-	newPlugins := []string{"git", "zsh-syntax-highlighting", "tmux", "zsh-autosuggestions", "virtualenv", "ansible", "docker", "docker-compose", "terraform", "kubectl", "helm", "fzf"}
+	newPlugins := []string{"git", "zsh-syntax-highlighting", "tmux", "golang", "zsh-autosuggestions", "virtualenv", "ansible", "docker", "docker-compose", "terraform", "kubectl", "helm", "fzf"}
 	currentlyInstalledPlugins := re.FindStringSubmatch(string(input))
 	//fmt.Printf("Plugins: %+v\n", currentlyInstalledPlugins[1])
 	installedPlugins := strings.Fields(currentlyInstalledPlugins[1])
