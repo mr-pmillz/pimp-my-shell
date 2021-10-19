@@ -9,6 +9,9 @@ import (
 func InstallNerdFontsLSD(osType string, dirs *localio.Directories, packages *localio.InstalledPackages) error {
 	switch osType {
 	case "darwin":
+		if !localio.CorrectOS("darwin") {
+			break
+		}
 		// brew tap homebrew/cask-fonts
 		if err := localio.BrewTap("homebrew/cask-fonts", packages); err != nil {
 			return err
@@ -18,6 +21,9 @@ func InstallNerdFontsLSD(osType string, dirs *localio.Directories, packages *loc
 			return err
 		}
 	case "linux":
+		if !localio.CorrectOS("linux") {
+			break
+		}
 		// install meslo nerd fonts
 		fontsDir := fmt.Sprintf("%s/.local/share/fonts", dirs.HomeDir)
 		if exists, err := localio.Exists(fmt.Sprintf("%s/%s", fontsDir, "MesloLGS NF Regular.ttf")); err == nil && !exists {

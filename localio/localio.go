@@ -15,6 +15,7 @@ import (
 	"os/exec"
 	"os/user"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"time"
 )
@@ -323,8 +324,20 @@ func Contains(s []string, str string) bool {
 	return false
 }
 
+// CorrectOS ...
+func CorrectOS(osType string) bool {
+	operatingSystem := runtime.GOOS
+	if operatingSystem == osType {
+		return true
+	}
+	return false
+}
+
 // BrewInstallProgram ...
 func BrewInstallProgram(brewName, binaryName string, packages *InstalledPackages) error {
+	if !CorrectOS("darwin") {
+		return nil
+	}
 	if _, exists := CommandExists(binaryName); exists && Contains(packages.BrewInstalledPackages.Names, brewName) {
 		return nil
 	}
@@ -338,6 +351,9 @@ func BrewInstallProgram(brewName, binaryName string, packages *InstalledPackages
 
 // BrewTap ...
 func BrewTap(brewTap string, packages *InstalledPackages) error {
+	if !CorrectOS("darwin") {
+		return nil
+	}
 	if Contains(packages.BrewInstalledPackages.Taps, brewTap) {
 		return nil
 	}
@@ -351,6 +367,9 @@ func BrewTap(brewTap string, packages *InstalledPackages) error {
 
 // BrewInstallCaskProgram ...
 func BrewInstallCaskProgram(brewName, brewFullName string, packages *InstalledPackages) error {
+	if !CorrectOS("darwin") {
+		return nil
+	}
 	if Contains(packages.BrewInstalledPackages.CaskFullNames, brewFullName) {
 		return nil
 	}
@@ -375,6 +394,9 @@ type AptInstalled struct {
 
 // NewAptInstalled ...
 func NewAptInstalled() (*AptInstalled, error) {
+	if !CorrectOS("linux") {
+		return nil, nil
+	}
 	var ai = &AptInstalled{}
 	// installed cli to array ["blah", "foot"]
 	cmd := "apt list --installed 2>/dev/null | cut -d / -f1"
@@ -395,6 +417,9 @@ func NewAptInstalled() (*AptInstalled, error) {
 
 // AptInstall ...
 func AptInstall(packages *InstalledPackages, aptName ...string) error {
+	if !CorrectOS("linux") {
+		return nil
+	}
 	var notInstalled []string
 	for _, name := range aptName {
 		if Contains(packages.AptInstalledPackages.Name, name) {
@@ -423,6 +448,9 @@ type BrewInstalled struct {
 
 // NewBrewInstalled ...
 func NewBrewInstalled() (*BrewInstalled, error) {
+	if !CorrectOS("darwin") {
+		return nil, nil
+	}
 	var brewInfo = &BrewInstalled{}
 	brewJSON, err := CmdExec("brew", "info", "--json=v2", "--installed")
 	if err != nil {

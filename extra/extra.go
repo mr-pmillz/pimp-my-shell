@@ -15,6 +15,9 @@ var extraConfigs embed.FS
 func InstallExtraPackages(osType string, dirs *localio.Directories, packages *localio.InstalledPackages) error {
 	switch osType {
 	case "darwin":
+		if !localio.CorrectOS("darwin") {
+			break
+		}
 		// install lsd
 		if err := localio.BrewInstallProgram("lsd", "lsd", packages); err != nil {
 			return err
@@ -80,6 +83,9 @@ func InstallExtraPackages(osType string, dirs *localio.Directories, packages *lo
 		}
 
 	case "linux":
+		if !localio.CorrectOS("linux") {
+			break
+		}
 		// install lsd
 		if _, exists := localio.CommandExists("lsd"); !exists {
 			lsdDebPackage, err := githubapi.DownloadLatestRelease(osType, dirs, "Peltoche", "lsd")

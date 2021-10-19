@@ -3,6 +3,8 @@ package localio
 import (
 	"fmt"
 	"os"
+	"os/user"
+	"reflect"
 	"testing"
 )
 
@@ -59,6 +61,385 @@ func TestExists(t *testing.T) {
 			}
 			if got != tt.want {
 				t.Errorf("Exists() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestBrewInstallProgram(t *testing.T) {
+	type args struct {
+		brewName   string
+		binaryName string
+		packages   *InstalledPackages
+	}
+
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{"Test BrewInstallProgram 1", args{brewName: "fzf", binaryName: "fzf", packages: &InstalledPackages{
+			AptInstalledPackages:  nil,
+			BrewInstalledPackages: &BrewInstalled{
+				Names: []string{"bat"}, CaskFullNames: []string{"bat"}, Taps: []string{"bat"},
+			},
+		}}, false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if err := BrewInstallProgram(tt.args.brewName, tt.args.binaryName, tt.args.packages); (err != nil) != tt.wantErr {
+				t.Errorf("BrewInstallProgram() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestAptInstall(t *testing.T) {
+	type args struct {
+		packages *InstalledPackages
+		aptName  []string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{"Test AptInstall 1", args{packages: &InstalledPackages{
+			AptInstalledPackages:  &AptInstalled{Name: []string{"bat"}},
+			BrewInstalledPackages: nil,
+			}, aptName: []string{"xclip"},
+		}, false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if err := AptInstall(tt.args.packages, tt.args.aptName...); (err != nil) != tt.wantErr {
+				t.Errorf("AptInstall() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestNewBrewInstalled(t *testing.T) {
+	tests := []struct {
+		name    string
+		want    *BrewInstalled
+		wantErr bool
+	}{
+		{"Test NewBrewInstalled 1", &BrewInstalled{
+			Names:         []string{"cowsay", "bat", "watch"},
+			CaskFullNames: []string{"font-meslo-lg-nerd-font"},
+			Taps:          []string{"homebrew/core", "homebrew/cask-fonts"},
+		}, false},
+	}
+		for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := NewBrewInstalled()
+			if (err != nil) != tt.wantErr {
+				t.Errorf("NewBrewInstalled() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if reflect.TypeOf(got) != reflect.TypeOf(&BrewInstalled{}) {
+				t.Errorf("NewBrewInstalled() = %v, want %v", got, &BrewInstalled{})
+			}
+		})
+	}
+}
+
+func TestNewAptInstalled(t *testing.T) {
+	tests := []struct {
+		name    string
+		want    *AptInstalled
+		wantErr bool
+	}{
+		{"Test NewAptInstalled 1", &AptInstalled{[]string{"python3-dev", "cowsay"}}, false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := NewAptInstalled()
+			if (err != nil) != tt.wantErr {
+				t.Errorf("NewAptInstalled() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if reflect.TypeOf(got) != reflect.TypeOf(&AptInstalled{}) {
+				t.Errorf("NewAptInstalled() = %v, want %v", got, &AptInstalled{})
+			}
+		})
+	}
+}
+func TestBrewInstallCaskProgram(t *testing.T) {
+	type args struct {
+		brewName     string
+		brewFullName string
+		packages     *InstalledPackages
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{"Test BrewInstallCaskProgram 1 that already exists", args{packages: &InstalledPackages{
+			AptInstalledPackages:  nil,
+			BrewInstalledPackages: &BrewInstalled{
+				Names: []string{"font-meslo-lg-nerd-font"}, CaskFullNames: []string{"font-meslo-lg-nerd-font"}, Taps: []string{"homebrew/core"},
+			},
+		},
+		brewFullName: "font-meslo-lg-nerd-font",
+		brewName: "font-meslo-lg-nerd-font",
+		}, false},
+		{"Test BrewInstallCaskProgram 2 that doesn't already exist", args{packages: &InstalledPackages{
+			AptInstalledPackages:  nil,
+			BrewInstalledPackages: &BrewInstalled{
+				Names: []string{"bat"}, CaskFullNames: []string{"bat"}, Taps: []string{"homebrew/core"},
+			},
+		},
+		brewFullName: "font-meslo-lg-nerd-font",
+		brewName: "font-meslo-lg-nerd-font",
+		}, false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if err := BrewInstallCaskProgram(tt.args.brewName, tt.args.brewFullName, tt.args.packages); (err != nil) != tt.wantErr {
+				t.Errorf("BrewInstallCaskProgram() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestBrewTap(t *testing.T) {
+	type args struct {
+		brewTap  string
+		packages *InstalledPackages
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{"Test BrewInstallCaskProgram 1 that doesn't already exist", args{packages: &InstalledPackages{
+			AptInstalledPackages:  nil,
+			BrewInstalledPackages: &BrewInstalled{
+				Names: []string{"bat"}, CaskFullNames: []string{"bat"}, Taps: []string{"homebrew/core"},
+			},
+		},
+			brewTap: "homebrew/cask-fonts",
+		}, false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if err := BrewTap(tt.args.brewTap, tt.args.packages); (err != nil) != tt.wantErr {
+				t.Errorf("BrewTap() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestContains(t *testing.T) {
+	type args struct {
+		s   []string
+		str string
+	}
+	tests := []struct {
+		name string
+		args args
+		want bool
+	}{
+		{name: "Test Contains 1", args: args{
+			s:   []string{"hello", "world"},
+			str: "foobar",
+		}, want: false},
+		{name: "Test Contains 2", args: args{
+			s:   []string{"hello", "world"},
+			str: "world",
+		}, want: true},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := Contains(tt.args.s, tt.args.str); got != tt.want {
+				t.Errorf("Contains() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestCommandExists(t *testing.T) {
+	type args struct {
+		cmd string
+	}
+	tests := []struct {
+		name  string
+		args  args
+		want  string
+		want1 bool
+	}{
+		{"Test CommandExists 1 Nonexistent command", args{cmd: "asdfasdfsdfsadf"}, "", false},
+		{"Test CommandExists 2 find command", args{cmd: "find"}, "/usr/bin/find", true},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, got1 := CommandExists(tt.args.cmd)
+			if got != tt.want {
+				t.Errorf("CommandExists() got = %v, want %v", got, tt.want)
+			}
+			if got1 != tt.want1 {
+				t.Errorf("CommandExists() got1 = %v, want %v", got1, tt.want1)
+			}
+		})
+	}
+}
+
+func TestRunCommandPipeOutput(t *testing.T) {
+	type args struct {
+		command string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{"Test RunCommandPipeOutput 1", args{command: "ls -la"}, false},
+		{"Test RunCommandPipeOutput 2", args{command: "asdfsdfsadfsdf"}, true},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if err := RunCommandPipeOutput(tt.args.command); (err != nil) != tt.wantErr {
+				t.Errorf("RunCommandPipeOutput() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestExecCMD(t *testing.T) {
+	username, err := user.Current()
+	if err != nil {
+		t.Errorf("can't get username: %v", err)
+	}
+	currentUsername := username.Username
+	type args struct {
+		command string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    string
+		wantErr bool
+	}{
+		{"Test ExecCMD 1", args{command: "whoami"}, currentUsername, false},
+		{"Test ExecCMD 2", args{command: "asdfsadfasdf"}, currentUsername, true},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := ExecCMD(tt.args.command)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("ExecCMD() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if reflect.TypeOf(got) != reflect.TypeOf("") {
+				t.Errorf("ExecCMD() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestDownloadFile(t *testing.T) {
+	type args struct {
+		dest string
+		url  string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{"Test DownloadFile 1", args{
+			dest: "pimp-my-shell-linux-amd64.gz",
+			url:  "https://github.com/mr-pmillz/pimp-my-shell/releases/download/v1.5.6/pimp-my-shell-linux-amd64.gz",
+		}, false},
+		{"Test DownloadFile 2 non-existent", args{
+			dest: "pimp-my-shell-linux-amd64.gz",
+			url:  "https://notarealwebsite.notreal.fake.com/fakefile.gz",
+		}, true},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if err := DownloadFile(tt.args.dest, tt.args.url); (err != nil) != tt.wantErr {
+				t.Errorf("DownloadFile() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestCopyStringToFile(t *testing.T) {
+	type args struct {
+		data string
+		dest string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{"Test CopyStringToFile 1", args{
+			data: "this is a test string to write to file",
+			dest: "testWriteStringFile.txt",
+		}, false},
+		{"Test CopyStringToFile 2 non-existent directory path", args{
+			data: "this is a test string to write to file",
+			dest: "/fake/path/that/definitely/doesnt/exists/i/hope/testWriteStringFile.txt",
+		}, true},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if err := CopyStringToFile(tt.args.data, tt.args.dest); (err != nil) != tt.wantErr {
+				t.Errorf("CopyStringToFile() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestCmdExec(t *testing.T) {
+	type args struct {
+		args []string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    string
+		wantErr bool
+	}{
+		{"Test CmdExec 1", args{args: []string{"ls", "-la"}}, "", false},
+		{"Test CmdExec 2", args{args: []string{"fakeCommandThatDoesntExist", "--foo", "--bar"}}, "", true},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := CmdExec(tt.args.args...)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("CmdExec() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if reflect.TypeOf(got) != reflect.TypeOf("") {
+				t.Errorf("CmdExec() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestRunCommands(t *testing.T) {
+	type args struct {
+		cmds []string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{"Test RunCommands 1", args{cmds: []string{"whoami", "ls -la"}}, false},
+		{"Test RunCommands 2", args{cmds: []string{"pwd", "uname -a"}}, false},
+		{"Test RunCommands 3", args{cmds: []string{"id", "python3 -c 'print(\"hello world\")'"}}, false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if err := RunCommands(tt.args.cmds); (err != nil) != tt.wantErr {
+				t.Errorf("RunCommands() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}
