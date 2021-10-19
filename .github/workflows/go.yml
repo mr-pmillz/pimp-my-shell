@@ -55,11 +55,6 @@ jobs:
           go mod tidy
           go build -v .
 
-      # Run Tests
-      - name: Run Tests
-        run: |
-          go test -v ./...
-
       # Run pimp-my-shell
       - name: Run pimp-my-shell
         run: |
@@ -165,9 +160,9 @@ jobs:
           body: ${{steps.github_release.outputs.changelog}}
           prerelease: ${{ contains(github.ref, '-rc') || contains(github.ref, '-b') || contains(github.ref, '-a') }}
           files: |
-            bin/linux/amd64/pimp-my-shell-linux-amd64.gz
-            bin/linux/arm64/pimp-my-shell-linux-arm64.gz
-            bin/darwin/amd64/pimp-my-shell-x86_64-apple-darwin_amd64.gz
-            bin/darwin/arm64/pimp-my-shell-x86_64-apple-darwin_arm64.gz
+            bin/linux/amd64/pimp-my-shell-${{ env.TAG }}-linux-amd64.gz
+            bin/linux/arm64/pimp-my-shell-${{ env.TAG }}-linux-arm64.gz
+            bin/darwin/amd64/pimp-my-shell-${{ env.TAG }}-x86_64-apple-darwin_amd64.gz
+            bin/darwin/arm64/pimp-my-shell-${{ env.TAG }}-x86_64-apple-darwin_arm64.gz
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

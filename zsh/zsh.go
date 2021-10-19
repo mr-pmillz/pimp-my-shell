@@ -58,6 +58,9 @@ func InstallOhMyZsh(osType string, dirs *localio.Directories) error {
 
 		switch osType {
 		case "linux":
+			if !localio.CorrectOS("linux") {
+				break
+			}
 			if exists, err = localio.Exists(fmt.Sprintf("%s/.zshrc", dirs.HomeDir)); err == nil && exists {
 				// Kali linux weird zshrc constraint
 				osINFO, err := osrelease.Read()

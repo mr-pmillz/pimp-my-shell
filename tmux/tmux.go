@@ -76,6 +76,9 @@ func StartTMUX() error {
 func InstallOhMyTmux(osType string, dirs *localio.Directories, packages *localio.InstalledPackages) error {
 	switch osType {
 	case "darwin":
+		if !localio.CorrectOS("darwin") {
+			break
+		}
 		if err := localio.BrewInstallProgram("tmux", "tmux", packages); err != nil {
 			return err
 		}
@@ -89,6 +92,9 @@ func InstallOhMyTmux(osType string, dirs *localio.Directories, packages *localio
 			return err
 		}
 	case "linux":
+		if !localio.CorrectOS("linux") {
+			break
+		}
 		if err := localio.AptInstall(packages, "tmux", "xclip"); err != nil {
 			return err
 		}

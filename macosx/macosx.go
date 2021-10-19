@@ -7,6 +7,9 @@ import (
 
 // InstallHomebrew if Not already installed
 func InstallHomebrew(dirs *localio.Directories) error {
+	if !localio.CorrectOS("darwin") {
+		return nil
+	}
 	if _, exists := localio.CommandExists("brew"); exists {
 		return nil
 	}

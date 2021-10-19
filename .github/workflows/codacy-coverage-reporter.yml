@@ -4,7 +4,11 @@ on: ["push"]
 
 jobs:
   codacy-coverage-reporter:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go-version: [1.17.x]
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
     name: codacy-coverage-reporter
     steps:
       - uses: actions/checkout@v2
@@ -13,7 +17,7 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@v2
         with:
-          go-version: 1.17.x
+          go-version: ${{ matrix.go-version }}
 
       - name: Cache Go modules
         uses: actions/cache@preview
@@ -44,11 +48,11 @@ jobs:
       - name: Run Tests and Coverage
         run: |
           go test -v -coverprofile=coverage.out ./... | tee test.out
-          cat test.out | go-junit-report > coverage/report.xml
-          gocov convert coverage.out | gocov-xml > coverage/report.xml
+          cat test.out | go-junit-report > coverage/${{ runner.OS }}-report.xml
+          gocov convert coverage.out | gocov-xml > coverage/${{ runner.OS }}-report.xml
 
       - name: Run codacy-coverage-reporter
         uses: codacy/codacy-coverage-reporter-action@v1
         with:
           project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-          coverage-reports: coverage/report.xml
+          coverage-reports: coverage/${{ runner.OS }}-report.xml

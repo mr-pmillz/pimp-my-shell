@@ -36,10 +36,16 @@ func generateCheatConfig(dirs *localio.Directories) (string, error) {
 func InstallCheat(osType string, dirs *localio.Directories, packages *localio.InstalledPackages) error {
 	switch osType {
 	case "darwin":
+		if !localio.CorrectOS("darwin") {
+			break
+		}
 		if err := localio.BrewInstallProgram("cheat", "cheat", packages); err != nil {
 			return err
 		}
 	case "linux":
+		if !localio.CorrectOS("linux") {
+			break
+		}
 		if _, exists := localio.CommandExists("cheat"); !exists {
 			fmt.Println("[+] Installing cheat")
 			if _, exists = localio.CommandExists("go"); !exists {

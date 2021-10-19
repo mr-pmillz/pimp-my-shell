@@ -115,6 +115,9 @@ func InstallVimAwesome(osType string, dirs *localio.Directories, packages *local
 
 	switch osType {
 	case "darwin":
+		if !localio.CorrectOS("darwin") {
+			break
+		}
 		// brew install macvim
 		if err := localio.BrewInstallProgram("macvim", "vim", packages); err != nil {
 			return err
@@ -138,6 +141,9 @@ func InstallVimAwesome(osType string, dirs *localio.Directories, packages *local
 			return err
 		}
 	case "linux":
+		if !localio.CorrectOS("linux") {
+			break
+		}
 		// add mono to apt repos. Different for debian / ubuntu
 		var packagesToInstall []string
 		switch {

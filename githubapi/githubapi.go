@@ -41,15 +41,19 @@ func getLatestReleasesFromGithubRepo(owner, repo string) (*ReleaseAssets, error)
 			r.LinuxAMDURL = releaseTypeURL
 			r.LinuxAMDFileName = path.Base(releaseTypeURL)
 		}
+		if strings.Contains(releaseTypeURL, "amd64") && strings.HasSuffix(releaseTypeURL, ".gz") && !strings.Contains(releaseTypeURL, "musl") && strings.Contains(releaseTypeURL, "linux") {
+			r.LinuxAMDURL = releaseTypeURL
+			r.LinuxAMDFileName = path.Base(releaseTypeURL)
+		}
 		if strings.Contains(releaseTypeURL, "arm64") && strings.HasSuffix(releaseTypeURL, ".deb") && !strings.Contains(releaseTypeURL, "musl") {
 			r.LinuxARMURL = releaseTypeURL
 			r.LinuxARMFileName = path.Base(releaseTypeURL)
 		}
-		if strings.Contains(releaseTypeURL, "x86_64") && strings.HasSuffix(releaseTypeURL, ".gz") && strings.Contains(releaseTypeURL, "darwin") {
+		if strings.Contains(releaseTypeURL, "x86_64") && strings.HasSuffix(releaseTypeURL, ".gz") && strings.Contains(releaseTypeURL, "darwin") && !strings.Contains(releaseTypeURL, "arm64") {
 			r.DarwinAMDURL = releaseTypeURL
 			r.DarwinAMDFileName = path.Base(releaseTypeURL)
 		}
-		if strings.Contains(releaseTypeURL, "arm64") && strings.HasSuffix(releaseTypeURL, ".gz") && strings.Contains(releaseTypeURL, "darwin") {
+		if strings.Contains(releaseTypeURL, "arm64") && strings.HasSuffix(releaseTypeURL, ".gz") && strings.Contains(releaseTypeURL, "darwin") && !strings.Contains(releaseTypeURL, "amd64") {
 			r.DarwinARMURL = releaseTypeURL
 			r.DarwinARMFileName = path.Base(releaseTypeURL)
 		}
