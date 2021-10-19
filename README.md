@@ -26,7 +26,7 @@ Table of Contents
   * [Enjoy](#enjoy)
 
 
-![pimp-my-shell.png](imgs/pimp-my-shell.png)
+![pimp-my-shell.png](https://github.com/mr-pmillz/pimp-my-shell/blob/master/imgs/pimp-my-shell.png?raw=true)
 
 ## Install
 
@@ -74,7 +74,7 @@ All these configurations can be modified to your needs
   - **Fonts**
     - [NerdFonts](https://github.com/ryanoasis/nerd-fonts)
       - In Iterm2 Preferences, Profiles -> Text -> Font
-      - ![imgs/enable-nerd-fonts-iterm2.png](imgs/enable-nerd-fonts-iterm2.png)
+      - ![enable-nerd-fonts-iterm2.png](https://github.com/mr-pmillz/pimp-my-shell/blob/master/imgs/enable-nerd-fonts-iterm2.png?raw=true)
   - **CLI Tools**
     - [lsd](https://github.com/Peltoche/lsd)
     - [fzf](https://github.com/junegunn/fzf)
@@ -191,7 +191,7 @@ alias fzfbat="fzf --preview 'bat --style numbers,changes --color=always {}' | he
 - because of a shortcut conflict with Mission Control/Spaces on MacOSX
 - make sure to uncheck these 2 options in
 - System Preferences -> Keyboard -> Shortcuts -> Mission Control, Move left/right a space
-  ![mac-bind-keys.png](imgs/mac-bind-keys.png)
+  ![mac-bind-keys.png](https://github.com/mr-pmillz/pimp-my-shell/blob/master/imgs/mac-bind-keys.png?raw=true)
 
 
 ## Enjoy

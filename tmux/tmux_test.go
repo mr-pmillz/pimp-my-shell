@@ -21,17 +21,17 @@ func TestInstallOhMyTmux(t *testing.T) {
 		wantErr bool
 	}{
 		{"Test InstallOhMyTmux darwin 1", args{
-			osType:   "darwin",
-			dirs:     dirs,
+			osType: "darwin",
+			dirs:   dirs,
 			packages: &localio.InstalledPackages{
-				AptInstalledPackages:  nil,
+				AptInstalledPackages: nil,
 				BrewInstalledPackages: &localio.BrewInstalled{
 					Names: []string{"bat", "lsd", "gnu-sed", "gotop", "yamllint", "git-delta"}, CaskFullNames: []string{"bat"}, Taps: []string{"homebrew/core", "cjbassi/gotop"},
 				},
 			}}, false},
 		{"Test InstallOhMyTmux Linux 2", args{
-			osType:   "linux",
-			dirs:     dirs,
+			osType: "linux",
+			dirs:   dirs,
 			packages: &localio.InstalledPackages{
 				AptInstalledPackages:  &localio.AptInstalled{Name: []string{"bat", "lsd", "gotop", "delta"}},
 				BrewInstalledPackages: nil,

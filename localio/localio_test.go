@@ -79,7 +79,7 @@ func TestBrewInstallProgram(t *testing.T) {
 		wantErr bool
 	}{
 		{"Test BrewInstallProgram 1", args{brewName: "fzf", binaryName: "fzf", packages: &InstalledPackages{
-			AptInstalledPackages:  nil,
+			AptInstalledPackages: nil,
 			BrewInstalledPackages: &BrewInstalled{
 				Names: []string{"bat"}, CaskFullNames: []string{"bat"}, Taps: []string{"bat"},
 			},
@@ -107,7 +107,7 @@ func TestAptInstall(t *testing.T) {
 		{"Test AptInstall 1", args{packages: &InstalledPackages{
 			AptInstalledPackages:  &AptInstalled{Name: []string{"bat"}},
 			BrewInstalledPackages: nil,
-			}, aptName: []string{"xclip"},
+		}, aptName: []string{"xclip"},
 		}, false},
 	}
 	for _, tt := range tests {
@@ -131,7 +131,7 @@ func TestNewBrewInstalled(t *testing.T) {
 			Taps:          []string{"homebrew/core", "homebrew/cask-fonts"},
 		}, false},
 	}
-		for _, tt := range tests {
+	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			got, err := NewBrewInstalled()
 			if (err != nil) != tt.wantErr {
@@ -178,22 +178,22 @@ func TestBrewInstallCaskProgram(t *testing.T) {
 		wantErr bool
 	}{
 		{"Test BrewInstallCaskProgram 1 that already exists", args{packages: &InstalledPackages{
-			AptInstalledPackages:  nil,
+			AptInstalledPackages: nil,
 			BrewInstalledPackages: &BrewInstalled{
 				Names: []string{"font-meslo-lg-nerd-font"}, CaskFullNames: []string{"font-meslo-lg-nerd-font"}, Taps: []string{"homebrew/core"},
 			},
 		},
-		brewFullName: "font-meslo-lg-nerd-font",
-		brewName: "font-meslo-lg-nerd-font",
+			brewFullName: "font-meslo-lg-nerd-font",
+			brewName:     "font-meslo-lg-nerd-font",
 		}, false},
 		{"Test BrewInstallCaskProgram 2 that doesn't already exist", args{packages: &InstalledPackages{
-			AptInstalledPackages:  nil,
+			AptInstalledPackages: nil,
 			BrewInstalledPackages: &BrewInstalled{
 				Names: []string{"bat"}, CaskFullNames: []string{"bat"}, Taps: []string{"homebrew/core"},
 			},
 		},
-		brewFullName: "font-meslo-lg-nerd-font",
-		brewName: "font-meslo-lg-nerd-font",
+			brewFullName: "font-meslo-lg-nerd-font",
+			brewName:     "font-meslo-lg-nerd-font",
 		}, false},
 	}
 	for _, tt := range tests {
@@ -216,7 +216,7 @@ func TestBrewTap(t *testing.T) {
 		wantErr bool
 	}{
 		{"Test BrewInstallCaskProgram 1 that doesn't already exist", args{packages: &InstalledPackages{
-			AptInstalledPackages:  nil,
+			AptInstalledPackages: nil,
 			BrewInstalledPackages: &BrewInstalled{
 				Names: []string{"bat"}, CaskFullNames: []string{"bat"}, Taps: []string{"homebrew/core"},
 			},

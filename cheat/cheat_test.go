@@ -22,17 +22,17 @@ func TestInstallCheat(t *testing.T) {
 		wantErr bool
 	}{
 		{"Test InstallCheat darwin 1", args{
-			osType:   "darwin",
-			dirs:     dirs,
+			osType: "darwin",
+			dirs:   dirs,
 			packages: &localio.InstalledPackages{
-				AptInstalledPackages:  nil,
+				AptInstalledPackages: nil,
 				BrewInstalledPackages: &localio.BrewInstalled{
 					Names: []string{"bat"}, CaskFullNames: []string{"bat"}, Taps: []string{"homebrew/core"},
 				},
-		}}, false},
+			}}, false},
 		{"Test InstallCheat Linux 2", args{
-			osType:   "linux",
-			dirs:     dirs,
+			osType: "linux",
+			dirs:   dirs,
 			packages: &localio.InstalledPackages{
 				AptInstalledPackages:  &localio.AptInstalled{Name: []string{"bat"}},
 				BrewInstalledPackages: nil,

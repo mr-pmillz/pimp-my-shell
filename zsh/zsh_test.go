@@ -20,12 +20,12 @@ func TestInstallOhMyZsh(t *testing.T) {
 		wantErr bool
 	}{
 		{"Test InstallOhMyZsh darwin 1", args{
-			osType:   "darwin",
-			dirs:     dirs,
+			osType: "darwin",
+			dirs:   dirs,
 		}, false},
 		{"Test InstallOhMyZsh Linux 2", args{
-			osType:   "linux",
-			dirs:     dirs,
+			osType: "linux",
+			dirs:   dirs,
 		}, false},
 	}
 	for _, tt := range tests {
