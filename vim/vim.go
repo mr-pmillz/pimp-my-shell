@@ -92,15 +92,18 @@ func InstallVimPlugins(osType string, dirs *localio.Directories) error {
 		return err
 	}
 
-	if err := localio.EmbedFileCopy("~/.vim_runtime/my_configs.vim", myConfigFS); err != nil {
+	if err = localio.EmbedFileCopy("~/.vim_runtime/my_configs.vim", myConfigFS); err != nil {
 		return err
 	}
-	if err := localio.EmbedFileCopy("~/.vimrc", vimrcFS); err != nil {
+	if err = localio.EmbedFileCopy("~/.vimrc", vimrcFS); err != nil {
 		return err
 	}
 
 	fmt.Println("[+] Installing vim binaries via +GoInstallBinaries")
-	if err := localio.RunCommandPipeOutput("vim -es -c \"GoInstallBinaries\" -c \"qa\" || true"); err != nil {
+	if err = localio.RunCommandPipeOutput("vim -e +GoInstallBinaries +qa || true"); err != nil {
+		return err
+	}
+	if err = localio.RunCommandPipeOutput("reset || true"); err != nil {
 		return err
 	}
 

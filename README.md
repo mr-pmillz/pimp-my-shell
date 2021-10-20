@@ -55,6 +55,12 @@ After Installation, if you want to Customize Powerlevel10k zsh theme differently
 p10k configure
 ```
 
+Make sure your vim binaries installed. They should be from ./pimp-my-shell but just in case run the command below.
+
+```shell
+vim +GoInstallBinaries
+```
+
 ## About
 
 This project was designed to automate all the configurations that I typically set up for my terminal on Macos and Debian/Ubuntu Linux.

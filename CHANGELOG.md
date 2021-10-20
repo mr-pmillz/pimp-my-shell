@@ -1,8 +1,8 @@
 # Changelog
 
-## [Unreleased](https://github.com/mr-pmillz/pimp-my-shell/tree/HEAD)
+## [v1.5.9](https://github.com/mr-pmillz/pimp-my-shell/tree/v1.5.9) (2021-10-20)
 
-[Full Changelog](https://github.com/mr-pmillz/pimp-my-shell/compare/v1.5.8...HEAD)
+[Full Changelog](https://github.com/mr-pmillz/pimp-my-shell/compare/v1.5.8...v1.5.9)
 
 **Implemented enhancements:**
 
