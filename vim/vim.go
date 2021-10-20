@@ -12,7 +12,7 @@ var myConfigs embed.FS
 
 // InstallVimPlugins ...
 func InstallVimPlugins(osType string, dirs *localio.Directories) error {
-	if exists, err := localio.Exists(fmt.Sprintf("%s/.vim_runtime", dirs.HomeDir)); err == nil && exists == true {
+	if exists, err := localio.Exists(fmt.Sprintf("%s/.vim_runtime", dirs.HomeDir)); err == nil && exists {
 		return nil
 	}
 	// install awesome vim

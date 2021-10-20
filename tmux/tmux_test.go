@@ -1,6 +1,8 @@
 package tmux
 
 import (
+	"fmt"
+	"os"
 	"pimp-my-shell/localio"
 	"testing"
 	"time"
@@ -15,6 +17,14 @@ func TestInstallOhMyTmux(t *testing.T) {
 		osType   string
 		dirs     *localio.Directories
 		packages *localio.InstalledPackages
+	}
+	if val, _ := os.LookupEnv("GITHUB_ACTIONS"); val == "true" {
+		if err = localio.RunCommandPipeOutput(fmt.Sprintf("rm -rf %s/.tmux.conf.local", dirs.HomeDir)); err != nil {
+			t.Errorf("couldn't remove ~/.vim_runtime dir. error = %v", err)
+		}
+		if err = localio.RunCommandPipeOutput(fmt.Sprintf("rm -rf %s/.tmux", dirs.HomeDir)); err != nil {
+			t.Errorf("couldn't remove ~/.vim_runtime dir. error = %v", err)
+		}
 	}
 	tests := []struct {
 		name    string
@@ -72,7 +82,6 @@ func Test_runTmux(t *testing.T) {
 		})
 	}
 }
-
 
 func TestStartTMUX(t *testing.T) {
 	tests := []struct {

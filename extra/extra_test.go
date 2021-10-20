@@ -41,7 +41,7 @@ func TestInstallExtraPackages(t *testing.T) {
 			packages: &localio.InstalledPackages{
 				AptInstalledPackages: nil,
 				BrewInstalledPackages: &localio.BrewInstalled{
-					Names: []string{"bat", "lsd", "gnu-sed", "gotop", "yamllint", "git-delta"}, CaskFullNames: []string{"gotop"}, Taps: []string{"homebrew/core", "cjbassi/gotop"},
+					Names: []string{"ca-certificates"}, CaskFullNames: []string{"ca-certificates"}, Taps: []string{"homebrew/core", "cjbassi/gotop"},
 				},
 			}}, false},
 		{"Test InstallExtraPackages darwin lots of packages already installed 2", args{
@@ -60,7 +60,7 @@ func TestInstallExtraPackages(t *testing.T) {
 			osType: "linux",
 			dirs:   dirs,
 			packages: &localio.InstalledPackages{
-				AptInstalledPackages:  &localio.AptInstalled{Name: []string{"bat", "lsd", "cowsay"}},
+				AptInstalledPackages:  &localio.AptInstalled{Name: []string{"lsd"}},
 				BrewInstalledPackages: nil,
 			}}, false},
 	}

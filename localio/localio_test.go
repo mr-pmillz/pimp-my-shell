@@ -390,7 +390,7 @@ func TestBrewTap(t *testing.T) {
 		{"Test BrewInstallCaskProgram 1 that doesn't already exist", args{packages: &InstalledPackages{
 			AptInstalledPackages: nil,
 			BrewInstalledPackages: &BrewInstalled{
-				Names: []string{"bat"}, CaskFullNames: []string{"bat"}, Taps: []string{"homebrew/core"},
+				Names: []string{"aom"}, CaskFullNames: []string{"aom"}, Taps: []string{"homebrew/core"},
 			},
 		},
 			brewTap: "homebrew/cask-fonts",
