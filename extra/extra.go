@@ -100,10 +100,7 @@ func InstallExtraPackages(osType string, dirs *localio.Directories, packages *lo
 				}
 			}
 		}
-		// ensure apt-transport-https is installed. Prevents apt-get error exit code 100
-		if err := localio.AptInstall(packages, "apt-transport-https"); err != nil {
-			return err
-		}
+
 		// install cowsay
 		if err := localio.AptInstall(packages, "cowsay", "bat"); err != nil {
 			return err

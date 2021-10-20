@@ -59,7 +59,7 @@ func TestInstallOhMyZsh(t *testing.T) {
 	osType := runtime.GOOS
 	switch osType {
 	case "linux":
-		if err := localio.AptInstall(packages, "zsh", "apt-transport-https"); err != nil {
+		if err := localio.AptInstall(packages, "zsh"); err != nil {
 			t.Errorf("couldn't install zsh via apt-get: %v", err)
 		}
 	case "darwin":

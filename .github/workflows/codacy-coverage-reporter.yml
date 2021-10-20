@@ -44,7 +44,6 @@ jobs:
           go install github.com/AlekSi/gocov-xml@latest
           go get -u github.com/jstemmer/go-junit-report
           sudo apt-get update -y || true
-          sudo apt-get install -y -q apt-transport-https || true
 
       # Run build of the application
       - name: Run build

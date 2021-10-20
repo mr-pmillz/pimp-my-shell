@@ -494,7 +494,7 @@ func AptInstall(packages *InstalledPackages, aptName ...string) error {
 	}
 	if len(notInstalled) >= 1 {
 		packagesToInstall := strings.Join(notInstalled, " ")
-		command := fmt.Sprintf("sudo apt-get update -y && sudo apt-get install -y -q %s", packagesToInstall)
+		command := fmt.Sprintf("sudo apt-get install -y -q %s", packagesToInstall)
 		if err := RunCommandPipeOutput(command); err != nil {
 			return err
 		}
