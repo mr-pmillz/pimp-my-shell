@@ -623,3 +623,19 @@ func TestRunCommands(t *testing.T) {
 		})
 	}
 }
+
+func TestStartTmuxSession(t *testing.T) {
+	tests := []struct {
+		name    string
+		wantErr bool
+	}{
+		{name: "TestStartTmuxSession", wantErr: false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if err := StartTmuxSession(); (err != nil) != tt.wantErr {
+				t.Errorf("StartTmuxSession() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}

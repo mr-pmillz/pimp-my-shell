@@ -1,6 +1,8 @@
 package vim
 
 import (
+	"fmt"
+	"os"
 	"pimp-my-shell/localio"
 	"testing"
 	"time"
@@ -58,6 +60,11 @@ func TestInstallVimAwesome(t *testing.T) {
 		osType   string
 		dirs     *localio.Directories
 		packages *localio.InstalledPackages
+	}
+	if val, _ := os.LookupEnv("GITHUB_ACTIONS"); val == "true" {
+		if err = localio.RunCommandPipeOutput(fmt.Sprintf("rm -rf %s/.vim_runtime", dirs.HomeDir)); err != nil {
+			t.Errorf("couldn't remove ~/.vim_runtime dir. error = %v", err)
+		}
 	}
 	tests := []struct {
 		name    string

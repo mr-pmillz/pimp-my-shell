@@ -2,6 +2,7 @@ package zsh
 
 import (
 	"fmt"
+	"os"
 	"pimp-my-shell/localio"
 	"runtime"
 	"testing"
@@ -56,6 +57,11 @@ func TestInstallOhMyZsh(t *testing.T) {
 	}
 	packages.AptInstalledPackages = &localio.AptInstalled{Name: []string{"bat"}}
 
+	if val, _ := os.LookupEnv("GITHUB_ACTIONS"); val == "true" {
+		if err = localio.RunCommandPipeOutput(fmt.Sprintf("rm -rf %s/.oh-my-zsh", dirs.HomeDir)); err != nil {
+			t.Errorf("couldn't remove ~/.vim_runtime dir. error = %v", err)
+		}
+	}
 	osType := runtime.GOOS
 	switch osType {
 	case "linux":

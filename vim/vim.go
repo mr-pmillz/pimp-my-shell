@@ -112,7 +112,7 @@ func InstallVimPlugins(osType string, dirs *localio.Directories) error {
 
 // InstallVimAwesome ...
 func InstallVimAwesome(osType string, dirs *localio.Directories, packages *localio.InstalledPackages) error {
-	if exists, err := localio.Exists(fmt.Sprintf("%s/.vim_runtime", dirs.HomeDir)); err == nil && exists == true {
+	if exists, err := localio.Exists(fmt.Sprintf("%s/.vim_runtime", dirs.HomeDir)); err == nil && exists {
 		return nil
 	}
 
