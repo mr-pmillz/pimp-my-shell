@@ -100,7 +100,7 @@ func InstallVimPlugins(osType string, dirs *localio.Directories) error {
 	}
 
 	fmt.Println("[+] Installing vim binaries via +GoInstallBinaries")
-	if err = localio.RunCommandPipeOutput("vim -e +GoInstallBinaries +qa || true"); err != nil {
+	if err = localio.RunCommandPipeOutput("vim +GoInstallBinaries +qa || true"); err != nil {
 		return err
 	}
 	if err = localio.RunCommandPipeOutput("reset || true"); err != nil {
