@@ -639,3 +639,69 @@ func TestStartTmuxSession(t *testing.T) {
 		})
 	}
 }
+
+func TestGetCPUType(t *testing.T) {
+	tests := []struct {
+		name string
+		want string
+	}{
+		{name: "TestGetCPUType 1", want: "Intel"},
+		{name: "TestGetCPUType 2", want: "AMD64"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := GetCPUType(); got != tt.want {
+				t.Errorf("GetCPUType() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestNewDirectories(t *testing.T) {
+	homedir, err := os.UserHomeDir()
+	if err != nil {
+		t.Errorf("homedir error = %v", err)
+	}
+	tests := []struct {
+		name    string
+		want    *Directories
+		wantErr bool
+	}{
+		{name: "TestNewDirectories", want: &Directories{HomeDir: homedir}, wantErr: false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := NewDirectories()
+			if (err != nil) != tt.wantErr {
+				t.Errorf("NewDirectories() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("NewDirectories() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestCorrectOS(t *testing.T) {
+	type args struct {
+		osType string
+	}
+	osType := runtime.GOOS
+	tests := []struct {
+		name string
+		args args
+		want bool
+	}{
+		{name: "TestCorrectOS darwin", args: args{osType: "darwin"}, want: true},
+		{name: "TestCorrectOS linux", args: args{osType: "linux"}, want: true},
+		{name: "TestCorrectOS linux", args: args{osType: osType}, want: true},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := CorrectOS(tt.args.osType); got != tt.want {
+				t.Errorf("CorrectOS() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
