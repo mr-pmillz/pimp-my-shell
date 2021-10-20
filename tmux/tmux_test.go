@@ -56,3 +56,19 @@ func TestInstallOhMyTmux(t *testing.T) {
 	case <-done:
 	}
 }
+
+func TestStartTMUX(t *testing.T) {
+	tests := []struct {
+		name    string
+		wantErr bool
+	}{
+		{name: "TestStartTMUX 1", wantErr: false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if err := StartTMUX(); (err != nil) != tt.wantErr {
+				t.Errorf("StartTMUX() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
