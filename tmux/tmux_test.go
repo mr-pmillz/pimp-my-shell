@@ -3,6 +3,7 @@ package tmux
 import (
 	"pimp-my-shell/localio"
 	"testing"
+	"time"
 )
 
 func TestInstallOhMyTmux(t *testing.T) {
@@ -37,11 +38,21 @@ func TestInstallOhMyTmux(t *testing.T) {
 				BrewInstalledPackages: nil,
 			}}, false},
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if err := InstallOhMyTmux(tt.args.osType, tt.args.dirs, tt.args.packages); (err != nil) != tt.wantErr {
-				t.Errorf("InstallOhMyTmux() error = %v, wantErr %v", err, tt.wantErr)
-			}
-		})
+	timeout := time.After(20 * time.Minute)
+	done := make(chan bool)
+	go func() {
+		for _, tt := range tests {
+			t.Run(tt.name, func(t *testing.T) {
+				if err := InstallOhMyTmux(tt.args.osType, tt.args.dirs, tt.args.packages); (err != nil) != tt.wantErr {
+					t.Errorf("InstallOhMyTmux() error = %v, wantErr %v", err, tt.wantErr)
+				}
+			})
+		}
+		done <- true
+	}()
+	select {
+	case <-timeout:
+		t.Fatal("Test didn't finish in time")
+	case <-done:
 	}
 }

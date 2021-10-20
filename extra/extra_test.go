@@ -4,6 +4,7 @@ import (
 	"pimp-my-shell/localio"
 	"runtime"
 	"testing"
+	"time"
 )
 
 func TestInstallExtraPackages(t *testing.T) {
@@ -75,11 +76,21 @@ func TestInstallExtraPackages(t *testing.T) {
 				BrewInstalledPackages: nil,
 			}}, false},
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if err := InstallExtraPackages(tt.args.osType, tt.args.dirs, tt.args.packages); (err != nil) != tt.wantErr {
-				t.Errorf("InstallExtraPackages() error = %v, wantErr %v", err, tt.wantErr)
-			}
-		})
+	timeout := time.After(20 * time.Minute)
+	done := make(chan bool)
+	go func() {
+		for _, tt := range tests {
+			t.Run(tt.name, func(t *testing.T) {
+				if err := InstallExtraPackages(tt.args.osType, tt.args.dirs, tt.args.packages); (err != nil) != tt.wantErr {
+					t.Errorf("InstallExtraPackages() error = %v, wantErr %v", err, tt.wantErr)
+				}
+			})
+		}
+		done <- true
+	}()
+	select {
+	case <-timeout:
+		t.Fatal("Test didn't finish in time")
+	case <-done:
 	}
 }
