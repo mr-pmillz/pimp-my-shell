@@ -30,10 +30,6 @@ func InstallExtraPackages(osType string, dirs *localio.Directories, packages *lo
 		if err := localio.BrewInstallProgram("gnu-sed", "gsed", packages); err != nil {
 			return err
 		}
-		// brew tap cjbassi/gotop
-		if err := localio.BrewTap("cjbassi/gotop", packages); err != nil {
-			return err
-		}
 		// install gotop
 		if err := localio.BrewInstallProgram("gotop", "gotop", packages); err != nil {
 			return err
@@ -98,11 +94,15 @@ func InstallExtraPackages(osType string, dirs *localio.Directories, packages *lo
 		}
 		// install gotop
 		if _, exists := localio.CommandExists("go"); exists {
-			if _, exists := localio.CommandExists("gotop"); !exists {
-				if err := localio.RunCommandPipeOutput("go get github.com/cjbassi/gotop"); err != nil {
+			if _, exists = localio.CommandExists("gotop"); !exists {
+				if err := localio.RunCommandPipeOutput("go install github.com/xxxserxxx/gotop/v4/cmd/gotop@latest"); err != nil {
 					return err
 				}
 			}
+		}
+		// ensure apt-transport-https is installed. Prevents apt-get error exit code 100
+		if err := localio.AptInstall(packages, "apt-transport-https"); err != nil {
+			return err
 		}
 		// install cowsay
 		if err := localio.AptInstall(packages, "cowsay", "bat"); err != nil {

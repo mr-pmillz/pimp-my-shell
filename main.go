@@ -44,6 +44,9 @@ func pimpMyShell(osType string, dirs *localio.Directories, installedPackages *lo
                   ""VXXXXXXXXXXXXXXXXXXV""`)
 	switch osType {
 	case "darwin":
+		if err := localio.BrewInstallProgram("ca-certificates", "ca-certificates", installedPackages); err != nil {
+			return err
+		}
 		if err := localio.BrewInstallProgram("zsh", "zsh", installedPackages); err != nil {
 			return err
 		}
@@ -52,10 +55,17 @@ func pimpMyShell(osType string, dirs *localio.Directories, installedPackages *lo
 			return err
 		}
 	case "linux":
-		if err := localio.AptInstall(installedPackages, "zsh", "tilix"); err != nil {
+		if err := localio.RunCommandPipeOutput("sudo apt-get autoclean && sudo apt-get update"); err != nil {
+			return err
+		}
+		if err := localio.AptInstall(installedPackages, "zsh", "tilix", "apt-transport-https"); err != nil {
 			return err
 		}
 		if err := linux.CustomTilixBookmarks(); err != nil {
+			return err
+		}
+		// Install the latest version of golang
+		if err := localio.DownloadAndInstallLatestVersionOfGolang(dirs.HomeDir); err != nil {
 			return err
 		}
 	}

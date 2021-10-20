@@ -5,6 +5,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"github.com/klauspost/cpuid/v2"
 	"github.com/schollz/progressbar/v3"
 	"github.com/tidwall/gjson"
 	"io"
@@ -14,6 +15,7 @@ import (
 	"os"
 	"os/exec"
 	"os/user"
+	"path"
 	"path/filepath"
 	"runtime"
 	"strings"
@@ -128,6 +130,68 @@ func DownloadFile(dest, url string) error {
 	return err
 }
 
+// GetCPUType Returns the CPU type for the current runtime environment
+func GetCPUType() string {
+	cpuid.Detect()
+	if cpuid.CPU.VendorID.String() == "AMD" || cpuid.CPU.VendorID.String() == "Intel" && cpuid.CPU.CacheLine == 64 {
+		return "AMD64"
+	} else if cpuid.CPU.VendorID.String() == "ARM" && cpuid.CPU.CacheLine == 64 {
+		return "ARM64"
+	} else {
+		return ""
+	}
+}
+
+// DownloadAndInstallLatestVersionOfGolang Only for linux x86_64. Mac uses homebrew
+func DownloadAndInstallLatestVersionOfGolang(homeDir string) error {
+	if !CorrectOS("linux") {
+		return nil
+	}
+	req, err := http.NewRequest("GET", "https://golang.org/VERSION?m=text", nil)
+	if err != nil {
+		return err
+	}
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+	goversion, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return err
+	}
+	latestGoVersion := string(goversion)
+
+	switch GetCPUType() {
+	case "AMD64":
+		armGoURL := fmt.Sprintf("https://dl.google.com/go/%s.linux-arm64.tar.gz", latestGoVersion)
+		dest := fmt.Sprintf("%s/%s", homeDir, path.Base(armGoURL))
+		if err = DownloadFile(dest, armGoURL); err != nil {
+			return err
+		}
+		// // Now extract the go binary. pimp-my-shell ensures that ~/.zshrc will already have the path setup for you
+		if err = RunCommandPipeOutput(fmt.Sprintf("sudo rm -rf /usr/local/go && tar -C /usr/local -xzf %s || true", dest)); err != nil {
+			return err
+		}
+
+	case "ARM64":
+		amdGoURL := fmt.Sprintf("https://dl.google.com/go/%s.linux-amd64.tar.gz", latestGoVersion)
+		dest := fmt.Sprintf("%s/%s", homeDir, path.Base(amdGoURL))
+		if err = DownloadFile(dest, amdGoURL); err != nil {
+			return err
+		}
+
+		if err = RunCommandPipeOutput(fmt.Sprintf("sudo rm -rf /usr/local/go && tar -C /usr/local -xzf %s || true", dest)); err != nil {
+			return err
+		}
+	default:
+		fmt.Println("[-] Couldn't download and install golang Unsupported CPU... Pimp-My-Shell only supports 64 bit")
+	}
+
+	return nil
+}
+
 // RunCommands ...
 func RunCommands(cmds []string) error {
 	for _, c := range cmds {
@@ -194,7 +258,7 @@ func EmbedFileCopy(dst string, src fs.File) error {
 	return nil
 }
 
-// EmbedFileStringAppendToDest ...
+// EmbedFileStringAppendToDest takes a slice of bytes and writes it as a string to dest file path
 func EmbedFileStringAppendToDest(data []byte, dest string) error {
 	fmt.Printf("[+] Appending: \n%s\n -> %s\n", string(data), dest)
 	fileDest, err := ResolveAbsPath(dest)
@@ -324,7 +388,7 @@ func Contains(s []string, str string) bool {
 	return false
 }
 
-// CorrectOS ...
+// CorrectOS ... Useful for go tests
 func CorrectOS(osType string) bool {
 	operatingSystem := runtime.GOOS
 	if operatingSystem == osType {

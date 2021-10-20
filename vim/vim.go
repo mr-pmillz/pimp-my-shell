@@ -201,7 +201,6 @@ func InstallVimAwesome(osType string, dirs *localio.Directories, packages *local
 			"cmake",
 			"vim-nox",
 			"python3-dev",
-			"golang",
 			"nodejs",
 			"default-jdk",
 			"npm",
