@@ -29,6 +29,13 @@ jobs:
             ${{ runner.OS }}-build-
             ${{ runner.OS }}-
 
+      # Remove apt repos that are known to break from time to time
+      # See https://github.com/actions/virtual-environments/issues/323
+      - name: Remove broken apt repos [Ubuntu]
+        run: |
+          for apt_file in `grep -lr microsoft /etc/apt/sources.list.d/`; do sudo rm $apt_file; done
+        if: matrix.os == 'ubuntu-latest' || matrix.os == 'ubuntu-18.04'
+
       # Install all the dependencies
       - name: Install dependencies
         run: |
