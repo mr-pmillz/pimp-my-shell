@@ -128,9 +128,6 @@ func TestSetVariableValue(t *testing.T) {
 	osType := runtime.GOOS
 	switch osType {
 	case "linux":
-		if err := RunCommandPipeOutput("sudo apt-get autoclean && sudo apt-get update"); err != nil {
-			t.Errorf("couldn't apt-get autocelan and update: %v", err)
-		}
 		if err := AptInstall(packages, "zsh", "apt-transport-https"); err != nil {
 			t.Errorf("couldn't install zsh via apt-get: %v", err)
 		}

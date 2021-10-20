@@ -55,9 +55,6 @@ func pimpMyShell(osType string, dirs *localio.Directories, installedPackages *lo
 			return err
 		}
 	case "linux":
-		if err := localio.RunCommandPipeOutput("sudo apt-get autoclean && sudo apt-get update"); err != nil {
-			return err
-		}
 		if err := localio.AptInstall(installedPackages, "zsh", "tilix", "apt-transport-https"); err != nil {
 			return err
 		}
