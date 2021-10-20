@@ -54,7 +54,7 @@ func InstallExtraPackages(osType string, dirs *localio.Directories, packages *lo
 			//To install useful key bindings and fuzzy completion:
 			// /usr/local/opt/fzf/install --all
 			if exists, err := localio.Exists("/usr/local/opt/fzf/install"); err == nil && exists {
-				if err := localio.RunCommandPipeOutput("/usr/local/opt/fzf/install --all"); err != nil {
+				if err = localio.RunCommandPipeOutput("/usr/local/opt/fzf/install --all"); err != nil {
 					return err
 				}
 			}
@@ -88,7 +88,7 @@ func InstallExtraPackages(osType string, dirs *localio.Directories, packages *lo
 			if err != nil {
 				return err
 			}
-			if err := localio.RunCommandPipeOutput(fmt.Sprintf("sudo dpkg -i %s", lsdDebPackage)); err != nil {
+			if err = localio.RunCommandPipeOutput(fmt.Sprintf("sudo dpkg --no-pager -i %s", lsdDebPackage)); err != nil {
 				return err
 			}
 		}
@@ -112,7 +112,7 @@ func InstallExtraPackages(osType string, dirs *localio.Directories, packages *lo
 		}
 
 		if exists, err := localio.Exists(fmt.Sprintf("%s/.local/bin/bat", dirs.HomeDir)); err == nil && !exists {
-			if err := localio.RunCommandPipeOutput(fmt.Sprintf("ln -sf /usr/bin/batcat %s/.local/bin/bat", dirs.HomeDir)); err != nil {
+			if err = localio.RunCommandPipeOutput(fmt.Sprintf("ln -sf /usr/bin/batcat %s/.local/bin/bat", dirs.HomeDir)); err != nil {
 				return err
 			}
 		}
@@ -132,7 +132,7 @@ func InstallExtraPackages(osType string, dirs *localio.Directories, packages *lo
 				return err
 			}
 			fmt.Println("[+] Installing git-delta latest release")
-			if err = localio.RunCommandPipeOutput(fmt.Sprintf("sudo dpkg -i %s", debPackage)); err != nil {
+			if err = localio.RunCommandPipeOutput(fmt.Sprintf("sudo dpkg --no-pager -i %s", debPackage)); err != nil {
 				return err
 			}
 		}
@@ -153,7 +153,7 @@ func updateGitConfig() error {
 
 	exists, err := localio.Exists("~/.gitconfig")
 	if err == nil && !exists {
-		if err := localio.EmbedFileStringAppendToDest(gitConfig, "~/.gitconfig"); err != nil {
+		if err = localio.EmbedFileStringAppendToDest(gitConfig, "~/.gitconfig"); err != nil {
 			return err
 		}
 	} else if err == nil && exists {

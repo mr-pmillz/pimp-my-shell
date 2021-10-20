@@ -34,7 +34,7 @@ func TestInstallOhMyTmux(t *testing.T) {
 			osType: "linux",
 			dirs:   dirs,
 			packages: &localio.InstalledPackages{
-				AptInstalledPackages:  &localio.AptInstalled{Name: []string{"xclip"}},
+				AptInstalledPackages:  &localio.AptInstalled{Name: []string{"xclip", "tmux"}},
 				BrewInstalledPackages: nil,
 			}}, false},
 	}
