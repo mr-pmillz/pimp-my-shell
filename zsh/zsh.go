@@ -9,15 +9,16 @@ import (
 	"pimp-my-shell/localio"
 	"pimp-my-shell/osrelease"
 	"regexp"
+	"sort"
 	"strings"
 )
 
 //go:embed templates/*
 var zshConfigs embed.FS
 
-func updateZSHPlugins(dirs *localio.Directories) error {
+func updateZSHPlugins(zshrcPath string) error {
 	var re = regexp.MustCompile(`(?m)^plugins=\(\s*((?:[a-z][a-z0-9_-]+\s*)+)\)$`)
-	input, err := ioutil.ReadFile(fmt.Sprintf("%s/.zshrc", dirs.HomeDir))
+	input, err := ioutil.ReadFile(zshrcPath)
 	if err != nil {
 		return err
 	}
@@ -31,12 +32,13 @@ func updateZSHPlugins(dirs *localio.Directories) error {
 			installedPlugins = append(installedPlugins, plugin)
 		}
 	}
+	sort.Strings(installedPlugins)
 
 	//fmt.Printf("InstalledPlugins: %+v\n", installedPlugins)
 	pluginsToAdd := strings.Join(installedPlugins, "\n\t")
 	updatedZshrcFile := re.ReplaceAllString(string(input), fmt.Sprintf("plugins=(\n\t%s\n)", pluginsToAdd))
 
-	err = ioutil.WriteFile(fmt.Sprintf("%s/.zshrc", dirs.HomeDir), []byte(updatedZshrcFile), 0644)
+	err = ioutil.WriteFile(zshrcPath, []byte(updatedZshrcFile), 0644)
 	if err != nil {
 		return err
 	}
@@ -63,6 +65,9 @@ func InstallOhMyZsh(osType string, dirs *localio.Directories) error {
 			}
 			if exists, err = localio.Exists(fmt.Sprintf("%s/.zshrc", dirs.HomeDir)); err == nil && exists {
 				// Kali linux weird zshrc constraint
+				if exists, err = localio.Exists("/etc/os-release"); err == nil && !exists {
+					break
+				}
 				osINFO, err := osrelease.Read()
 				if err != nil {
 					return err
@@ -179,7 +184,7 @@ func InstallOhMyZsh(osType string, dirs *localio.Directories) error {
 		}
 	}
 
-	if err = updateZSHPlugins(dirs); err != nil {
+	if err = updateZSHPlugins(fmt.Sprintf("%s/.zshrc", dirs.HomeDir)); err != nil {
 		return err
 	}
 

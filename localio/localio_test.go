@@ -1,12 +1,171 @@
 package localio
 
 import (
+	"embed"
 	"fmt"
+	"io/fs"
 	"os"
 	"os/user"
 	"reflect"
+	"runtime"
 	"testing"
+	"time"
 )
+
+//go:embed test/*
+var testEmbedFiles embed.FS
+
+func TestEmbedFileCopy(t *testing.T) {
+	myConfigFS, err := testEmbedFiles.Open("test/zshrc-test-append-to-file.zshrc")
+	if err != nil {
+		t.Errorf("EmbedFileStringAppendToDest() error = %v", err)
+	}
+	type args struct {
+		dst string
+		src fs.File
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{name: "TestEmbedFileCopy 1", args: args{
+			dst: "test/zshrc-test-copy-to-file.zshrc",
+			src: myConfigFS,
+		}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if err := EmbedFileCopy(tt.args.dst, tt.args.src); (err != nil) != tt.wantErr {
+				t.Errorf("EmbedFileCopy() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+	t.Cleanup(func() {
+		if exists, err := Exists("test/zshrc-test-copy-to-file.zshrc"); err == nil && exists {
+			if err = os.Remove("test/zshrc-test-copy-to-file.zshrc"); err != nil {
+				t.Errorf("couldnt remove test file: %v", err)
+			}
+		}
+	})
+}
+
+func TestEmbedFileStringAppendToDest(t *testing.T) {
+	testConfig, err := testEmbedFiles.ReadFile("test/zshrc_test_extra.zsh")
+	if err != nil {
+		t.Errorf("EmbedFileStringAppendToDest() error = %v", err)
+	}
+	type args struct {
+		data []byte
+		dest string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{name: "TestEmbedFileStringAppendToDest 1", args: args{
+			data: testConfig,
+			dest: "test/zshrc-test-append-to-file.zshrc",
+		}},
+		{name: "TestEmbedFileStringAppendToDest 1", args: args{
+			data: testConfig,
+			dest: "test/copy-embed-file-test.zshrc",
+		}},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if err := EmbedFileStringAppendToDest(tt.args.data, tt.args.dest); (err != nil) != tt.wantErr {
+				t.Errorf("EmbedFileStringAppendToDest() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+	t.Cleanup(func() {
+		if exists, err := Exists("test/copy-embed-file-test.zshrc"); err == nil && exists {
+			if err = os.Remove("test/copy-embed-file-test.zshrc"); err != nil {
+				t.Errorf("couldnt remove test file: %v", err)
+			}
+		}
+	})
+}
+
+func TestDownloadAndInstallLatestVersionOfGolang(t *testing.T) {
+	dirs, err := NewDirectories()
+	if err != nil {
+		t.Errorf("failed to create Directories type: %v", err)
+	}
+	type args struct {
+		homeDir string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{name: "TestDownloadAndInstallLatestVersionOfGolang 1", args: args{homeDir: dirs.HomeDir}, wantErr: false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if err := DownloadAndInstallLatestVersionOfGolang(tt.args.homeDir); (err != nil) != tt.wantErr {
+				t.Errorf("DownloadAndInstallLatestVersionOfGolang() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestSetVariableValue(t *testing.T) {
+	type args struct {
+		varName    string
+		val        string
+		osType     string
+		configPath string
+	}
+	packages := &InstalledPackages{}
+	packages.BrewInstalledPackages = &BrewInstalled{
+		Names: []string{"bat"}, CaskFullNames: []string{"bat"}, Taps: []string{"bat"},
+	}
+	packages.AptInstalledPackages = &AptInstalled{Name: []string{"bat"}}
+
+	osType := runtime.GOOS
+	switch osType {
+	case "linux":
+		if err := AptInstall(packages, "zsh"); err != nil {
+			t.Errorf("couldn't install zsh via apt-get: %v", err)
+		}
+	case "darwin":
+		// ensure zsh is installed for unit tests
+		if err := BrewInstallProgram("zsh", "zsh", packages); err != nil {
+			t.Errorf("couldn't install zsh via homebrew: %v", err)
+		}
+		// ensure gnu-sed is installed for unit tests
+		if err := BrewInstallProgram("gnu-sed", "gsed", packages); err != nil {
+			t.Errorf("couldn't install gnu-sed via homebrew: %v", err)
+		}
+	}
+	zshrcTestTemplate, err := ResolveAbsPath("test/zshrc-test-template.zshrc")
+	if err != nil {
+		t.Errorf("Couldnt resolve zshrcTestTemplate path: %v", err)
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{name: fmt.Sprintf("Test SetVariableValue %s 1", osType), args: args{
+			varName:    "ZSH_THEME",
+			val:        "powerlevel10k\\/powerlevel10k",
+			osType:     osType,
+			configPath: zshrcTestTemplate,
+		}, wantErr: false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if err := SetVariableValue(tt.args.varName, tt.args.val, tt.args.osType, tt.args.configPath); (err != nil) != tt.wantErr {
+				t.Errorf("SetVariableValue() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
 
 func TestResolveAbsPath(t *testing.T) {
 	homedir, err := os.UserHomeDir()
@@ -196,12 +355,25 @@ func TestBrewInstallCaskProgram(t *testing.T) {
 			brewName:     "font-meslo-lg-nerd-font",
 		}, false},
 	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if err := BrewInstallCaskProgram(tt.args.brewName, tt.args.brewFullName, tt.args.packages); (err != nil) != tt.wantErr {
-				t.Errorf("BrewInstallCaskProgram() error = %v, wantErr %v", err, tt.wantErr)
-			}
-		})
+	timeout := time.After(20 * time.Minute)
+	done := make(chan bool)
+	go func() {
+		for _, tt := range tests {
+			t.Run(tt.name, func(t *testing.T) {
+				if err := BrewTap("homebrew/cask-fonts", tt.args.packages); err != nil {
+					t.Errorf("BrewTap() error = %v, wantErr %v", err, tt.wantErr)
+				}
+				if err := BrewInstallCaskProgram(tt.args.brewName, tt.args.brewFullName, tt.args.packages); (err != nil) != tt.wantErr {
+					t.Errorf("BrewInstallCaskProgram() error = %v, wantErr %v", err, tt.wantErr)
+				}
+			})
+		}
+		done <- true
+	}()
+	select {
+	case <-timeout:
+		t.Fatal("Test didn't finish in time")
+	case <-done:
 	}
 }
 
@@ -380,7 +552,7 @@ func TestCopyStringToFile(t *testing.T) {
 	}{
 		{"Test CopyStringToFile 1", args{
 			data: "this is a test string to write to file",
-			dest: "testWriteStringFile.txt",
+			dest: "test/testWriteStringFile.txt",
 		}, false},
 		{"Test CopyStringToFile 2 non-existent directory path", args{
 			data: "this is a test string to write to file",
@@ -394,6 +566,13 @@ func TestCopyStringToFile(t *testing.T) {
 			}
 		})
 	}
+	t.Cleanup(func() {
+		if exists, err := Exists("test/testWriteStringFile.txt"); err == nil && exists {
+			if err = os.Remove("test/testWriteStringFile.txt"); err != nil {
+				t.Errorf("couldnt remove test file: %v", err)
+			}
+		}
+	})
 }
 
 func TestCmdExec(t *testing.T) {

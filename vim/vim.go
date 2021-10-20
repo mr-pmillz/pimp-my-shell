@@ -160,7 +160,7 @@ func InstallVimAwesome(osType string, dirs *localio.Directories, packages *local
 			if err := localio.RunCommandPipeOutput("echo \"deb https://download.mono-project.com/repo/ubuntu stable-focal main\" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list || true"); err != nil {
 				return err
 			}
-			if err := localio.RunCommandPipeOutput("sudo apt-get update"); err != nil {
+			if err := localio.RunCommandPipeOutput("sudo apt-get update -y"); err != nil {
 				return err
 			}
 			if err := localio.AptInstall(packages, "mono-complete"); err != nil {
@@ -181,7 +181,7 @@ func InstallVimAwesome(osType string, dirs *localio.Directories, packages *local
 			if err := localio.RunCommandPipeOutput("echo \"deb https://download.mono-project.com/repo/debian stable-buster main\" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list || true"); err != nil {
 				return err
 			}
-			if err := localio.RunCommandPipeOutput("sudo apt-get update"); err != nil {
+			if err := localio.RunCommandPipeOutput("sudo apt-get update -y"); err != nil {
 				return err
 			}
 			if err := localio.AptInstall(packages, "mono-complete"); err != nil {
@@ -201,7 +201,6 @@ func InstallVimAwesome(osType string, dirs *localio.Directories, packages *local
 			"cmake",
 			"vim-nox",
 			"python3-dev",
-			"golang",
 			"nodejs",
 			"default-jdk",
 			"npm",

@@ -9,7 +9,7 @@ jobs:
         go-version: [1.17.x]
         os: [ubuntu-latest, macos-latest]
     runs-on: ${{ matrix.os }}
-    name: codacy-coverage-reporter
+
     steps:
       - uses: actions/checkout@v2
 
@@ -29,6 +29,13 @@ jobs:
             ${{ runner.OS }}-build-
             ${{ runner.OS }}-
 
+      # Remove apt repos that are known to break from time to time
+      # See https://github.com/actions/virtual-environments/issues/323
+      - name: Remove broken apt repos [Ubuntu]
+        run: |
+          for apt_file in `grep -lr microsoft /etc/apt/sources.list.d/`; do sudo rm $apt_file; done
+        if: matrix.os == 'ubuntu-latest' || matrix.os == 'ubuntu-18.04'
+
       # Install all the dependencies
       - name: Install dependencies
         run: |
@@ -36,6 +43,7 @@ jobs:
           go install github.com/axw/gocov/gocov@latest
           go install github.com/AlekSi/gocov-xml@latest
           go get -u github.com/jstemmer/go-junit-report
+          sudo apt-get update -y || true
 
       # Run build of the application
       - name: Run build

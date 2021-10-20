@@ -8,7 +8,6 @@ import (
 	"strings"
 
 	"github.com/google/go-github/v39/github"
-	"github.com/klauspost/cpuid/v2"
 )
 
 // ReleaseAssets ...
@@ -68,16 +67,7 @@ func DownloadLatestRelease(osType string, dirs *localio.Directories, owner, repo
 		return "", err
 	}
 
-	var cpuType string
-	cpuid.Detect()
-	if cpuid.CPU.VendorID.String() == "AMD" || cpuid.CPU.VendorID.String() == "Intel" && cpuid.CPU.CacheLine == 64 {
-		cpuType = "AMD64"
-	} else if cpuid.CPU.VendorID.String() == "ARM" && cpuid.CPU.CacheLine == 64 {
-		cpuType = "ARM64"
-	} else {
-		cpuType = ""
-	}
-
+	cpuType := localio.GetCPUType()
 	switch osType {
 	case "darwin":
 		switch cpuType {
