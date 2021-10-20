@@ -156,7 +156,7 @@ func InstallOhMyZsh(osType string, dirs *localio.Directories) error {
 			return err
 		}
 
-		zshExtraConfigTemplate := fmt.Sprintf("templates/%s/zshrc_test_extra.zsh", osType)
+		zshExtraConfigTemplate := fmt.Sprintf("templates/%s/zshrc_extra.zsh", osType)
 		zshExtraConfig, err := zshConfigs.ReadFile(zshExtraConfigTemplate)
 		if err != nil {
 			return err
