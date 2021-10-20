@@ -9,6 +9,7 @@ import (
 	"reflect"
 	"runtime"
 	"testing"
+	"time"
 )
 
 //go:embed test/*
@@ -354,16 +355,25 @@ func TestBrewInstallCaskProgram(t *testing.T) {
 			brewName:     "font-meslo-lg-nerd-font",
 		}, false},
 	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if err := BrewTap("homebrew/cask-fonts", tt.args.packages); err != nil {
-				t.Errorf("BrewTap() error = %v, wantErr %v", err, tt.wantErr)
-			}
-			if err := BrewInstallCaskProgram(tt.args.brewName, tt.args.brewFullName, tt.args.packages); (err != nil) != tt.wantErr {
-				t.Errorf("BrewInstallCaskProgram() error = %v, wantErr %v", err, tt.wantErr)
-			}
-		})
+	timeout := time.After(20 * time.Minute)
+	done := make(chan bool)
+	go func() {
+		for _, tt := range tests {
+			t.Run(tt.name, func(t *testing.T) {
+				if err := BrewTap("homebrew/cask-fonts", tt.args.packages); err != nil {
+					t.Errorf("BrewTap() error = %v, wantErr %v", err, tt.wantErr)
+				}
+				if err := BrewInstallCaskProgram(tt.args.brewName, tt.args.brewFullName, tt.args.packages); (err != nil) != tt.wantErr {
+					t.Errorf("BrewInstallCaskProgram() error = %v, wantErr %v", err, tt.wantErr)
+				}
+			})
+		}
+		done <- true
+	}()
+	select {
+	case <-timeout:
+		t.Fatal("Test didn't finish in time")
+	case <-done:
 	}
 }
 

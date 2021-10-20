@@ -9,7 +9,7 @@ jobs:
         go-version: [1.17.x]
         os: [ubuntu-latest, macos-latest]
     runs-on: ${{ matrix.os }}
-    name: codacy-coverage-reporter
+
     steps:
       - uses: actions/checkout@v2
 
