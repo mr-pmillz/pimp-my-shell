@@ -51,6 +51,17 @@ func TestDownloadLatestRelease(t *testing.T) {
 			fmt.Sprintf("%s/%s", dirs.HomeDir, releaseAssets.DarwinAMDFileName),
 			false,
 		},
+		{
+			"Test DownloadLatestRelease From This Repo darwin 3 Should fail",
+			args{
+				osType: "darwin",
+				dirs:   dirs,
+				owner:  "mr-pmillzaasdfsadf",
+				repo:   "pimp-my-shellasdfasdf",
+			},
+			fmt.Sprintf("%s/%s", dirs.HomeDir, releaseAssets.DarwinAMDFileName),
+			true,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

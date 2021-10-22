@@ -36,6 +36,20 @@ func TestInstallNerdFontsLSD(t *testing.T) {
 				AptInstalledPackages:  &localio.AptInstalled{Name: []string{"bat", "lsd", "gotop", "delta"}},
 				BrewInstalledPackages: nil,
 			}}, false},
+		{"Test InstallNerdFontsLSD Linux 3", args{
+			osType: "linux",
+			dirs:   dirs,
+			packages: &localio.InstalledPackages{
+				AptInstalledPackages:  nil,
+				BrewInstalledPackages: nil,
+			}}, true},
+		{"Test InstallNerdFontsLSD Darwin 4", args{
+			osType: "darwin",
+			dirs:   dirs,
+			packages: &localio.InstalledPackages{
+				AptInstalledPackages:  nil,
+				BrewInstalledPackages: nil,
+			}}, true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

@@ -218,7 +218,8 @@ func InstallVimAwesome(osType string, dirs *localio.Directories, packages *local
 			"nodejs",
 			"default-jdk",
 			"npm",
-			"jq"}
+			"jq",
+		    "fonts-powerline"}
 
 		if err := localio.AptInstall(packages, universalPackagesToInstall...); err != nil {
 			return err

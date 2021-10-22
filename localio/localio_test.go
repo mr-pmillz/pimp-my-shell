@@ -243,6 +243,10 @@ func TestBrewInstallProgram(t *testing.T) {
 				Names: []string{"bat"}, CaskFullNames: []string{"bat"}, Taps: []string{"bat"},
 			},
 		}}, false},
+		{"Test BrewInstallProgram 2 Should Fail", args{brewName: "fzfasdfasdfsadfasfd", binaryName: "fzfasdfasdf", packages: &InstalledPackages{
+			AptInstalledPackages:  nil,
+			BrewInstalledPackages: nil,
+		}}, true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -268,6 +272,11 @@ func TestAptInstall(t *testing.T) {
 			BrewInstalledPackages: nil,
 		}, aptName: []string{"xclip"},
 		}, false},
+		{"Test AptInstall 2 should fail", args{packages: &InstalledPackages{
+			AptInstalledPackages:  nil,
+			BrewInstalledPackages: nil,
+		}, aptName: []string{"xclip"},
+		}, true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -311,6 +320,7 @@ func TestNewAptInstalled(t *testing.T) {
 		wantErr bool
 	}{
 		{"Test NewAptInstalled 1", &AptInstalled{[]string{"python3-dev", "cowsay"}}, false},
+		{"Test NewAptInstalled 2 Should fail", &AptInstalled{nil}, true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -354,6 +364,13 @@ func TestBrewInstallCaskProgram(t *testing.T) {
 			brewFullName: "font-meslo-lg-nerd-font",
 			brewName:     "font-meslo-lg-nerd-font",
 		}, false},
+		{"Test BrewInstallCaskProgram 3 Should fail", args{packages: &InstalledPackages{
+			AptInstalledPackages:  nil,
+			BrewInstalledPackages: nil,
+		},
+			brewFullName: "font-meslo-lg-nerd-font",
+			brewName:     "font-meslo-lg-nerd-font",
+		}, true},
 	}
 	timeout := time.After(20 * time.Minute)
 	done := make(chan bool)
@@ -395,6 +412,12 @@ func TestBrewTap(t *testing.T) {
 		},
 			brewTap: "homebrew/cask-fonts",
 		}, false},
+		{"Test BrewInstallCaskProgram 2 should fail", args{packages: &InstalledPackages{
+			AptInstalledPackages:  nil,
+			BrewInstalledPackages: nil,
+		},
+			brewTap: "homebrew/cask-fonts",
+		}, true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

@@ -44,6 +44,20 @@ func TestInstallCheat(t *testing.T) {
 				AptInstalledPackages:  &localio.AptInstalled{Name: []string{"aom"}},
 				BrewInstalledPackages: nil,
 			}}, false},
+		{"Test InstallCheat darwin 3", args{
+			osType: "darwin",
+			dirs:   dirs,
+			packages: &localio.InstalledPackages{
+				AptInstalledPackages:  nil,
+				BrewInstalledPackages: nil,
+			}}, true},
+		{"Test InstallCheat Linux 4", args{
+			osType: "linux",
+			dirs:   dirs,
+			packages: &localio.InstalledPackages{
+				AptInstalledPackages:  nil,
+				BrewInstalledPackages: nil,
+			}}, true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

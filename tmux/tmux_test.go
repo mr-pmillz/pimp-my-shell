@@ -51,7 +51,7 @@ func TestInstallOhMyTmux(t *testing.T) {
 			osType: "darwin",
 			dirs:   dirs,
 			packages: &localio.InstalledPackages{
-				AptInstalledPackages: nil,
+				AptInstalledPackages:  nil,
 				BrewInstalledPackages: nil,
 			}}, true},
 		{"Test InstallOhMyTmux Linux 4 Should fail", args{

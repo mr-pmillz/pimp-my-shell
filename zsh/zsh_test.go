@@ -29,6 +29,7 @@ func Test_updateZSHPlugins(t *testing.T) {
 	}{
 		{name: "Test_updateZSHPlugins Multi-line 1", args: args{zshrcTestTemplatePlugins}, wantErr: false},
 		{name: "Test_updateZSHPlugins Single-line 2", args: args{zshrcTestTemplateSingleLinePlugin}, wantErr: false},
+		{name: "Test_updateZSHPlugins Single-line 2", args: args{"/fakepath/doesn/t/exist/Fakepath/"}, wantErr: true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -47,6 +48,11 @@ func TestInstallOhMyZsh(t *testing.T) {
 	if err != nil {
 		t.Errorf("failed to create Directories type: %v", err)
 	}
+	fakeDirs, err := localio.NewDirectories()
+	if err != nil {
+		t.Errorf("failed to create Directories type: %v", err)
+	}
+	fakeDirs.HomeDir = "/not/a/real/dir/fake/dir/fake/test"
 	type args struct {
 		osType string
 		dirs   *localio.Directories
@@ -92,6 +98,14 @@ func TestInstallOhMyZsh(t *testing.T) {
 			osType: "linux",
 			dirs:   dirs,
 		}, false},
+		{"Test InstallOhMyZsh Darwin 3", args{
+			osType: "darwin",
+			dirs:   fakeDirs,
+		}, true},
+		{"Test InstallOhMyZsh Linux 4", args{
+			osType: "linux",
+			dirs:   fakeDirs,
+		}, true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
