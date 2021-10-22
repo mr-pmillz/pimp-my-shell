@@ -1,6 +1,10 @@
 name: codacy-coverage-reporter
 
-on: ["push"]
+on:
+  push:
+    tags:
+      - '*'
+  pull_request:
 
 jobs:
   codacy-coverage-reporter:
