@@ -94,6 +94,8 @@ All these configurations can be modified to your needs
       - useful command syntax cheatsheets Ex. `cheat tar`
     - [git-delta](https://github.com/dandavison/delta)
       - Beautiful less pager for `git diff`
+    - [bpytop](https://github.com/aristocratos/bpytop)
+      - Nice process monitor for the cli
 - **Oh-My-ZSH**
   - **Theme**
   - [Powerlevel10k](https://github.com/romkatv/powerlevel10k)

@@ -73,7 +73,15 @@ func InstallExtraPackages(osType string, dirs *localio.Directories, packages *lo
 			if err := localio.RunCommandPipeOutput(fmt.Sprintf("cd %s && python3 get-pip.py || true", dirs.HomeDir)); err != nil {
 				return err
 			}
-			if err := localio.RunCommandPipeOutput("python3 -m pip install requests --user || true"); err != nil {
+			if err := localio.RunCommandPipeOutput("python3 -m pip install requests psutil --user || true"); err != nil {
+				return err
+			}
+			// Shows cpu core temperatures in bpytop
+			if err := localio.BrewInstallProgram("hacker1024/hacker1024/coretemp", "coretemp", packages); err != nil {
+				return err
+			}
+			// install bpytop
+			if err := localio.RunCommandPipeOutput("python3 -m pip install bpytop --user || true"); err != nil {
 				return err
 			}
 		}
@@ -133,6 +141,23 @@ func InstallExtraPackages(osType string, dirs *localio.Directories, packages *lo
 			}
 			fmt.Println("[+] Installing git-delta latest release")
 			if err = localio.RunCommandPipeOutput(fmt.Sprintf("sudo dpkg --no-pager -i %s", debPackage)); err != nil {
+				return err
+			}
+		}
+
+		// download get-pip
+		if _, exists := localio.CommandExists("python3"); exists {
+			if err := localio.DownloadFile(fmt.Sprintf("%s/get-pip.py", dirs.HomeDir), "https://bootstrap.pypa.io/get-pip.py"); err != nil {
+				return err
+			}
+			if err := localio.RunCommandPipeOutput(fmt.Sprintf("cd %s && python3 get-pip.py || true", dirs.HomeDir)); err != nil {
+				return err
+			}
+			if err := localio.RunCommandPipeOutput("python3 -m pip install requests psutil --user || true"); err != nil {
+				return err
+			}
+			// install bpytop
+			if err := localio.RunCommandPipeOutput("python3 -m pip install bpytop --user || true"); err != nil {
 				return err
 			}
 		}

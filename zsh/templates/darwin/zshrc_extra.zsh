@@ -6,7 +6,7 @@
 # Set GOPATH, GOROOT and add GOROOT to path
 if [[ -z "${GOPATH}" ]]; then export GOPATH="${HOME}/go"; fi
 if [[ -z "${GOROOT}" ]]; then export GOROOT="$(brew --prefix golang)/libexec"; fi
-if [[ ":$PATH:" != *":${GOROOT}/bin:"* ]] && export PATH="${PATH}:${GOROOT}/bin"
+[[ ":$PATH:" != *":${GOROOT}/bin:"* ]] && export PATH="${PATH}:${GOROOT}/bin"
 
 # Set CTRL+U to only delete backwards to the left of the cursor.
 bindkey \^U backward-kill-line

@@ -5,7 +5,7 @@
 [[ ":$PATH:" != *":${HOME}/go/bin:"* ]] && export PATH="${PATH}:${HOME}/go/bin"
 # Set GOPATH
 if [[ -z "${GOPATH}" ]]; then export GOPATH="${HOME}/go"; fi
-if [[ ":$PATH:" != *":/usr/local/go/bin:"* ]] && export PATH="${PATH}:/usr/local/go/bin"
+[[ ":$PATH:" != *":/usr/local/go/bin:"* ]] && export PATH="${PATH}:/usr/local/go/bin"
 
 # Set CTRL+U to only delete backwards to the left of the cursor.
 bindkey \^U backward-kill-line
