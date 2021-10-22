@@ -92,10 +92,21 @@ func InstallVimPlugins(osType string, dirs *localio.Directories) error {
 		return err
 	}
 
+	updateVimCustomPlugins, err := myConfigs.Open("templates/update.sh")
+	if err != nil {
+		return err
+	}
+
 	if err = localio.EmbedFileCopy("~/.vim_runtime/my_configs.vim", myConfigFS); err != nil {
 		return err
 	}
 	if err = localio.EmbedFileCopy("~/.vimrc", vimrcFS); err != nil {
+		return err
+	}
+	// Useful bash script to update plugins
+	// set it on a cron
+	// 0 12 * * * cd ~/.vim_runtime/my_plugins && ./update.sh > gitPullUpdates.txt 2>&1
+	if err = localio.EmbedFileCopy("~/.vim_runtime/my_plugins/update.sh", updateVimCustomPlugins); err != nil {
 		return err
 	}
 

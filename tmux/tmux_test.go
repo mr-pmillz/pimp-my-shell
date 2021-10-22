@@ -47,6 +47,20 @@ func TestInstallOhMyTmux(t *testing.T) {
 				AptInstalledPackages:  &localio.AptInstalled{Name: []string{"xclip", "tmux"}},
 				BrewInstalledPackages: nil,
 			}}, false},
+		{"Test InstallOhMyTmux darwin 3 Should Fail", args{
+			osType: "darwin",
+			dirs:   dirs,
+			packages: &localio.InstalledPackages{
+				AptInstalledPackages: nil,
+				BrewInstalledPackages: nil,
+			}}, true},
+		{"Test InstallOhMyTmux Linux 4 Should fail", args{
+			osType: "linux",
+			dirs:   dirs,
+			packages: &localio.InstalledPackages{
+				AptInstalledPackages:  nil,
+				BrewInstalledPackages: nil,
+			}}, true},
 	}
 	timeout := time.After(20 * time.Minute)
 	done := make(chan bool)

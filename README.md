@@ -55,10 +55,11 @@ After Installation, if you want to Customize Powerlevel10k zsh theme differently
 p10k configure
 ```
 
-Make sure your vim binaries installed. They should be from ./pimp-my-shell but just in case run the command below.
+If you want your custom vim plugins to automatically update, simply create this cronjob
 
 ```shell
-vim +GoInstallBinaries
+crontab -e
+0 12 * * * cd ~/.vim_runtime/my_plugins && ./update.sh > gitPullUpdates.txt 2>&1
 ```
 
 ## About

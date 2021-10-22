@@ -63,6 +63,20 @@ func TestInstallExtraPackages(t *testing.T) {
 				AptInstalledPackages:  &localio.AptInstalled{Name: []string{"lsd"}},
 				BrewInstalledPackages: nil,
 			}}, false},
+		{"Test InstallExtraPackages Linux 4 Should Fail", args{
+			osType: "linux",
+			dirs:   dirs,
+			packages: &localio.InstalledPackages{
+				AptInstalledPackages:  nil,
+				BrewInstalledPackages: nil,
+			}}, true},
+		{"Test InstallExtraPackages Darwin 5 Should Fail", args{
+			osType: "darwin",
+			dirs:   dirs,
+			packages: &localio.InstalledPackages{
+				AptInstalledPackages:  nil,
+				BrewInstalledPackages: nil,
+			}}, true},
 	}
 	timeout := time.After(20 * time.Minute)
 	done := make(chan bool)

@@ -87,6 +87,20 @@ func TestInstallVimAwesome(t *testing.T) {
 				AptInstalledPackages:  &localio.AptInstalled{Name: []string{"bat", "lsd", "gotop", "delta"}},
 				BrewInstalledPackages: nil,
 			}}, false},
+		{"Test InstallOhMyTmux Linux 3", args{
+			osType: "linux",
+			dirs:   dirs,
+			packages: &localio.InstalledPackages{
+				AptInstalledPackages:  nil,
+				BrewInstalledPackages: nil,
+			}}, true},
+		{"Test InstallOhMyTmux Darwin 4", args{
+			osType: "darwin",
+			dirs:   dirs,
+			packages: &localio.InstalledPackages{
+				AptInstalledPackages:  nil,
+				BrewInstalledPackages: nil,
+			}}, true},
 	}
 	timeout := time.After(20 * time.Minute)
 	done := make(chan bool)
