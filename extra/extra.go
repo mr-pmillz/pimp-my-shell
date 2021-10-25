@@ -3,9 +3,9 @@ package extra
 import (
 	"embed"
 	"fmt"
+	"github.com/mr-pmillz/pimp-my-shell/githubapi"
+	"github.com/mr-pmillz/pimp-my-shell/localio"
 	"gopkg.in/ini.v1"
-	"pimp-my-shell/githubapi"
-	"pimp-my-shell/localio"
 )
 
 //go:embed templates/*

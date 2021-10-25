@@ -1,4 +1,4 @@
-module pimp-my-shell
+module github.com/mr-pmillz/pimp-my-shell
 
 go 1.17
 

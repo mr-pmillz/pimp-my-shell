@@ -4,7 +4,7 @@ import (
 	"embed"
 	"fmt"
 	"github.com/google/periph/host/distro"
-	"pimp-my-shell/localio"
+	"github.com/mr-pmillz/pimp-my-shell/localio"
 )
 
 //go:embed templates/*

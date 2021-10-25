@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"pimp-my-shell/localio"
+	"github.com/mr-pmillz/pimp-my-shell/localio"
 	"runtime"
 	"testing"
 	"time"

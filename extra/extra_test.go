@@ -1,7 +1,7 @@
 package extra
 
 import (
-	"pimp-my-shell/localio"
+	"github.com/mr-pmillz/pimp-my-shell/localio"
 	"runtime"
 	"testing"
 	"time"

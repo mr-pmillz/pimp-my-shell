@@ -3,8 +3,8 @@ package cheat
 import (
 	_ "embed"
 	"fmt"
+	"github.com/mr-pmillz/pimp-my-shell/localio"
 	"os"
-	"pimp-my-shell/localio"
 	"testing"
 )
 

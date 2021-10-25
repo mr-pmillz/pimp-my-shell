@@ -61,20 +61,20 @@ func parseLine(line string) (key string, value string, err error) {
 
 	// skip empty lines
 	if len(line) == 0 {
-		err = errors.New("Skipping: zero-length")
+		err = errors.New("skipping: zero-length")
 		return
 	}
 
 	// skip comments
 	if line[0] == '#' {
-		err = errors.New("Skipping: comment")
+		err = errors.New("skipping: comment")
 		return
 	}
 
 	// try to split string at the first '='
 	splitString := strings.SplitN(line, "=", 2)
 	if len(splitString) != 2 {
-		err = errors.New("Can not extract key=value")
+		err = errors.New("can not extract key=value")
 		return
 	}
 

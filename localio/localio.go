@@ -241,7 +241,7 @@ func EmbedFileCopy(dst string, src fs.File) error {
 	}
 
 	if exists, err := Exists(filepath.Dir(destFilePath)); err == nil && !exists {
-		if err = os.MkdirAll(filepath.Dir(destFilePath), 0770); err != nil {
+		if err = os.MkdirAll(filepath.Dir(destFilePath), 0750); err != nil {
 			return err
 		}
 	}

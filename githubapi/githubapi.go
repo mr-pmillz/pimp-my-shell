@@ -3,8 +3,8 @@ package githubapi
 import (
 	"context"
 	"fmt"
+	"github.com/mr-pmillz/pimp-my-shell/localio"
 	"path"
-	"pimp-my-shell/localio"
 	"strings"
 
 	"github.com/google/go-github/v39/github"

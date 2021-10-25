@@ -4,8 +4,8 @@ import (
 	"embed"
 	"fmt"
 	gotmux "github.com/jubnzv/go-tmux"
+	"github.com/mr-pmillz/pimp-my-shell/localio"
 	"os"
-	"pimp-my-shell/localio"
 )
 
 //go:embed templates/*

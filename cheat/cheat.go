@@ -4,7 +4,7 @@ import (
 	"bytes"
 	_ "embed" // single file embed
 	"fmt"
-	"pimp-my-shell/localio"
+	"github.com/mr-pmillz/pimp-my-shell/localio"
 	"text/template"
 )
 

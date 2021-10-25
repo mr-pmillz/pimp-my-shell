@@ -2,16 +2,16 @@ package main
 
 import (
 	"fmt"
+	"github.com/mr-pmillz/pimp-my-shell/cheat"
+	"github.com/mr-pmillz/pimp-my-shell/extra"
+	"github.com/mr-pmillz/pimp-my-shell/linux"
+	"github.com/mr-pmillz/pimp-my-shell/localio"
+	"github.com/mr-pmillz/pimp-my-shell/macosx"
+	"github.com/mr-pmillz/pimp-my-shell/nerdfonts"
+	"github.com/mr-pmillz/pimp-my-shell/tmux"
+	"github.com/mr-pmillz/pimp-my-shell/vim"
+	"github.com/mr-pmillz/pimp-my-shell/zsh"
 	"log"
-	"pimp-my-shell/cheat"
-	"pimp-my-shell/extra"
-	"pimp-my-shell/linux"
-	"pimp-my-shell/localio"
-	"pimp-my-shell/macosx"
-	"pimp-my-shell/nerdfonts"
-	"pimp-my-shell/tmux"
-	"pimp-my-shell/vim"
-	"pimp-my-shell/zsh"
 	"runtime"
 )
 

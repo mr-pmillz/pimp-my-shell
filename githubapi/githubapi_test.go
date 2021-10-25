@@ -2,8 +2,8 @@ package githubapi
 
 import (
 	"fmt"
+	"github.com/mr-pmillz/pimp-my-shell/localio"
 	"log"
-	"pimp-my-shell/localio"
 	"reflect"
 	"testing"
 )
