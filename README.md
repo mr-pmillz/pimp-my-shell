@@ -33,6 +33,19 @@ Table of Contents
 
 ## Install
 
+If you have a version of golang >= 16.X you can install with
+
+```shell
+go install github.com/mr-pmillz/pimp-my-shell@latest
+```
+
+If using an older version of golang
+
+```shell
+go get github.com/mr-pmillz/pimp-my-shell@latest
+```
+ ### Manual installation
+
 Download the latest release for your system from [Releases](https://github.com/mr-pmillz/pimp-my-shell/releases)
 - or clone the repo and run `go build` to build the binary.
   - If you're going to build from source, this project requires >= go v1.17.X
