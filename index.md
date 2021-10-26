@@ -4,6 +4,7 @@
 [![Donate with Bitcoin](https://en.cryptobadges.io/badge/micro/3Cd54T1EB6WHRcechq1dRCGF6vY2HHhkdk)](https://en.cryptobadges.io/donate/3Cd54T1EB6WHRcechq1dRCGF6vY2HHhkdk)
 [![Donate with Ethereum](https://en.cryptobadges.io/badge/micro/0x064AA753EF36e5641E2Ee3C9BbC117F6aFe35F62)](https://en.cryptobadges.io/donate/0x064AA753EF36e5641E2Ee3C9BbC117F6aFe35F62)
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/cffe102aadbd4f4394754f0c259cc527)](https://www.codacy.com/gh/mr-pmillz/pimp-my-shell/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=mr-pmillz/pimp-my-shell&amp;utm_campaign=Badge_Grade)
+[![Go Report Card](https://goreportcard.com/badge/github.com/mr-pmillz/pimp-my-shell)](https://goreportcard.com/report/github.com/mr-pmillz/pimp-my-shell)
 ![GitHub all releases](https://img.shields.io/github/downloads/mr-pmillz/pimp-my-shell/total?style=social)
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/mr-pmillz/pimp-my-shell/CI?style=plastic)
 ![GitHub repo size](https://img.shields.io/github/repo-size/mr-pmillz/pimp-my-shell?style=plastic)
@@ -32,6 +33,19 @@ Table of Contents
 
 ## Install
 
+If you have a version of golang >= 16.X you can install with
+
+```shell
+go install github.com/mr-pmillz/pimp-my-shell@latest
+```
+
+If using an older version of golang
+
+```shell
+go get github.com/mr-pmillz/pimp-my-shell@latest
+```
+ ### Manual installation
+
 Download the latest release for your system from [Releases](https://github.com/mr-pmillz/pimp-my-shell/releases)
 - or clone the repo and run `go build` to build the binary.
   - If you're going to build from source, this project requires >= go v1.17.X
@@ -52,6 +66,13 @@ After Installation, if you want to Customize Powerlevel10k zsh theme differently
 
 ```shell
 p10k configure
+```
+
+If you want your custom vim plugins to automatically update, simply create this cronjob
+
+```shell
+crontab -e
+0 12 * * * cd ~/.vim_runtime/my_plugins && ./update.sh > gitPullUpdates.txt 2>&1
 ```
 
 ## About
@@ -87,6 +108,8 @@ All these configurations can be modified to your needs
       - useful command syntax cheatsheets Ex. `cheat tar`
     - [git-delta](https://github.com/dandavison/delta)
       - Beautiful less pager for `git diff`
+    - [bpytop](https://github.com/aristocratos/bpytop)
+      - Nice process monitor for the cli
 - **Oh-My-ZSH**
   - **Theme**
   - [Powerlevel10k](https://github.com/romkatv/powerlevel10k)
