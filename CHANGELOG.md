@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.7.0](https://github.com/mr-pmillz/pimp-my-shell/tree/v1.7.0) (2021-10-25)
+
+[Full Changelog](https://github.com/mr-pmillz/pimp-my-shell/compare/v1.6.9...v1.7.0)
+
 ## [v1.6.9](https://github.com/mr-pmillz/pimp-my-shell/tree/v1.6.9) (2021-10-25)
 
 [Full Changelog](https://github.com/mr-pmillz/pimp-my-shell/compare/v1.6.8...v1.6.9)
