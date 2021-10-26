@@ -44,6 +44,7 @@ If using an older version of golang
 ```shell
 go get github.com/mr-pmillz/pimp-my-shell@latest
 ```
+
  ### Manual installation
 
 Download the latest release for your system from [Releases](https://github.com/mr-pmillz/pimp-my-shell/releases)
@@ -57,7 +58,7 @@ Download the latest release for your system from [Releases](https://github.com/m
 ./pimp-my-shell
 ```
 
-If you already have oh-my-zsh installed, don't worry! Your ~/.zshrc file will not be overridden install script
+If you already have oh-my-zsh installed, don't worry! Your ~/.zshrc file will not be overridden by the pimp-my-shell.
 The only thing that will change is your zsh theme and the following plugins will be merged into your existing plugins=() object
 
 - `git zsh-syntax-highlighting tmux zsh-autosuggestions virtualenv ansible docker docker-compose terraform helm kubectl fzf`
