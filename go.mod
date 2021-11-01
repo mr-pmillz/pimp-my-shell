@@ -9,7 +9,7 @@ require (
 	github.com/jubnzv/go-tmux v0.0.0-20210107170159-c6ae3ccbe820
 	github.com/klauspost/cpuid/v2 v2.0.9
 	github.com/schollz/progressbar/v3 v3.8.3
-	github.com/tidwall/gjson v1.10.2
+	github.com/tidwall/gjson v1.11.0
 	gopkg.in/ini.v1 v1.63.2
 )
 
