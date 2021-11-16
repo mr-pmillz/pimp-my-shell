@@ -73,12 +73,3 @@ jobs:
 
     - name: Checkout code
       uses: actions/checkout@main
-
-    - name: Run Codacy Analysis CLI
-      uses: codacy/codacy-analysis-cli-action@master
-      with:
-        project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-        run-gosec: "true"
-        run-staticcheck: "true"
-        upload: true
-        max-allowed-issues: 2147483647
