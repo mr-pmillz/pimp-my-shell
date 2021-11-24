@@ -1,8 +1,9 @@
 package nerdfonts
 
 import (
-	"github.com/mr-pmillz/pimp-my-shell/localio"
 	"testing"
+
+	"github.com/mr-pmillz/pimp-my-shell/localio"
 )
 
 func TestInstallNerdFontsLSD(t *testing.T) {

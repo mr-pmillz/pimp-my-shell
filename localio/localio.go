@@ -5,9 +5,6 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"github.com/klauspost/cpuid/v2"
-	"github.com/schollz/progressbar/v3"
-	"github.com/tidwall/gjson"
 	"io"
 	"io/fs"
 	"log"
@@ -20,7 +17,24 @@ import (
 	"runtime"
 	"strings"
 	"time"
+
+	"github.com/go-git/go-git/v5"
+	. "github.com/go-git/go-git/v5/_examples"
+	"github.com/klauspost/cpuid/v2"
+	"github.com/schollz/progressbar/v3"
+	"github.com/tidwall/gjson"
 )
+
+// GitClone clones a public git repo url to directory
+func GitClone(url, directory string) error {
+	Info("git clone %s %s", url, directory)
+	_, err := git.PlainClone(directory, false, &git.CloneOptions{
+		URL: url,
+	})
+	CheckIfError(err)
+
+	return nil
+}
 
 func sedReplaceKeysValue(sedName, varName, val, configPath string) error {
 	sedPath, exists := CommandExists(sedName)

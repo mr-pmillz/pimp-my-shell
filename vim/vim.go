@@ -3,6 +3,7 @@ package vim
 import (
 	"embed"
 	"fmt"
+
 	"github.com/google/periph/host/distro"
 	"github.com/mr-pmillz/pimp-my-shell/localio"
 )
@@ -24,7 +25,7 @@ func InstallVimPlugins(osType string, dirs *localio.Directories) error {
 	}
 
 	// install YCM
-	if err := localio.RunCommandPipeOutput(fmt.Sprintf("git clone https://github.com/ycm-core/YouCompleteMe.git %s/.vim_runtime/my_plugins/YouCompleteMe", dirs.HomeDir)); err != nil {
+	if err := localio.GitClone("https://github.com/ycm-core/YouCompleteMe.git", fmt.Sprintf("%s/.vim_runtime/my_plugins/YouCompleteMe", dirs.HomeDir)); err != nil {
 		return err
 	}
 
@@ -33,51 +34,51 @@ func InstallVimPlugins(osType string, dirs *localio.Directories) error {
 		return err
 	}
 	// vim-yaml plugin
-	if err := localio.RunCommandPipeOutput(fmt.Sprintf("git clone https://github.com/stephpy/vim-yaml.git %s/.vim_runtime/my_plugins/vim-yaml", dirs.HomeDir)); err != nil {
+	if err := localio.GitClone("https://github.com/stephpy/vim-yaml.git", fmt.Sprintf("%s/.vim_runtime/my_plugins/vim-yaml", dirs.HomeDir)); err != nil {
 		return err
 	}
 	// vim-go plugin
-	if err := localio.RunCommandPipeOutput(fmt.Sprintf("git clone https://github.com/fatih/vim-go.git %s/.vim_runtime/my_plugins/vim-go", dirs.HomeDir)); err != nil {
+	if err := localio.GitClone("https://github.com/fatih/vim-go.git", fmt.Sprintf("%s/.vim_runtime/my_plugins/vim-go", dirs.HomeDir)); err != nil {
 		return err
 	}
 	// rainbow brackets vim plugin
-	if err := localio.RunCommandPipeOutput(fmt.Sprintf("git clone https://github.com/luochen1990/rainbow.git %s/.vim_runtime/my_plugins/rainbow", dirs.HomeDir)); err != nil {
+	if err := localio.GitClone("https://github.com/luochen1990/rainbow.git", fmt.Sprintf("%s/.vim_runtime/my_plugins/rainbow", dirs.HomeDir)); err != nil {
 		return err
 	}
 	// fzf.vim plugin
-	if err := localio.RunCommandPipeOutput(fmt.Sprintf("git clone https://github.com/junegunn/fzf.vim.git %s/.vim_runtime/my_plugins/fzf.vim", dirs.HomeDir)); err != nil {
+	if err := localio.GitClone("https://github.com/junegunn/fzf.vim.git", fmt.Sprintf("%s/.vim_runtime/my_plugins/fzf.vim", dirs.HomeDir)); err != nil {
 		return err
 	}
 	// nerdtree-git-plugin
-	if err := localio.RunCommandPipeOutput(fmt.Sprintf("git clone https://github.com/Xuyuanp/nerdtree-git-plugin.git %s/.vim_runtime/my_plugins/nerdtree-git-plugin", dirs.HomeDir)); err != nil {
+	if err := localio.GitClone("https://github.com/Xuyuanp/nerdtree-git-plugin.git", fmt.Sprintf("%s/.vim_runtime/my_plugins/nerdtree-git-plugin", dirs.HomeDir)); err != nil {
 		return err
 	}
 	// vim-devicons plugin
-	if err := localio.RunCommandPipeOutput(fmt.Sprintf("git clone https://github.com/ryanoasis/vim-devicons.git %s/.vim_runtime/my_plugins/vim-devicons", dirs.HomeDir)); err != nil {
+	if err := localio.GitClone("https://github.com/ryanoasis/vim-devicons.git", fmt.Sprintf("%s/.vim_runtime/my_plugins/vim-devicons", dirs.HomeDir)); err != nil {
 		return err
 	}
 	// lightline-bufferline plugin
-	if err := localio.RunCommandPipeOutput(fmt.Sprintf("git clone https://github.com/mengelbrecht/lightline-bufferline.git %s/.vim_runtime/my_plugins/lightline-bufferline", dirs.HomeDir)); err != nil {
+	if err := localio.GitClone("https://github.com/mengelbrecht/lightline-bufferline.git", fmt.Sprintf("%s/.vim_runtime/my_plugins/lightline-bufferline", dirs.HomeDir)); err != nil {
 		return err
 	}
 	// vim-visual-multi
-	if err := localio.RunCommandPipeOutput(fmt.Sprintf("git clone https://github.com/mg979/vim-visual-multi.git %s/.vim_runtime/my_plugins/vim-visual-multi", dirs.HomeDir)); err != nil {
+	if err := localio.GitClone("https://github.com/mg979/vim-visual-multi.git", fmt.Sprintf("%s/.vim_runtime/my_plugins/vim-visual-multi", dirs.HomeDir)); err != nil {
 		return err
 	}
 	// vim-helm
-	if err := localio.RunCommandPipeOutput(fmt.Sprintf("git clone https://github.com/towolf/vim-helm.git %s/.vim_runtime/my_plugins/vim-helm", dirs.HomeDir)); err != nil {
+	if err := localio.GitClone("https://github.com/towolf/vim-helm.git", fmt.Sprintf("%s/.vim_runtime/my_plugins/vim-helm", dirs.HomeDir)); err != nil {
 		return err
 	}
 	// vim-airline plugin
-	if err := localio.RunCommandPipeOutput(fmt.Sprintf("git clone https://github.com/vim-airline/vim-airline.git %s/.vim_runtime/my_plugins/vim-airline", dirs.HomeDir)); err != nil {
+	if err := localio.GitClone("https://github.com/vim-airline/vim-airline.git", fmt.Sprintf("%s/.vim_runtime/my_plugins/vim-airline", dirs.HomeDir)); err != nil {
 		return err
 	}
 	// vim-airline-themes plugin
-	if err := localio.RunCommandPipeOutput(fmt.Sprintf("git clone https://github.com/vim-airline/vim-airline-themes.git %s/.vim_runtime/my_plugins/vim-airline-themes", dirs.HomeDir)); err != nil {
+	if err := localio.GitClone("https://github.com/vim-airline/vim-airline-themes.git", fmt.Sprintf("%s/.vim_runtime/my_plugins/vim-airline-themes", dirs.HomeDir)); err != nil {
 		return err
 	}
 	// indentLine vim plugin
-	if err := localio.RunCommandPipeOutput(fmt.Sprintf("git clone https://github.com/Yggdroot/indentLine.git %s/.vim_runtime/my_plugins/indentLine", dirs.HomeDir)); err != nil {
+	if err := localio.GitClone("https://github.com/Yggdroot/indentLine.git", fmt.Sprintf("%s/.vim_runtime/my_plugins/indentLine", dirs.HomeDir)); err != nil {
 		return err
 	}
 

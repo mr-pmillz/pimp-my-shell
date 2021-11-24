@@ -705,3 +705,34 @@ func TestCorrectOS(t *testing.T) {
 		})
 	}
 }
+
+func TestGitClone(t *testing.T) {
+	type args struct {
+		url       string
+		directory string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{name: "TestGitClone", args: args{
+			url:       "https://github.com/zsh-users/zsh-syntax-highlighting.git",
+			directory: "/tmp/TestGitClone",
+		}, wantErr: false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if err := GitClone(tt.args.url, tt.args.directory); (err != nil) != tt.wantErr {
+				t.Errorf("GitClone() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+	t.Cleanup(func() {
+		if exists, err := Exists("/tmp/TestGitClone"); err == nil && exists {
+			if err = os.RemoveAll("/tmp/TestGitClone"); err != nil {
+				t.Errorf("couldnt remove dir: %v", err)
+			}
+		}
+	})
+}

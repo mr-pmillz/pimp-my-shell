@@ -1,10 +1,11 @@
 package extra
 
 import (
-	"github.com/mr-pmillz/pimp-my-shell/localio"
 	"runtime"
 	"testing"
 	"time"
+
+	"github.com/mr-pmillz/pimp-my-shell/localio"
 )
 
 func TestInstallExtraPackages(t *testing.T) {

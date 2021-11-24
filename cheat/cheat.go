@@ -4,8 +4,10 @@ import (
 	"bytes"
 	_ "embed" // single file embed
 	"fmt"
-	"github.com/mr-pmillz/pimp-my-shell/localio"
+	"os"
 	"text/template"
+
+	"github.com/mr-pmillz/pimp-my-shell/localio"
 )
 
 type cheatConfigOptions struct {
@@ -56,13 +58,10 @@ func InstallCheat(osType string, dirs *localio.Directories, packages *localio.In
 		}
 	}
 	if exists, err := localio.Exists(fmt.Sprintf("%s/.config/cheat", dirs.HomeDir)); err == nil && !exists {
-		if err := localio.RunCommandPipeOutput(fmt.Sprintf("mkdir -p %s/.config/cheat/cheatsheets", dirs.HomeDir)); err != nil {
+		if err = os.MkdirAll(fmt.Sprintf("%s/.config/cheat/cheatsheets/personal", dirs.HomeDir), 0750); err != nil {
 			return err
 		}
-		if err := localio.RunCommandPipeOutput(fmt.Sprintf("mkdir -p %s/.config/cheat/cheatsheets/personal", dirs.HomeDir)); err != nil {
-			return err
-		}
-		if err := localio.RunCommandPipeOutput(fmt.Sprintf("git clone https://github.com/cheat/cheatsheets.git %s/.config/cheat/cheatsheets/community", dirs.HomeDir)); err != nil {
+		if err = localio.GitClone("https://github.com/cheat/cheatsheets.git", fmt.Sprintf("%s/.config/cheat/cheatsheets/community", dirs.HomeDir)); err != nil {
 			return err
 		}
 		generatedCheatConfig, err := generateCheatConfig(dirs)

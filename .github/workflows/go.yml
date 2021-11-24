@@ -61,11 +61,15 @@ jobs:
           ./pimp-my-shell
           cat "$HOME/.zshrc"
 
-      # Run vet & lint on the code
-      - name: Run vet & lint
+      # Run Tests
+      - name: Tests
         run: |
-          go vet ./...
-          golint ./...
+          make -f MakeFile test || true
+
+      # Run golangci-lint
+      - name: Lint
+        run: |
+          make -f MakeFile lint || true
 
   generate-milestone:
     runs-on: ubuntu-latest
@@ -135,7 +139,7 @@ jobs:
           go env -w GOFLAGS=-mod=mod
           go mod tidy
           go build -v .
-          make -f MakeFile all
+          make -f MakeFile release
 
       - name: Get current tag name
         run: |

@@ -3,9 +3,10 @@ package tmux
 import (
 	"embed"
 	"fmt"
+	"os"
+
 	gotmux "github.com/jubnzv/go-tmux"
 	"github.com/mr-pmillz/pimp-my-shell/localio"
-	"os"
 )
 
 //go:embed templates/*

@@ -2,6 +2,8 @@ package nerdfonts
 
 import (
 	"fmt"
+	"os"
+
 	"github.com/mr-pmillz/pimp-my-shell/localio"
 )
 
@@ -31,7 +33,7 @@ func InstallNerdFontsLSD(osType string, dirs *localio.Directories, packages *loc
 			mesloLGSNFBoldURL := "https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold.ttf"
 			mesloLGSNFItalicURL := "https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Italic.ttf"
 			mesloLGSNFBoldItalicURL := "https://github.com/romkatv/powerlevel10k-media/raw/master/MesloLGS%20NF%20Bold%20Italic.ttf"
-			if err = localio.RunCommandPipeOutput(fmt.Sprintf("mkdir -p %s", fontsDir)); err != nil {
+			if err = os.MkdirAll(fontsDir, 0750); err != nil {
 				return err
 			}
 			if err = localio.DownloadFile(fmt.Sprintf("%s/MesloLGS NF Regular.ttf", fontsDir), mesloLGSNFRegularURL); err != nil {

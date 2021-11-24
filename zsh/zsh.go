@@ -3,14 +3,15 @@ package zsh
 import (
 	"embed"
 	"fmt"
-	"github.com/Masterminds/semver"
-	"github.com/mr-pmillz/pimp-my-shell/localio"
-	"github.com/mr-pmillz/pimp-my-shell/osrelease"
 	"io/ioutil"
 	"os"
 	"regexp"
 	"sort"
 	"strings"
+
+	"github.com/Masterminds/semver"
+	"github.com/mr-pmillz/pimp-my-shell/localio"
+	"github.com/mr-pmillz/pimp-my-shell/osrelease"
 )
 
 //go:embed templates/*
@@ -170,16 +171,14 @@ func InstallOhMyZsh(osType string, dirs *localio.Directories) error {
 
 	// install zsh-autosuggestions
 	if exists, err := localio.Exists(fmt.Sprintf("%s/.oh-my-zsh/custom/plugins/zsh-autosuggestions", dirs.HomeDir)); err == nil && !exists {
-		installString := fmt.Sprintf("git clone https://github.com/zsh-users/zsh-autosuggestions %s/.oh-my-zsh/custom/plugins/zsh-autosuggestions", dirs.HomeDir)
-		if err = localio.RunCommandPipeOutput(fmt.Sprintf("cd %s && %s", dirs.HomeDir, installString)); err != nil {
+		if err = localio.GitClone("https://github.com/zsh-users/zsh-autosuggestions", fmt.Sprintf("%s/.oh-my-zsh/custom/plugins/zsh-autosuggestions", dirs.HomeDir)); err != nil {
 			return err
 		}
 	}
 
 	// install zsh-syntax-highlighting
 	if exists, err := localio.Exists(fmt.Sprintf("%s/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting", dirs.HomeDir)); err == nil && !exists {
-		installString := fmt.Sprintf("git clone https://github.com/zsh-users/zsh-syntax-highlighting.git %s/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting", dirs.HomeDir)
-		if err = localio.RunCommandPipeOutput(fmt.Sprintf("cd %s && %s", dirs.HomeDir, installString)); err != nil {
+		if err = localio.GitClone("https://github.com/zsh-users/zsh-syntax-highlighting.git", fmt.Sprintf("%s/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting", dirs.HomeDir)); err != nil {
 			return err
 		}
 	}

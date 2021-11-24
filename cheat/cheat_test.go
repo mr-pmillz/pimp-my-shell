@@ -3,9 +3,10 @@ package cheat
 import (
 	_ "embed"
 	"fmt"
-	"github.com/mr-pmillz/pimp-my-shell/localio"
 	"os"
 	"testing"
+
+	"github.com/mr-pmillz/pimp-my-shell/localio"
 )
 
 func TestInstallCheat(t *testing.T) {

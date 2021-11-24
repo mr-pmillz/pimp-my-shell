@@ -2,10 +2,11 @@ package vim
 
 import (
 	"fmt"
-	"github.com/mr-pmillz/pimp-my-shell/localio"
 	"os"
 	"testing"
 	"time"
+
+	"github.com/mr-pmillz/pimp-my-shell/localio"
 )
 
 func TestInstallVimPlugins(t *testing.T) {

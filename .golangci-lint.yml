@@ -1,0 +1,52 @@
+run:
+  timeout: 5m
+
+linters:
+  disable-all: true
+  enable:
+    #- bodyclose
+    - deadcode
+    #- depguard
+    #- dogsled
+    #- dupl
+    - errcheck
+    #- exhaustive
+    #- funlen
+    - gas
+    #- gochecknoinits
+    - goconst
+    #- gocritic
+    #- gocyclo
+    #- gofmt
+    - goimports
+    #- golint
+    #- gomnd
+    #- goprintffuncname
+    - gosec
+    - gosimple
+    - govet
+    - ineffassign
+    #- interfacer
+    #- lll
+    #- maligned
+    - megacheck
+    #- misspell
+    #- nakedret
+    #- noctx
+    #- nolintlint
+    #- rowserrcheck
+    #- scopelint
+    - staticcheck
+    - structcheck
+    #- stylecheck
+    - typecheck
+    - unconvert
+    #- unparam
+    - unused
+    - varcheck
+    #- whitespace
+  fast: false
+
+linters-settings:
+  gosimple:
+    checks: ["all", "-S1028"]

@@ -2,6 +2,7 @@ package macosx
 
 import (
 	"fmt"
+
 	"github.com/mr-pmillz/pimp-my-shell/localio"
 )
 

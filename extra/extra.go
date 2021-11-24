@@ -3,6 +3,8 @@ package extra
 import (
 	"embed"
 	"fmt"
+	"os"
+
 	"github.com/mr-pmillz/pimp-my-shell/githubapi"
 	"github.com/mr-pmillz/pimp-my-shell/localio"
 	"gopkg.in/ini.v1"
@@ -115,7 +117,7 @@ func InstallExtraPackages(osType string, dirs *localio.Directories, packages *lo
 		}
 
 		// add batcat to path as bat
-		if err := localio.RunCommandPipeOutput(fmt.Sprintf("mkdir -p %s/.local/bin", dirs.HomeDir)); err != nil {
+		if err := os.MkdirAll(fmt.Sprintf("%s/.local/bin", dirs.HomeDir), 0750); err != nil {
 			return err
 		}
 

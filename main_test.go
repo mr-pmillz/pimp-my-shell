@@ -2,10 +2,11 @@ package main
 
 import (
 	"fmt"
-	"github.com/mr-pmillz/pimp-my-shell/localio"
 	"runtime"
 	"testing"
 	"time"
+
+	"github.com/mr-pmillz/pimp-my-shell/localio"
 )
 
 func Test_pimpMyShell(t *testing.T) {

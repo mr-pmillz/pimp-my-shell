@@ -3,9 +3,10 @@ package githubapi
 import (
 	"context"
 	"fmt"
-	"github.com/mr-pmillz/pimp-my-shell/localio"
 	"path"
 	"strings"
+
+	"github.com/mr-pmillz/pimp-my-shell/localio"
 
 	"github.com/google/go-github/v39/github"
 )

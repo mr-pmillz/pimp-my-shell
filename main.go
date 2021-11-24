@@ -2,6 +2,9 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"runtime"
+
 	"github.com/mr-pmillz/pimp-my-shell/cheat"
 	"github.com/mr-pmillz/pimp-my-shell/extra"
 	"github.com/mr-pmillz/pimp-my-shell/linux"
@@ -11,8 +14,6 @@ import (
 	"github.com/mr-pmillz/pimp-my-shell/tmux"
 	"github.com/mr-pmillz/pimp-my-shell/vim"
 	"github.com/mr-pmillz/pimp-my-shell/zsh"
-	"log"
-	"runtime"
 )
 
 // pimpMyShell runs all the installation setup tasks

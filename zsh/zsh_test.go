@@ -2,10 +2,11 @@ package zsh
 
 import (
 	"fmt"
-	"github.com/mr-pmillz/pimp-my-shell/localio"
 	"os"
 	"runtime"
 	"testing"
+
+	"github.com/mr-pmillz/pimp-my-shell/localio"
 )
 
 // Test_updateZSHPlugins is a basic test checking for errors, it doesn't validate the correct plugins

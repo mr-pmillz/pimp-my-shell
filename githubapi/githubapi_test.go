@@ -2,10 +2,11 @@ package githubapi
 
 import (
 	"fmt"
-	"github.com/mr-pmillz/pimp-my-shell/localio"
 	"log"
 	"reflect"
 	"testing"
+
+	"github.com/mr-pmillz/pimp-my-shell/localio"
 )
 
 func TestDownloadLatestRelease(t *testing.T) {

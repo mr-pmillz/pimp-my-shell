@@ -1,5 +1,18 @@
 # Changelog
 
+## [Unreleased](https://github.com/mr-pmillz/pimp-my-shell/tree/HEAD)
+
+[Full Changelog](https://github.com/mr-pmillz/pimp-my-shell/compare/v1.7.1...HEAD)
+
+**Merged pull requests:**
+
+- Bump gopkg.in/ini.v1 from 1.63.2 to 1.64.0 [\#7](https://github.com/mr-pmillz/pimp-my-shell/pull/7) ([dependabot[bot]](https://github.com/apps/dependabot))
+- Bump github.com/tidwall/gjson from 1.10.2 to 1.11.0 [\#5](https://github.com/mr-pmillz/pimp-my-shell/pull/5) ([dependabot[bot]](https://github.com/apps/dependabot))
+
+## [v1.7.1](https://github.com/mr-pmillz/pimp-my-shell/tree/v1.7.1) (2021-10-26)
+
+[Full Changelog](https://github.com/mr-pmillz/pimp-my-shell/compare/v1.7.0...v1.7.1)
+
 ## [v1.7.0](https://github.com/mr-pmillz/pimp-my-shell/tree/v1.7.0) (2021-10-25)
 
 [Full Changelog](https://github.com/mr-pmillz/pimp-my-shell/compare/v1.6.9...v1.7.0)
