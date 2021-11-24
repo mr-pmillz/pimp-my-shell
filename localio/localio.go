@@ -30,6 +30,7 @@ func GitClone(url, directory string) error {
 	Info("git clone %s %s", url, directory)
 	_, err := git.PlainClone(directory, false, &git.CloneOptions{
 		URL: url,
+		Progress: os.Stdout,
 	})
 	CheckIfError(err)
 
