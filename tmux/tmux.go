@@ -101,7 +101,7 @@ func InstallOhMyTmux(osType string, dirs *localio.Directories, packages *localio
 		}
 	}
 
-	if exists, err := localio.Exists(fmt.Sprintf("%s/.tmux.conf.local", dirs.HomeDir)); err == nil && exists == true {
+	if exists, err := localio.Exists(fmt.Sprintf("%s/.tmux.conf.local", dirs.HomeDir)); err == nil && exists {
 		return nil
 	}
 

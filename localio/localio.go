@@ -29,7 +29,7 @@ import (
 func GitClone(url, directory string) error {
 	Info("git clone %s %s", url, directory)
 	_, err := git.PlainClone(directory, false, &git.CloneOptions{
-		URL: url,
+		URL:      url,
 		Progress: os.Stdout,
 	})
 	CheckIfError(err)
@@ -406,10 +406,7 @@ func Contains(s []string, str string) bool {
 // CorrectOS ... Useful for go tests
 func CorrectOS(osType string) bool {
 	operatingSystem := runtime.GOOS
-	if operatingSystem == osType {
-		return true
-	}
-	return false
+	return operatingSystem == osType
 }
 
 // BrewInstallProgram ...
@@ -487,9 +484,8 @@ func NewAptInstalled() (*AptInstalled, error) {
 	if err != nil {
 		return nil, err
 	}
-	for _, name := range installedList {
-		ai.Name = append(ai.Name, name)
-	}
+
+	ai.Name = append(ai.Name, installedList...)
 
 	return ai, nil
 }

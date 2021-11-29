@@ -52,3 +52,8 @@ linters-settings:
     checks: ["all", "-S1028"]
   staticcheck:
     checks: ["all"]
+  gosec:
+    # To specify a set of rules to explicitly exclude.
+    # Available rules: https://github.com/securego/gosec#available-rules
+    excludes:
+      - G306
