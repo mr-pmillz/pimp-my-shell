@@ -11,7 +11,7 @@ require (
 	github.com/klauspost/cpuid/v2 v2.0.9
 	github.com/schollz/progressbar/v3 v3.8.3
 	github.com/tidwall/gjson v1.11.0
-	gopkg.in/ini.v1 v1.64.0
+	gopkg.in/ini.v1 v1.65.0
 )
 
 require (
