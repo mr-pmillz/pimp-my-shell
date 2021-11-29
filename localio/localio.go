@@ -321,9 +321,9 @@ func RunCommandPipeOutput(command string) error {
 	}
 
 	timeout := 60
-	ctx := context.Background()
+
 	var cancel context.CancelFunc
-	ctx, cancel = context.WithTimeout(context.Background(), time.Duration(timeout)*time.Minute)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(timeout)*time.Minute)
 	defer cancel()
 
 	cmd := exec.CommandContext(ctx, bashPath, "-c", command)

@@ -2,13 +2,9 @@ BIN="./bin"
 SRC=$(shell find . -name "*.go")
 CURRENT_TAG=$(shell git describe --tags --abbrev=0)
 
-ifeq (, $(shell which golangci-lint))
-$(warning "could not find golangci-lint in $(PATH), run: curl -sfL https://install.goreleaser.com/github.com/golangci/golangci-lint.sh | sh")
-endif
-
-ifeq (, $(shell which richgo))
-$(warning "could not find richgo in $(PATH), run: go get github.com/kyoh86/richgo")
-endif
+GOLANGCI := $(shell command -v golangci-lint 2>/dev/null)
+RICHGO := $(shell command -v richgo 2>/dev/null)
+MIN_GOLANGCI_LINT_VERSION := 001043000
 
 .PHONY: fmt lint test clean compile chmodX compress
 
@@ -22,12 +18,31 @@ fmt:
 	$(info ******************** checking formatting ********************)
 	@test -z $(shell gofmt -l $(SRC)) || (gofmt -d $(SRC); exit 1)
 
-lint:
+.PHONY: golangci-lint-check
+golangci-lint-check:
+	$(eval GOLANGCI_LINT_VERSION := $(shell printf "%03d%03d%03d" $(shell golangci-lint --version | grep -Eo '[0-9]+\.[0-9.]+' | tr '.' ' ');))
+	$(eval MIN_GOLANGCI_LINT_VER_FMT := $(shell printf "%g.%g.%g" $(shell echo $(MIN_GOLANGCI_LINT_VERSION) | grep -o ...)))
+	@hash golangci-lint > /dev/null 2>&1; if [ $$? -ne 0 ]; then \
+		echo "Downloading golangci-lint v${MIN_GOLANGCI_LINT_VER_FMT}"; \
+		export BINARY="golangci-lint"; \
+		curl -sfL "https://raw.githubusercontent.com/golangci/golangci-lint/v${MIN_GOLANGCI_LINT_VER_FMT}/install.sh" | sh -s -- -b $(GOPATH)/bin v$(MIN_GOLANGCI_LINT_VER_FMT); \
+	elif [ "$(GOLANGCI_LINT_VERSION)" -lt "$(MIN_GOLANGCI_LINT_VERSION)" ]; then \
+		echo "Downloading newer version of golangci-lint v${MIN_GOLANGCI_LINT_VER_FMT}"; \
+		export BINARY="golangci-lint"; \
+		curl -sfL "https://raw.githubusercontent.com/golangci/golangci-lint/v${MIN_GOLANGCI_LINT_VER_FMT}/install.sh" | sh -s -- -b $(GOPATH)/bin v$(MIN_GOLANGCI_LINT_VER_FMT); \
+	fi
+
+.PHONY: lint
+lint: golangci-lint-check
 	$(info ******************** running lint tools ********************)
-	golangci-lint run -c .golangci-lint.yml -v ./...
+	golangci-lint run -c .golangci-lint.yml -v ./... --timeout 10m
 
 test:
 	$(info ******************** running tests ********************)
+    ifndef RICHGO
+	    $(warning "could not find richgo in $(PATH), running: go get github.com/kyoh86/richgo")
+	    $(shell go get github.com/kyoh86/richgo)
+    endif
 	richgo test -v ./...
 
 clean:

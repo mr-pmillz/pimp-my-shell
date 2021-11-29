@@ -66,11 +66,6 @@ jobs:
         run: |
           make -f MakeFile test || true
 
-      # Run golangci-lint
-      - name: Lint
-        run: |
-          make -f MakeFile lint || true
-
   generate-milestone:
     runs-on: ubuntu-latest
     steps:

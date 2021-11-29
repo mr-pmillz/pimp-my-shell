@@ -50,3 +50,5 @@ linters:
 linters-settings:
   gosimple:
     checks: ["all", "-S1028"]
+  staticcheck:
+    checks: ["all"]
