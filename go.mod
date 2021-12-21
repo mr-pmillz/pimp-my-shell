@@ -9,7 +9,7 @@ require (
 	github.com/google/periph v3.6.8+incompatible
 	github.com/jubnzv/go-tmux v0.0.0-20210107170159-c6ae3ccbe820
 	github.com/klauspost/cpuid/v2 v2.0.9
-	github.com/schollz/progressbar/v3 v3.8.3
+	github.com/schollz/progressbar/v3 v3.8.5
 	github.com/tidwall/gjson v1.12.1
 	gopkg.in/ini.v1 v1.66.0
 )
@@ -33,10 +33,10 @@ require (
 	github.com/tidwall/match v1.1.1 // indirect
 	github.com/tidwall/pretty v1.2.0 // indirect
 	github.com/xanzy/ssh-agent v0.3.0 // indirect
-	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5 // indirect
-	golang.org/x/net v0.0.0-20210326060303-6b1517762897 // indirect
-	golang.org/x/sys v0.0.0-20210910150752-751e447fb3d0 // indirect
-	golang.org/x/term v0.0.0-20210615171337-6886f2dfbf5b // indirect
+	golang.org/x/crypto v0.0.0-20211215153901-e495a2d5b3d3 // indirect
+	golang.org/x/net v0.0.0-20211112202133-69e39bad7dc2 // indirect
+	golang.org/x/sys v0.0.0-20211216021012-1d35b9e2eb4e // indirect
+	golang.org/x/term v0.0.0-20210927222741-03fcf44c2211 // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect
 	periph.io/x/periph v3.6.8+incompatible // indirect
 )
