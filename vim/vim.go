@@ -65,8 +65,8 @@ func InstallVimPlugins(osType string, dirs *localio.Directories) error {
 	if err := localio.GitClone("https://github.com/mg979/vim-visual-multi.git", fmt.Sprintf("%s/.vim_runtime/my_plugins/vim-visual-multi", dirs.HomeDir)); err != nil {
 		return err
 	}
-	// vim-helm
-	if err := localio.GitClone("https://github.com/towolf/vim-helm.git", fmt.Sprintf("%s/.vim_runtime/my_plugins/vim-helm", dirs.HomeDir)); err != nil {
+	// vim-bracketed-paste
+	if err := localio.GitClone("https://github.com/ConradIrwin/vim-bracketed-paste", fmt.Sprintf("%s/.vim_runtime/my_plugins/vim-bracketed-paste", dirs.HomeDir)); err != nil {
 		return err
 	}
 	// vim-airline plugin

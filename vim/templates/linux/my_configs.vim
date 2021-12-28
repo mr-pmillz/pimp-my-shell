@@ -111,6 +111,9 @@ try
       \'syn match yamlBlockMappingKey /^\s*\zs.*\ze\s*:\%(\s\|$\)/'
     " END YAML Settings
 
+    " prevent vim from hiding quotes in json files
+    let g:vim_json_conceal=0
+ 
     " disable folding
     set nofoldenable
 
@@ -160,34 +163,6 @@ try
 
     " fix paste settings
 	let g:yankstack_map_keys = 0
-
-	" un-official tmux fix paste settings
-	let s:screen  = &term =~ 'screen-256color'
-	let s:tmux = &term =~ 'tmux'
-	let s:xterm   = &term =~ 'xterm-256color'
-
-	" make use of Xterm "bracketed paste mode"
-	" http://www.xfree86.org/current/ctlseqs.html#Bracketed%20Paste%20Mode
-	" http://stackoverflow.com/questions/5585129
-	if s:screen || s:xterm || s:tmux
-	  function! s:BeginXTermPaste(ret)
-		set paste
-		return a:ret
-	  endfunction
-
-	  " enable bracketed paste mode on entering Vim
-	  let &t_ti .= "\e[?2004h"
-
-	  " disable bracketed paste mode on leaving Vim
-	  let &t_te = "\e[?2004l" . &t_te
-
-	  set pastetoggle=<Esc>[201~
-	  inoremap <expr> <Esc>[200~ <SID>BeginXTermPaste("")
-	  nnoremap <expr> <Esc>[200~ <SID>BeginXTermPaste("i")
-	  vnoremap <expr> <Esc>[200~ <SID>BeginXTermPaste("c")
-	  cnoremap <Esc>[200~ <nop>
-	  cnoremap <Esc>[201~ <nop>
-	endif
 
     " Disbale visual mode warnings from vim-visual-multi
     let g:VM_show_warnings = 0
