@@ -4,15 +4,16 @@ CURRENT_TAG=$(shell git describe --tags --abbrev=0)
 
 GOLANGCI := $(shell command -v golangci-lint 2>/dev/null)
 RICHGO := $(shell command -v richgo 2>/dev/null)
+GOTESTFMT := $(shell command -v gotestfmt 2>/dev/null)
 MIN_GOLANGCI_LINT_VERSION := 001043000
 
-.PHONY: fmt lint test clean compile chmodX compress
+.PHONY: fmt lint build test clean compile chmodX compress
 
 default: all
 
-all: fmt lint test release
+all: fmt lint build test release
 
-release: clean compile chmodX compress
+release: clean build compile chmodX compress
 
 fmt:
 	$(info ******************** checking formatting ********************)
@@ -39,14 +40,28 @@ lint: golangci-lint-check
 
 test:
 	$(info ******************** running tests ********************)
-    ifndef RICHGO
-	    $(warning "could not find richgo in $(PATH), running: go get github.com/kyoh86/richgo")
-	    $(shell go get github.com/kyoh86/richgo)
+    ifeq ($(GITHUB_ACTIONS), "true")
+        ifndef GOTESTFMT
+            $(warning "could not find gotestfmt in $(PATH), running: go install github.com/haveyoudebuggedit/gotestfmt/v2/cmd/gotestfmt@latest")
+            $(shell go install github.com/haveyoudebuggedit/gotestfmt/v2/cmd/gotestfmt@latest)
+        endif
+		set -euo pipefail
+		go test -json -v ./... 2>&1 | tee /tmp/gotest.log | gotestfmt
+    else
+        ifndef RICHGO
+            $(warning "could not find richgo in $(PATH), running: go get github.com/kyoh86/richgo")
+            $(shell go get -u github.com/kyoh86/richgo)
+        endif
+		richgo test -v ./...
     endif
-	richgo test -v ./...
 
 clean:
 	rm -rf $(BIN) 2>/dev/null
+
+build:
+	go env -w GOFLAGS=-mod=mod
+	go mod tidy
+	go build -v .
 
 compile:
 	GOOS=linux GOARCH=amd64 go build -o bin/linux/amd64/pimp-my-shell-$(CURRENT_TAG)-linux-amd64 main.go

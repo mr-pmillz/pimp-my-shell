@@ -6,7 +6,6 @@ alias myip='dig +short myip.opendns.com @resolver1.opendns.com'
 alias pyup='python3 -m http.server'
 alias a2='curl wttr.in/Ann_Arbor'
 alias gs='git status'
-alias gcmsg='git commit -m '
 alias nstat='netstat -p tcp -van | grep LISTEN'
 alias gl="git log --all --graph --pretty=tformat:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --date=short"
 alias gll="git log --all --stat --pretty=tformat:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative"

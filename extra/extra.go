@@ -48,6 +48,10 @@ func InstallExtraPackages(osType string, dirs *localio.Directories, packages *lo
 		if err := localio.BrewInstallProgram("bat", "bat", packages); err != nil {
 			return err
 		}
+		// install fd
+		if err := localio.BrewInstallProgram("fd", "fd", packages); err != nil {
+			return err
+		}
 		// install fzf
 		if _, exists := localio.CommandExists("fzf"); !exists {
 			if err := localio.BrewInstallProgram("fzf", "fzf", packages); err != nil {
@@ -111,8 +115,8 @@ func InstallExtraPackages(osType string, dirs *localio.Directories, packages *lo
 			}
 		}
 
-		// install cowsay
-		if err := localio.AptInstall(packages, "cowsay", "bat"); err != nil {
+		// install cowsay, bat, fd-find
+		if err := localio.AptInstall(packages, "cowsay", "bat", "fd-find"); err != nil {
 			return err
 		}
 

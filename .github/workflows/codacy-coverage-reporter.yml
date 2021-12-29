@@ -24,13 +24,15 @@ jobs:
           go-version: ${{ matrix.go-version }}
 
       - name: Cache Go modules
-        uses: actions/cache@preview
+        uses: actions/cache@v2
         with:
-          path: ~/go/pkg/mod
-          key: ${{ runner.os }}-build-${{ hashFiles('**/go.sum') }}
+          path: |
+            ~/go/pkg/mod
+            ~/.cache/go-build
+          key: ${{ runner.os }}-codacy-coverage-reporter-${{ hashFiles('**/go.sum') }}
           restore-keys: |
-            ${{ runner.OS }}-build-${{ env.cache-name }}-
-            ${{ runner.OS }}-build-
+            ${{ runner.OS }}-codacy-coverage-reporter-${{ env.cache-name }}-
+            ${{ runner.OS }}-codacy-coverage-reporter-
             ${{ runner.OS }}-
 
       # Remove apt repos that are known to break from time to time
@@ -53,9 +55,7 @@ jobs:
       # Run build of the application
       - name: Run build
         run: |
-          go env -w GOFLAGS=-mod=mod
-          go mod tidy
-          go build -v .
+          make -f MakeFile build
 
       # Run Tests and Coverage
       - name: Run Tests and Coverage
