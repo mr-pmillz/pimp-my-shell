@@ -13,13 +13,13 @@ var myConfigs embed.FS
 
 // InstallVimPlugins ...
 func InstallVimPlugins(osType string, dirs *localio.Directories) error {
-	if exists, err := localio.Exists(fmt.Sprintf("%s/.vim_runtime", dirs.HomeDir)); err == nil && exists {
-		return nil
+	if exists, err := localio.Exists(fmt.Sprintf("%s/.vim_runtime", dirs.HomeDir)); err == nil && !exists {
+		// install awesome vim
+		if err = localio.RunCommandPipeOutput(fmt.Sprintf("git clone --depth=1 https://github.com/amix/vimrc.git %s/.vim_runtime", dirs.HomeDir)); err != nil {
+			return err
+		}
 	}
-	// install awesome vim
-	if err := localio.RunCommandPipeOutput(fmt.Sprintf("git clone --depth=1 https://github.com/amix/vimrc.git %s/.vim_runtime", dirs.HomeDir)); err != nil {
-		return err
-	}
+
 	if err := localio.RunCommandPipeOutput(fmt.Sprintf("cd %s && bash .vim_runtime/install_awesome_vimrc.sh", dirs.HomeDir)); err != nil {
 		return err
 	}
@@ -124,10 +124,6 @@ func InstallVimPlugins(osType string, dirs *localio.Directories) error {
 
 // InstallVimAwesome ...
 func InstallVimAwesome(osType string, dirs *localio.Directories, packages *localio.InstalledPackages) error {
-	if exists, err := localio.Exists(fmt.Sprintf("%s/.vim_runtime", dirs.HomeDir)); err == nil && exists {
-		return nil
-	}
-
 	switch osType {
 	case "darwin":
 		if !localio.CorrectOS("darwin") {

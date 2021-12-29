@@ -146,7 +146,10 @@ func InstallExtraPackages(osType string, dirs *localio.Directories, packages *lo
 				return err
 			}
 			fmt.Println("[+] Installing git-delta latest release")
-			if err = localio.RunCommandPipeOutput(fmt.Sprintf("sudo dpkg --no-pager -i %s", debPackage)); err != nil {
+			if err = localio.RunCommandPipeOutput(fmt.Sprintf("sudo dpkg --no-pager --force-depends -i %s", debPackage)); err != nil {
+				return err
+			}
+			if err = localio.RunCommandPipeOutput("sudo apt-get -y -q install -f"); err != nil {
 				return err
 			}
 		}
