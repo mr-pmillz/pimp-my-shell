@@ -56,7 +56,8 @@ jobs:
 
       # Run Tests and Coverage
       - name: Run coverage
-        run: go test ./... -v -race -coverprofile=coverage.txt -covermode=atomic
+        run: |
+          go test ./... -v -race -coverprofile=coverage.txt -covermode=atomic || true
 
       - name: Codecov
         uses: codecov/codecov-action@v2

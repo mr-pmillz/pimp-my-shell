@@ -63,7 +63,7 @@ func TestInstallVimAwesome(t *testing.T) {
 		packages *localio.InstalledPackages
 	}
 	if val, _ := os.LookupEnv("GITHUB_ACTIONS"); val == "true" {
-		if err = localio.RunCommandPipeOutput(fmt.Sprintf("rm -rf %s/.vim_runtime", dirs.HomeDir)); err != nil {
+		if err = localio.RunCommandPipeOutput(fmt.Sprintf("rm -rf %s/.vim_runtime 2>/dev/null || true", dirs.HomeDir)); err != nil {
 			t.Errorf("couldn't remove ~/.vim_runtime dir. error = %v", err)
 		}
 	}
