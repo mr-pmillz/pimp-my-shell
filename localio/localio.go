@@ -275,7 +275,7 @@ func EmbedFileCopy(dst string, src fs.File) error {
 
 // EmbedFileStringAppendToDest takes a slice of bytes and writes it as a string to dest file path
 func EmbedFileStringAppendToDest(data []byte, dest string) error {
-	fmt.Printf("[+] Appending: \n%s\n -> %s\n", string(data), dest)
+	fmt.Printf("[+] Appending: \n%s\n-> %s\n", string(data), dest)
 	fileDest, err := ResolveAbsPath(dest)
 	if err != nil {
 		return err
@@ -288,6 +288,98 @@ func EmbedFileStringAppendToDest(data []byte, dest string) error {
 
 	_, err = file.WriteString(string(data))
 	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// EmbedFileStringPrependToDest takes a slice of bytes and prepend writes it as a string
+// to the beginning of the dest file path
+func EmbedFileStringPrependToDest(data []byte, dest string) error {
+	fmt.Printf("[+] Prepending: \n%s\n-> %s\n", string(data), dest)
+	fileDest, err := ResolveAbsPath(dest)
+	if err != nil {
+		return err
+	}
+
+	if err = NewRecord(fileDest).PrependStringToFile(string(data)); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// Record is a type for prepending string text to a file
+type Record struct {
+	Filename string
+	Contents []string
+}
+
+// NewRecord returns the Record type
+func NewRecord(filename string) *Record {
+	return &Record{
+		Filename: filename,
+		Contents: make([]string, 0),
+	}
+}
+
+// readLines reads the lines of a file and appends them to Record.Contents
+func (r *Record) readLines() error {
+	if _, err := os.Stat(r.Filename); err != nil {
+		return err
+	}
+
+	f, err := os.OpenFile(r.Filename, os.O_RDONLY, 0600)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	scanner := bufio.NewScanner(f)
+	for scanner.Scan() {
+		line := scanner.Text()
+
+		if len(strings.TrimSpace(line)) != 0 {
+			r.Contents = append(r.Contents, line)
+			continue
+		}
+
+		if len(r.Contents) != 0 {
+			r.Contents = append(r.Contents, line)
+		}
+	}
+
+	return nil
+}
+
+// PrependStringToFile prepends a given string to an existing file while preserving the original formatting
+func (r *Record) PrependStringToFile(content string) error {
+	err := r.readLines()
+	if err != nil {
+		return err
+	}
+
+	f, err := os.OpenFile(r.Filename, os.O_CREATE|os.O_WRONLY, 0600)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+
+	writer := bufio.NewWriter(f)
+
+	_, err = writer.WriteString(fmt.Sprintf("%s\n", content))
+	if err != nil {
+		return err
+	}
+	for _, line := range r.Contents {
+		_, err = writer.WriteString(fmt.Sprintf("%s\n", line))
+		if err != nil {
+			return err
+		}
+	}
+
+	if err = writer.Flush(); err != nil {
 		return err
 	}
 

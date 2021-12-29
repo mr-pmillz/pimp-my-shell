@@ -10,5 +10,5 @@ alias gcmsg='git commit -m '
 alias gl="git log --all --graph --pretty=tformat:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --date=short"
 alias gll="git log --all --stat --pretty=tformat:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative"
 alias gln="git --no-pager log --all --stat --pretty=tformat:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative -n 10"
-alias clp="pbcopy < $1"
+alias clp="xclip -selection c -r"
 alias fzfbat="fzf --preview 'batcat --style numbers,changes --color=always {}' | head -500"

@@ -67,11 +67,11 @@ func TestEmbedFileStringAppendToDest(t *testing.T) {
 		{name: "TestEmbedFileStringAppendToDest 1", args: args{
 			data: testConfig,
 			dest: "test/zshrc-test-append-to-file.zshrc",
-		}},
+		}, wantErr: false},
 		{name: "TestEmbedFileStringAppendToDest 1", args: args{
 			data: testConfig,
 			dest: "test/copy-embed-file-test.zshrc",
-		}},
+		}, wantErr: false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -87,6 +87,34 @@ func TestEmbedFileStringAppendToDest(t *testing.T) {
 			}
 		}
 	})
+}
+
+func TestEmbedFileStringPrependToDest(t *testing.T) {
+	testConfig, err := testEmbedFiles.ReadFile("test/zshrc_test_extra_prepend.zsh")
+	if err != nil {
+		t.Errorf("EmbedFileStringAppendToDest() error = %v", err)
+	}
+	type args struct {
+		data []byte
+		dest string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{name: "TestEmbedFileStringPrependToDest 1", args: args{
+			data: testConfig,
+			dest: "test/zshrc-test-prepend-to-file.zshrc",
+		}, wantErr: false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if err := EmbedFileStringPrependToDest(tt.args.data, tt.args.dest); (err != nil) != tt.wantErr {
+				t.Errorf("EmbedFileStringPrependToDest() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
 }
 
 func TestDownloadAndInstallLatestVersionOfGolang(t *testing.T) {

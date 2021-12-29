@@ -49,6 +49,8 @@ func updateZSHPlugins(zshrcPath string) error {
 	return nil
 }
 
+const zshExtraConfigPrependTemplate = "templates/zshrc_extra_prepend.zsh"
+
 // InstallOhMyZsh ...
 func InstallOhMyZsh(osType string, dirs *localio.Directories) error {
 	// install ohmyzsh if not already installed
@@ -132,7 +134,7 @@ func InstallOhMyZsh(osType string, dirs *localio.Directories) error {
 		return err
 	}
 
-	if err := localio.EmbedFileCopy("~/.oh-my-zsh/tools/upgrade.zsh", upgradeScript); err != nil {
+	if err = localio.EmbedFileCopy("~/.oh-my-zsh/tools/upgrade.zsh", upgradeScript); err != nil {
 		return err
 	}
 
@@ -148,12 +150,21 @@ func InstallOhMyZsh(osType string, dirs *localio.Directories) error {
 			return err
 		}
 
-		if err := localio.EmbedFileCopy("~/.p10k.zsh", p10kConfig); err != nil {
+		if err = localio.EmbedFileCopy("~/.p10k.zsh", p10kConfig); err != nil {
 			return err
 		}
 
 		fmt.Println("[+] Setting Powerlevel10k Theme")
-		if err := localio.SetVariableValue("ZSH_THEME", "powerlevel10k\\/powerlevel10k", osType, "~/.zshrc"); err != nil {
+		if err = localio.SetVariableValue("ZSH_THEME", "powerlevel10k\\/powerlevel10k", osType, "~/.zshrc"); err != nil {
+			return err
+		}
+
+		zshExtraPrependConfig, err := zshConfigs.ReadFile(zshExtraConfigPrependTemplate)
+		if err != nil {
+			return err
+		}
+
+		if err := localio.EmbedFileStringPrependToDest(zshExtraPrependConfig, "~/.zshrc"); err != nil {
 			return err
 		}
 
