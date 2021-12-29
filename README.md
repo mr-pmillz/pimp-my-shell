@@ -6,12 +6,13 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/cffe102aadbd4f4394754f0c259cc527)](https://www.codacy.com/gh/mr-pmillz/pimp-my-shell/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=mr-pmillz/pimp-my-shell&amp;utm_campaign=Badge_Grade)
 [![Go Report Card](https://goreportcard.com/badge/github.com/mr-pmillz/pimp-my-shell)](https://goreportcard.com/report/github.com/mr-pmillz/pimp-my-shell)
 ![GitHub all releases](https://img.shields.io/github/downloads/mr-pmillz/pimp-my-shell/total?style=social)
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/mr-pmillz/pimp-my-shell/CI?style=plastic)
 ![GitHub repo size](https://img.shields.io/github/repo-size/mr-pmillz/pimp-my-shell?style=plastic)
 ![GitHub go.mod Go version](https://img.shields.io/github/go-mod/go-version/mr-pmillz/pimp-my-shell?style=plastic)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/mr-pmillz/pimp-my-shell?style=plastic)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/mr-pmillz/pimp-my-shell?style=plastic)
+[![Twitter](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2Fmr-pmillz%2Fpimp-my-shell)](https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fmr-pmillz%2Fpimp-my-shell)
 [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/cffe102aadbd4f4394754f0c259cc527)](https://www.codacy.com/gh/mr-pmillz/pimp-my-shell/dashboard?utm_source=github.com&utm_medium=referral&utm_content=mr-pmillz/pimp-my-shell&utm_campaign=Badge_Coverage)
+[![CI](https://github.com/mr-pmillz/pimp-my-shell/actions/workflows/go.yml/badge.svg)](https://github.com/mr-pmillz/pimp-my-shell/actions/workflows/go.yml)
 
 Table of Contents
 =================
