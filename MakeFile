@@ -45,7 +45,6 @@ test:
 			$(warning "could not find gotestfmt in $(PATH), running: go install github.com/haveyoudebuggedit/gotestfmt/v2/cmd/gotestfmt@latest")
 			$(shell go install github.com/haveyoudebuggedit/gotestfmt/v2/cmd/gotestfmt@latest)
         endif
-		set -euo pipefail
 		go test -json -v ./... 2>&1 | tee /tmp/gotest.log | gotestfmt
     else
         ifndef RICHGO
