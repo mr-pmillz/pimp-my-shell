@@ -35,7 +35,7 @@ type ReleaseAssets struct {
 }
 
 func getLatestReleasesFromGithubRepo(owner, repo string) (*ReleaseAssets, error) {
-	client := &github.Client{}
+	var client = &github.Client{}
 	ctx := context.Background()
 	githubToken, ok := os.LookupEnv("GITHUB_TOKEN")
 	if ok {

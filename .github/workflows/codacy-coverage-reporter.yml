@@ -23,17 +23,24 @@ jobs:
         with:
           go-version: ${{ matrix.go-version }}
 
-      - name: Cache Go modules
+      - id: go-cache-paths
+        run: |
+          echo "::set-output name=go-build::$(go env GOCACHE)"
+          echo "::set-output name=go-mod::$(go env GOMODCACHE)"
+
+      # Cache go build cache
+      - name: Go Build Cache
         uses: actions/cache@v2
         with:
-          path: |
-            ~/go/pkg/mod
-            ~/.cache/go-build
-          key: ${{ runner.os }}-codacy-coverage-reporter-${{ hashFiles('**/go.sum') }}
-          restore-keys: |
-            ${{ runner.OS }}-codacy-coverage-reporter-${{ env.cache-name }}-
-            ${{ runner.OS }}-codacy-coverage-reporter-
-            ${{ runner.OS }}-
+          path: ${{ steps.go-cache-paths.outputs.go-build }}
+          key: ${{ runner.os }}-go-build-${{ hashFiles('**/go.sum') }}
+
+      # Cache go mod cache
+      - name: Go Mod Cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.go-cache-paths.outputs.go-mod }}
+          key: ${{ runner.os }}-go-mod-${{ hashFiles('**/go.sum') }}
 
       # Remove apt repos that are known to break from time to time
       # See https://github.com/actions/virtual-environments/issues/323
@@ -60,7 +67,8 @@ jobs:
       # Run Tests and Coverage
       - name: Run Tests and Coverage
         run: |
-          go test -v -coverprofile=coverage.out ./... | tee >(richgo testfilter) | go-junit-report > coverage/${{ runner.OS }}-report.xml
+          go test -v -coverprofile=coverage.out ./... | tee test.out
+          cat test.out | go-junit-report > coverage/${{ runner.OS }}-report.xml
           gocov convert coverage.out | gocov-xml > coverage/${{ runner.OS }}-report.xml
 
       - name: Run codacy-coverage-reporter
