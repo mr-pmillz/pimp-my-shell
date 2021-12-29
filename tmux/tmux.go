@@ -12,60 +12,68 @@ import (
 //go:embed templates/*
 var tmuxConfig embed.FS
 
+const (
+	trueString = "true"
+	darwin     = "darwin"
+	linux      = "linux"
+)
+
 // runTmux ...
 func runTmux() error {
-	server := new(gotmux.Server)
+	if val, _ := os.LookupEnv("GITHUB_ACTIONS"); val != trueString {
+		if err := localio.StartTmuxSession(); err != nil {
+			return err
+		}
+		server := new(gotmux.Server)
 
-	// Check if "PimpMyShell" session already exists.
-	exists, err := server.HasSession("PimpMyShell")
-	if err != nil {
-		msg := fmt.Errorf("Can't check 'PimpMyShell' session: %s", err)
-		fmt.Println(msg)
-		return err
-	}
-	if exists {
-		fmt.Println("Session 'PimpMyShell' already exists!")
-		return err
-	}
+		// Check if "PimpMyShell" session already exists.
+		exists, err := server.HasSession("PimpMyShell")
+		if err != nil {
+			msg := fmt.Errorf("Can't check 'PimpMyShell' session: %s", err)
+			fmt.Println(msg)
+			return err
+		}
+		if exists {
+			fmt.Println("Session 'PimpMyShell' already exists!")
+			return err
+		}
 
-	// Prepare configuration for a new session with some windows.
-	session := gotmux.Session{Name: "PimpMyShell"}
-	w1 := gotmux.Window{Name: "Human", Id: 0}
-	w2 := gotmux.Window{Name: "Element", Id: 1}
-	session.AddWindow(w1)
-	session.AddWindow(w2)
-	server.AddSession(session)
-	var sessions []*gotmux.Session
-	sessions = append(sessions, &session)
-	conf := gotmux.Configuration{
-		Server:        server,
-		Sessions:      sessions,
-		ActiveSession: nil}
+		// Prepare configuration for a new session with some windows.
+		session := gotmux.Session{Name: "PimpMyShell"}
+		w1 := gotmux.Window{Name: "Human", Id: 0}
+		w2 := gotmux.Window{Name: "Element", Id: 1}
+		session.AddWindow(w1)
+		session.AddWindow(w2)
+		server.AddSession(session)
+		var sessions []*gotmux.Session
+		sessions = append(sessions, &session)
+		conf := gotmux.Configuration{
+			Server:        server,
+			Sessions:      sessions,
+			ActiveSession: nil}
 
-	// Setup this configuration.
-	err = conf.Apply()
-	if err != nil {
-		msg := fmt.Errorf("Can't apply prepared configuration: %s", err)
-		fmt.Println(msg)
-		return err
-	}
+		// Setup this configuration.
+		err = conf.Apply()
+		if err != nil {
+			msg := fmt.Errorf("Can't apply prepared configuration: %s", err)
+			fmt.Println(msg)
+			return err
+		}
 
-	// Attach to created session
-	err = session.AttachSession()
-	if err != nil {
-		msg := fmt.Errorf("Can't attached to created session: %s", err)
-		fmt.Println(msg)
-		return err
+		// Attach to created session
+		err = session.AttachSession()
+		if err != nil {
+			msg := fmt.Errorf("Can't attached to created session: %s", err)
+			fmt.Println(msg)
+			return err
+		}
 	}
 	return nil
 }
 
 // StartTMUX is a helper func
 func StartTMUX() error {
-	if val, _ := os.LookupEnv("GITHUB_ACTIONS"); val != "true" {
-		if err := localio.StartTmuxSession(); err != nil {
-			return err
-		}
+	if val, _ := os.LookupEnv("GITHUB_ACTIONS"); val != trueString {
 		if err := runTmux(); err != nil {
 			return err
 		}
@@ -76,8 +84,8 @@ func StartTMUX() error {
 // InstallOhMyTmux takes 1 of 3 possible strings, linux darwin windows
 func InstallOhMyTmux(osType string, dirs *localio.Directories, packages *localio.InstalledPackages) error {
 	switch osType {
-	case "darwin":
-		if !localio.CorrectOS("darwin") {
+	case darwin:
+		if !localio.CorrectOS(darwin) {
 			break
 		}
 		if err := localio.BrewInstallProgram("tmux", "tmux", packages); err != nil {
@@ -92,8 +100,8 @@ func InstallOhMyTmux(osType string, dirs *localio.Directories, packages *localio
 		if err := localio.BrewInstallProgram("reattach-to-user-namespace", "reattach-to-user-namespace", packages); err != nil {
 			return err
 		}
-	case "linux":
-		if !localio.CorrectOS("linux") {
+	case linux:
+		if !localio.CorrectOS(linux) {
 			break
 		}
 		if err := localio.AptInstall(packages, "tmux", "xclip"); err != nil {

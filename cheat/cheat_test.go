@@ -20,8 +20,8 @@ func TestInstallCheat(t *testing.T) {
 		packages *localio.InstalledPackages
 	}
 	if val, _ := os.LookupEnv("GITHUB_ACTIONS"); val == "true" {
-		if err = localio.RunCommandPipeOutput(fmt.Sprintf("rm -rf %s/.config/cheat", dirs.HomeDir)); err != nil {
-			t.Errorf("couldn't remove ~/.vim_runtime dir. error = %v", err)
+		if err = localio.RunCommandPipeOutput(fmt.Sprintf("rm -rf %s/.config/cheat 2>/dev/null", dirs.HomeDir)); err != nil {
+			t.Errorf("couldn't remove ~/.config/cheat dir. error = %v", err)
 		}
 	}
 	tests := []struct {
@@ -49,16 +49,18 @@ func TestInstallCheat(t *testing.T) {
 			osType: "darwin",
 			dirs:   dirs,
 			packages: &localio.InstalledPackages{
-				AptInstalledPackages:  nil,
-				BrewInstalledPackages: nil,
-			}}, true},
+				AptInstalledPackages: nil,
+				BrewInstalledPackages: &localio.BrewInstalled{
+					Names: []string{"cheat"}, CaskFullNames: []string{"aom"}, Taps: []string{"homebrew/core"},
+				},
+			}}, false},
 		{"Test InstallCheat Linux 4", args{
 			osType: "linux",
 			dirs:   dirs,
 			packages: &localio.InstalledPackages{
 				AptInstalledPackages:  nil,
 				BrewInstalledPackages: nil,
-			}}, true},
+			}}, false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

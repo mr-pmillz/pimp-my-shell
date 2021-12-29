@@ -72,7 +72,7 @@ func TestInstallVimAwesome(t *testing.T) {
 		args    args
 		wantErr bool
 	}{
-		{"Test InstallOhMyTmux darwin 1", args{
+		{"Darwin 1", args{
 			osType: "darwin",
 			dirs:   dirs,
 			packages: &localio.InstalledPackages{
@@ -81,27 +81,27 @@ func TestInstallVimAwesome(t *testing.T) {
 					Names: []string{"bat", "lsd", "gnu-sed", "gotop", "yamllint", "git-delta"}, CaskFullNames: []string{"bat"}, Taps: []string{"homebrew/core", "cjbassi/gotop"},
 				},
 			}}, false},
-		{"Test InstallOhMyTmux Linux 2", args{
+		{"Linux 1", args{
 			osType: "linux",
 			dirs:   dirs,
 			packages: &localio.InstalledPackages{
 				AptInstalledPackages:  &localio.AptInstalled{Name: []string{"bat", "lsd", "gotop", "delta"}},
 				BrewInstalledPackages: nil,
 			}}, false},
-		{"Test InstallOhMyTmux Linux 3", args{
+		{"Linux 2", args{
 			osType: "linux",
 			dirs:   dirs,
 			packages: &localio.InstalledPackages{
 				AptInstalledPackages:  nil,
 				BrewInstalledPackages: nil,
-			}}, true},
-		{"Test InstallOhMyTmux Darwin 4", args{
+			}}, false},
+		{"Darwin 2", args{
 			osType: "darwin",
 			dirs:   dirs,
 			packages: &localio.InstalledPackages{
 				AptInstalledPackages:  nil,
 				BrewInstalledPackages: nil,
-			}}, true},
+			}}, false},
 	}
 	timeout := time.After(20 * time.Minute)
 	done := make(chan bool)

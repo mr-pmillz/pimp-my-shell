@@ -653,6 +653,21 @@ func TestRunCommands(t *testing.T) {
 }
 
 func TestStartTmuxSession(t *testing.T) {
+	var packages = &InstalledPackages{}
+	osType := runtime.GOOS
+	switch osType {
+	case "darwin":
+		installedBrewPackages, err := NewBrewInstalled()
+		if err != nil {
+			t.Errorf("NewBrewInstalled() error = %v", err)
+		}
+		packages.BrewInstalledPackages = installedBrewPackages
+		if err = BrewInstallProgram("tmux", "tmux", packages); err != nil {
+			t.Errorf("BrewInstallProgram() error = %v", err)
+		}
+	default:
+		//Do Nothing
+	}
 	tests := []struct {
 		name    string
 		wantErr bool
@@ -673,8 +688,7 @@ func TestGetCPUType(t *testing.T) {
 		name string
 		want string
 	}{
-		{name: "TestGetCPUType 1", want: "Intel"},
-		{name: "TestGetCPUType 2", want: "AMD64"},
+		{name: "TestGetCPUType", want: "AMD64"},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -721,8 +735,6 @@ func TestCorrectOS(t *testing.T) {
 		args args
 		want bool
 	}{
-		{name: "TestCorrectOS darwin", args: args{osType: "darwin"}, want: true},
-		{name: "TestCorrectOS linux", args: args{osType: "linux"}, want: true},
 		{name: "TestCorrectOS linux", args: args{osType: osType}, want: true},
 	}
 	for _, tt := range tests {

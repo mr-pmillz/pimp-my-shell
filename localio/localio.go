@@ -25,6 +25,11 @@ import (
 	"github.com/tidwall/gjson"
 )
 
+const (
+	darwin = "darwin"
+	linux  = "linux"
+)
+
 // GitClone clones a public git repo url to directory
 func GitClone(url, directory string) error {
 	Info("git clone %s %s", url, directory)
@@ -54,11 +59,11 @@ func SetVariableValue(varName, val, osType, configPath string) error {
 		return err
 	}
 	switch osType {
-	case "darwin":
+	case darwin:
 		if err := sedReplaceKeysValue("gsed", varName, val, cfgPath); err != nil {
 			return err
 		}
-	case "linux":
+	case linux:
 		if err := sedReplaceKeysValue("sed", varName, val, cfgPath); err != nil {
 			return err
 		}
@@ -159,7 +164,7 @@ func GetCPUType() string {
 
 // DownloadAndInstallLatestVersionOfGolang Only for linux x86_64. Mac uses homebrew
 func DownloadAndInstallLatestVersionOfGolang(homeDir string) error {
-	if !CorrectOS("linux") {
+	if !CorrectOS(linux) {
 		return nil
 	}
 	req, err := http.NewRequest("GET", "https://golang.org/VERSION?m=text", nil)
@@ -433,6 +438,7 @@ func RunCommandPipeOutput(command string) error {
 
 	cmd.Env = os.Environ()
 	cmd.Env = append(cmd.Env, "MONO_GAC_PREFIX=\"/usr/local\"")
+	cmd.Env = append(cmd.Env, "DEBIAN_FRONTEND=noninteractive")
 	if err = cmd.Start(); err != nil {
 		return err
 	}
@@ -449,6 +455,7 @@ func RunCommandPipeOutput(command string) error {
 // StartTmuxSession ...
 func StartTmuxSession() error {
 	cmd := exec.Command("tmux", "new-session", "-d")
+	cmd.Env = os.Environ()
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
@@ -503,7 +510,7 @@ func CorrectOS(osType string) bool {
 
 // BrewInstallProgram ...
 func BrewInstallProgram(brewName, binaryName string, packages *InstalledPackages) error {
-	if !CorrectOS("darwin") {
+	if !CorrectOS(darwin) {
 		return nil
 	}
 	if _, exists := CommandExists(binaryName); exists && Contains(packages.BrewInstalledPackages.Names, brewName) {
@@ -519,7 +526,7 @@ func BrewInstallProgram(brewName, binaryName string, packages *InstalledPackages
 
 // BrewTap ...
 func BrewTap(brewTap string, packages *InstalledPackages) error {
-	if !CorrectOS("darwin") {
+	if !CorrectOS(darwin) {
 		return nil
 	}
 	if Contains(packages.BrewInstalledPackages.Taps, brewTap) {
@@ -535,7 +542,7 @@ func BrewTap(brewTap string, packages *InstalledPackages) error {
 
 // BrewInstallCaskProgram ...
 func BrewInstallCaskProgram(brewName, brewFullName string, packages *InstalledPackages) error {
-	if !CorrectOS("darwin") {
+	if !CorrectOS(darwin) {
 		return nil
 	}
 	if Contains(packages.BrewInstalledPackages.CaskFullNames, brewFullName) {
@@ -562,7 +569,7 @@ type AptInstalled struct {
 
 // NewAptInstalled ...
 func NewAptInstalled() (*AptInstalled, error) {
-	if !CorrectOS("linux") {
+	if !CorrectOS(linux) {
 		return nil, nil
 	}
 	var ai = &AptInstalled{}
@@ -584,7 +591,7 @@ func NewAptInstalled() (*AptInstalled, error) {
 
 // AptInstall ...
 func AptInstall(packages *InstalledPackages, aptName ...string) error {
-	if !CorrectOS("linux") {
+	if !CorrectOS(linux) {
 		return nil
 	}
 	var notInstalled []string
@@ -615,7 +622,7 @@ type BrewInstalled struct {
 
 // NewBrewInstalled ...
 func NewBrewInstalled() (*BrewInstalled, error) {
-	if !CorrectOS("darwin") {
+	if !CorrectOS(darwin) {
 		return nil, nil
 	}
 	var brewInfo = &BrewInstalled{}

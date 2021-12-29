@@ -85,7 +85,7 @@ jobs:
         if: always()
         with:
           name: test-log
-          path: /tmp/gotest.log
+          path: coverage/gotest.log
           if-no-files-found: error
 
   run-pimp-my-shell:

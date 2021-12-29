@@ -73,7 +73,7 @@ func Test_runTmux(t *testing.T) {
 		name    string
 		wantErr bool
 	}{
-		{name: "Test_runTmux 1", wantErr: true},
+		{name: "Test_runTmux 1", wantErr: false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
