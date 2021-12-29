@@ -12,7 +12,7 @@
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/mr-pmillz/pimp-my-shell?style=plastic)
 [![Twitter](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2Fmr-pmillz%2Fpimp-my-shell)](https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fmr-pmillz%2Fpimp-my-shell)
 [![CI](https://github.com/mr-pmillz/pimp-my-shell/actions/workflows/go.yml/badge.svg)](https://github.com/mr-pmillz/pimp-my-shell/actions/workflows/go.yml)
-[![codecov](https://codecov.io/gh/mr-pmillz/pimp-my-shell/branch/master/graph/badge.svg)](https://codecov.io/gh/mr-pmillz/pimp-my-shell)
+[![codecov](https://codecov.io/gh/mr-pmillz/pimp-my-shell/branch/master/graph/badge.svg?token=8NOCNMK0OE)](https://codecov.io/gh/mr-pmillz/pimp-my-shell)
 
 Table of Contents
 =================

@@ -429,6 +429,18 @@ func RunCommandPipeOutput(command string) error {
 		return err
 	}
 
+	stderr, err := cmd.StderrPipe()
+	if err != nil {
+		return err
+	}
+
+	errScanner := bufio.NewScanner(stderr)
+	go func() {
+		for errScanner.Scan() {
+			fmt.Printf("%s\n", errScanner.Text())
+		}
+	}()
+
 	scanner := bufio.NewScanner(stdout)
 	go func() {
 		for scanner.Scan() {
@@ -443,8 +455,7 @@ func RunCommandPipeOutput(command string) error {
 		return err
 	}
 
-	err = cmd.Wait()
-	if err != nil {
+	if err = cmd.Wait(); err != nil {
 		fmt.Fprintf(os.Stderr, "Error waiting for Cmd %s\n", err)
 		return err
 	}
