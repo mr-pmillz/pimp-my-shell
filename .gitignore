@@ -7,3 +7,4 @@ bin/*
 *.html
 *.xml
 coverage/*
+coverage.txt

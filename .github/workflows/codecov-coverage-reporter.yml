@@ -1,0 +1,67 @@
+name: Codecov
+
+on:
+  push:
+    tags:
+      - '*'
+  pull_request:
+
+jobs:
+  coverage-reporter:
+    strategy:
+      matrix:
+        go-version: [1.17.x]
+        os: [ubuntu-latest]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v2
+
+      # Setup Go
+      - name: Setup Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ matrix.go-version }}
+
+      - id: go-cache-paths
+        run: |
+          echo "::set-output name=gobuild::$(go env GOCACHE)"
+          echo "::set-output name=gomod::$(go env GOMODCACHE)"
+
+      # Cache go build cache
+      - name: Go Build Cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.go-cache-paths.outputs.gobuild }}
+          key: ${{ runner.os }}-gobuild-${{ hashFiles('**/go.sum') }}
+
+      # Cache go mod cache
+      - name: Go Mod Cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.go-cache-paths.outputs.gomod }}
+          key: ${{ runner.os }}-gomod-${{ hashFiles('**/go.sum') }}
+
+      # Remove apt repos that are known to break from time to time
+      # See https://github.com/actions/virtual-environments/issues/323
+      - name: Remove broken apt repos [Ubuntu]
+        run: |
+          for apt_file in `grep -lr microsoft /etc/apt/sources.list.d/`; do sudo rm $apt_file; done
+        if: matrix.os == 'ubuntu-latest' || matrix.os == 'ubuntu-18.04'
+
+      # Run build of the application
+      - name: Run build
+        run: |
+          make -f MakeFile build
+
+      # Run Tests and Coverage
+      - name: Run coverage
+        run: go test ./... -v -race -coverprofile=coverage.txt -covermode=atomic
+
+      - name: Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./coverage.txt
+          env_vars: OS,GOVERSION
+          verbose: true

@@ -11,8 +11,8 @@
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/mr-pmillz/pimp-my-shell?style=plastic)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/mr-pmillz/pimp-my-shell?style=plastic)
 [![Twitter](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2Fmr-pmillz%2Fpimp-my-shell)](https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fmr-pmillz%2Fpimp-my-shell)
-[![Codacy Badge](https://app.codacy.com/project/badge/Coverage/cffe102aadbd4f4394754f0c259cc527)](https://www.codacy.com/gh/mr-pmillz/pimp-my-shell/dashboard?utm_source=github.com&utm_medium=referral&utm_content=mr-pmillz/pimp-my-shell&utm_campaign=Badge_Coverage)
 [![CI](https://github.com/mr-pmillz/pimp-my-shell/actions/workflows/go.yml/badge.svg)](https://github.com/mr-pmillz/pimp-my-shell/actions/workflows/go.yml)
+[![codecov](https://codecov.io/gh/mr-pmillz/pimp-my-shell/branch/master/graph/badge.svg)](https://codecov.io/gh/mr-pmillz/pimp-my-shell)
 
 Table of Contents
 =================
