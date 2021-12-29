@@ -40,17 +40,17 @@ lint: golangci-lint-check
 
 test:
 	$(info ******************** running tests ********************)
-    ifeq ($(GITHUB_ACTIONS), "true")
+    ifeq ($(GITHUB_ACTIONS), true)
         ifndef GOTESTFMT
-            $(warning "could not find gotestfmt in $(PATH), running: go install github.com/haveyoudebuggedit/gotestfmt/v2/cmd/gotestfmt@latest")
-            $(shell go install github.com/haveyoudebuggedit/gotestfmt/v2/cmd/gotestfmt@latest)
+			$(warning "could not find gotestfmt in $(PATH), running: go install github.com/haveyoudebuggedit/gotestfmt/v2/cmd/gotestfmt@latest")
+			$(shell go install github.com/haveyoudebuggedit/gotestfmt/v2/cmd/gotestfmt@latest)
         endif
 		set -euo pipefail
 		go test -json -v ./... 2>&1 | tee /tmp/gotest.log | gotestfmt
     else
         ifndef RICHGO
-            $(warning "could not find richgo in $(PATH), running: go get github.com/kyoh86/richgo")
-            $(shell go get -u github.com/kyoh86/richgo)
+			$(warning "could not find richgo in $(PATH), running: go get github.com/kyoh86/richgo")
+			$(shell go get -u github.com/kyoh86/richgo)
         endif
 		richgo test -v ./...
     endif

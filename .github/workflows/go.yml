@@ -115,8 +115,10 @@ jobs:
             ${{ runner.OS }}-run-pimp-my-shell-
             ${{ runner.OS }}-
 
-      - name: Install dependencies
-        run: go get github.com/mattn/go-isatty@v0.0.12
+      - name: Go Build
+        run: |
+          go get github.com/mattn/go-isatty@v0.0.12
+          make -f MakeFile build
 
       - name: Run pimp-my-shell
         run: |
