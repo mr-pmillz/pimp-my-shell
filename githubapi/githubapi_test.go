@@ -7,6 +7,12 @@ import (
 	"testing"
 
 	"github.com/mr-pmillz/pimp-my-shell/localio"
+	"github.com/stretchr/testify/assert"
+)
+
+const (
+	owner = "mr-pmillz"
+	repo  = "pimp-my-shell"
 )
 
 func TestDownloadLatestRelease(t *testing.T) {
@@ -14,7 +20,7 @@ func TestDownloadLatestRelease(t *testing.T) {
 	if err != nil {
 		log.Panic(err)
 	}
-	releaseAssets, err := getLatestReleasesFromGithubRepo("mr-pmillz", "pimp-my-shell")
+	releaseAssets, err := getLatestReleasesFromGithubRepo(owner, repo)
 	if err != nil {
 		t.Errorf("couldn't get release assets: %v\n", err)
 	}
@@ -35,8 +41,8 @@ func TestDownloadLatestRelease(t *testing.T) {
 			args{
 				osType: "linux",
 				dirs:   dirs,
-				owner:  "mr-pmillz",
-				repo:   "pimp-my-shell",
+				owner:  owner,
+				repo:   repo,
 			},
 			fmt.Sprintf("%s/%s", dirs.HomeDir, releaseAssets.LinuxAMDFileName),
 			false,
@@ -46,22 +52,11 @@ func TestDownloadLatestRelease(t *testing.T) {
 			args{
 				osType: "darwin",
 				dirs:   dirs,
-				owner:  "mr-pmillz",
-				repo:   "pimp-my-shell",
+				owner:  owner,
+				repo:   repo,
 			},
 			fmt.Sprintf("%s/%s", dirs.HomeDir, releaseAssets.DarwinAMDFileName),
 			false,
-		},
-		{
-			"Test DownloadLatestRelease From This Repo darwin 3 Should fail",
-			args{
-				osType: "darwin",
-				dirs:   dirs,
-				owner:  "mr-pmillzaasdfsadf",
-				repo:   "pimp-my-shellasdfasdf",
-			},
-			fmt.Sprintf("%s/%s", dirs.HomeDir, releaseAssets.DarwinAMDFileName),
-			true,
 		},
 	}
 	for _, tt := range tests {
@@ -73,6 +68,36 @@ func TestDownloadLatestRelease(t *testing.T) {
 			}
 			if reflect.TypeOf(got) != reflect.TypeOf("") {
 				t.Errorf("DownloadLatestRelease() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_getLatestReleasesFromGithubRepo(t *testing.T) {
+	type args struct {
+		owner string
+		repo  string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *ReleaseAssets
+		wantErr bool
+	}{
+		{name: "PimpMyShell Releases", args: args{
+			owner: owner,
+			repo:  repo,
+		}, want: &ReleaseAssets{}, wantErr: false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := getLatestReleasesFromGithubRepo(tt.args.owner, tt.args.repo)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("getLatestReleasesFromGithubRepo() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if ok := assert.IsType(t, &ReleaseAssets{}, got); !ok {
+				t.Errorf("getLatestReleasesFromGithubRepo() = %v, want %v", got, tt.want)
 			}
 		})
 	}

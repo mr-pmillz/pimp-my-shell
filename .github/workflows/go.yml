@@ -78,6 +78,8 @@ jobs:
       - name: Tests
         run: |
           make -f MakeFile test || true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # Upload the original go test log as an artifact for later review.
       - name: Upload test log

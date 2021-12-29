@@ -3,12 +3,23 @@ package githubapi
 import (
 	"context"
 	"fmt"
+	"log"
+	"os"
 	"path"
 	"strings"
 
 	"github.com/mr-pmillz/pimp-my-shell/localio"
 
 	"github.com/google/go-github/v39/github"
+	"golang.org/x/oauth2"
+)
+
+const (
+	darwin = "darwin"
+	linux  = "linux"
+	amd64  = "amd64"
+	arm64  = "arm64"
+	musl   = "musl"
 )
 
 // ReleaseAssets ...
@@ -24,11 +35,29 @@ type ReleaseAssets struct {
 }
 
 func getLatestReleasesFromGithubRepo(owner, repo string) (*ReleaseAssets, error) {
-	client := github.NewClient(nil)
+	client := &github.Client{}
 	ctx := context.Background()
-	latestRelease, _, err := client.Repositories.GetLatestRelease(ctx, owner, repo)
+	githubToken, ok := os.LookupEnv("GITHUB_TOKEN")
+	if ok {
+		ts := oauth2.StaticTokenSource(
+			&oauth2.Token{AccessToken: githubToken},
+		)
+		tc := oauth2.NewClient(ctx, ts)
+		client = github.NewClient(tc)
+	} else {
+		client = github.NewClient(nil)
+	}
+
+	latestRelease, resp, err := client.Repositories.GetLatestRelease(ctx, owner, repo)
 	if err != nil {
 		return nil, err
+	}
+	// Rate.Limit should most likely be 5000 when authorized.
+	log.Printf("Github API Rate: %#v\n", resp.Rate)
+
+	// If a Token Expiration has been set, it will be displayed.
+	if !resp.TokenExpiration.IsZero() {
+		log.Printf("Github Token Expiration: %v\n", resp.TokenExpiration)
 	}
 	var releaseAssetsDownloadURLS []string
 	r := ReleaseAssets{}
@@ -37,23 +66,27 @@ func getLatestReleasesFromGithubRepo(owner, repo string) (*ReleaseAssets, error)
 		releaseAssetsDownloadURLS = append(releaseAssetsDownloadURLS, *release.BrowserDownloadURL)
 	}
 	for _, releaseTypeURL := range releaseAssetsDownloadURLS {
-		if strings.Contains(releaseTypeURL, "amd64") && strings.HasSuffix(releaseTypeURL, ".deb") && !strings.Contains(releaseTypeURL, "musl") {
+		if strings.Contains(releaseTypeURL, amd64) && strings.HasSuffix(releaseTypeURL, ".deb") && !strings.Contains(releaseTypeURL, musl) {
 			r.LinuxAMDURL = releaseTypeURL
 			r.LinuxAMDFileName = path.Base(releaseTypeURL)
 		}
-		if strings.Contains(releaseTypeURL, "amd64") && strings.HasSuffix(releaseTypeURL, ".gz") && !strings.Contains(releaseTypeURL, "musl") && strings.Contains(releaseTypeURL, "linux") {
+		if strings.Contains(releaseTypeURL, amd64) && strings.HasSuffix(releaseTypeURL, ".gz") && !strings.Contains(releaseTypeURL, musl) && strings.Contains(releaseTypeURL, linux) {
 			r.LinuxAMDURL = releaseTypeURL
 			r.LinuxAMDFileName = path.Base(releaseTypeURL)
 		}
-		if strings.Contains(releaseTypeURL, "arm64") && strings.HasSuffix(releaseTypeURL, ".deb") && !strings.Contains(releaseTypeURL, "musl") {
+		if strings.Contains(releaseTypeURL, arm64) && strings.HasSuffix(releaseTypeURL, ".deb") && !strings.Contains(releaseTypeURL, musl) {
 			r.LinuxARMURL = releaseTypeURL
 			r.LinuxARMFileName = path.Base(releaseTypeURL)
 		}
-		if strings.Contains(releaseTypeURL, "x86_64") && strings.HasSuffix(releaseTypeURL, ".gz") && strings.Contains(releaseTypeURL, "darwin") && !strings.Contains(releaseTypeURL, "arm64") {
+		if strings.Contains(releaseTypeURL, arm64) && strings.HasSuffix(releaseTypeURL, ".gz") && !strings.Contains(releaseTypeURL, musl) && strings.Contains(releaseTypeURL, linux) {
+			r.LinuxARMURL = releaseTypeURL
+			r.LinuxARMFileName = path.Base(releaseTypeURL)
+		}
+		if strings.Contains(releaseTypeURL, "x86_64") && strings.HasSuffix(releaseTypeURL, ".gz") && strings.Contains(releaseTypeURL, darwin) && !strings.Contains(releaseTypeURL, arm64) {
 			r.DarwinAMDURL = releaseTypeURL
 			r.DarwinAMDFileName = path.Base(releaseTypeURL)
 		}
-		if strings.Contains(releaseTypeURL, "arm64") && strings.HasSuffix(releaseTypeURL, ".gz") && strings.Contains(releaseTypeURL, "darwin") && !strings.Contains(releaseTypeURL, "amd64") {
+		if strings.Contains(releaseTypeURL, arm64) && strings.HasSuffix(releaseTypeURL, ".gz") && strings.Contains(releaseTypeURL, darwin) && !strings.Contains(releaseTypeURL, amd64) {
 			r.DarwinARMURL = releaseTypeURL
 			r.DarwinARMFileName = path.Base(releaseTypeURL)
 		}
