@@ -191,7 +191,7 @@ func DownloadAndInstallLatestVersionOfGolang(homeDir string) error {
 			return err
 		}
 		// // Now extract the go binary. pimp-my-shell ensures that ~/.zshrc will already have the path setup for you
-		if err = RunCommandPipeOutput(fmt.Sprintf("sudo rm -rf /usr/local/go && tar -C /usr/local -xzf %s || true", dest)); err != nil {
+		if err = RunCommandPipeOutput(fmt.Sprintf("sudo rm -rf /usr/local/go 2>/dev/null && sudo tar -C /usr/local -xzf %s || true", dest)); err != nil {
 			return err
 		}
 
@@ -202,7 +202,7 @@ func DownloadAndInstallLatestVersionOfGolang(homeDir string) error {
 			return err
 		}
 
-		if err = RunCommandPipeOutput(fmt.Sprintf("sudo rm -rf /usr/local/go && tar -C /usr/local -xzf %s || true", dest)); err != nil {
+		if err = RunCommandPipeOutput(fmt.Sprintf("sudo rm -rf /usr/local/go 2>/dev/null && sudo tar -C /usr/local -xzf %s || true", dest)); err != nil {
 			return err
 		}
 	default:

@@ -64,5 +64,5 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: ./coverage/${{ runner.os }}-coverage.txt
-          env_vars: OS,GOVERSION
+          env_vars: ${{ runner.os }}, ${{ matrix.go-version }}
           verbose: true
