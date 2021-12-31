@@ -95,9 +95,21 @@ func pimpMyShell(osType string, dirs *localio.Directories, installedPackages *lo
 
 	fmt.Println("To Customize Powerlevel10k Theme, Run")
 	fmt.Println("p10k configure")
-	if err := localio.RunCommandPipeOutput("cowsay -f eyes \"See you Space Cowboy\""); err != nil {
-		return err
-	}
+	fmt.Println(`
+ ______________________
+< See you >
+ ----------------------
+    \
+     \
+                                   .::!!!!!!!:.
+  .!!!!!:.                        .:!!!!!!!!!!!!
+  ~~~~!!!!!!.                 .:!!!!!!!!!UWWW$$$
+      :$$NWX!!:           .:!!!!!!XUWW$$$$$$$$$P
+      $$$$$##WX!:      .<!!!!UW$$$$"  $$$$$$$$#
+      $$$$$  $$$UX   :!!UW$$$$$$$$$   4$$$$$*
+      ^$$$B  $$$$\     $$$$$$$$$$$$   d$$R"
+        "*$bd$$$$      '*$$$$$$$$$$$o+#"
+             """"          """""""`)
 
 	if err := tmux.StartTMUX(); err != nil {
 		return err
