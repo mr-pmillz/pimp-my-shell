@@ -80,15 +80,15 @@ try
     autocmd FileType yaml execute
       \'syn match yamlBlockMappingKey /^\s*\zs.*\ze\s*:\%(\s\|$\)/'
     " END YAML Settings
-    
+
     " prevent vim from hiding quotes in json files
-    let g:vim_json_conceal=0 
+    let g:vim_json_conceal=0
 
     " disable folding
     set nofoldenable
 
-     " Fix indentLine plugin for markdown backticks and invisible chars
-     let g:indentLine_fileTypeExclude = ['markdown']
+    " Fix indentLine plugin for markdown backticks and invisible chars
+    let g:indentLine_fileTypeExclude = ['markdown']
 
     " Tab hotkeys
     map <leader>tb :tabprevious<cr>
@@ -116,6 +116,7 @@ try
     if
         has('gui_running') set guioptions-=e
     endif
+
     let g:lightline#bufferline#clickable = 1
     " in order for tabs to be clickable, need to set mouse to a mode
     "FZF settings
@@ -137,5 +138,7 @@ try
     " Disbale visual mode warnings from vim-visual-multi
     let g:VM_show_warnings = 0
 
+    " Block vim-multiple-cursors as it is deprecated eol use vim-visual-multi instead
+    let g:pathogen_blacklist = ['vim-multiple-cursors']
 catch
 endtry

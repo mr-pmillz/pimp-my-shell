@@ -32,12 +32,16 @@ const (
 
 // GitClone clones a public git repo url to directory
 func GitClone(url, directory string) error {
-	Info("git clone %s %s", url, directory)
-	_, err := git.PlainClone(directory, false, &git.CloneOptions{
-		URL:      url,
-		Progress: os.Stdout,
-	})
-	CheckIfError(err)
+	if exists, err := Exists(directory); err == nil && !exists {
+		Info("git clone %s %s", url, directory)
+		_, err := git.PlainClone(directory, false, &git.CloneOptions{
+			URL:      url,
+			Progress: os.Stdout,
+		})
+		CheckIfError(err)
+	} else {
+		fmt.Printf("[+] Repo: %s already exists at %s, skipping... \n", url, directory)
+	}
 
 	return nil
 }

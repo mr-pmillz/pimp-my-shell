@@ -18,21 +18,23 @@ func InstallVimPlugins(osType string, dirs *localio.Directories) error {
 		if err = localio.RunCommandPipeOutput(fmt.Sprintf("git clone --depth=1 https://github.com/amix/vimrc.git %s/.vim_runtime", dirs.HomeDir)); err != nil {
 			return err
 		}
+		if err = localio.RunCommandPipeOutput(fmt.Sprintf("cd %s && bash .vim_runtime/install_awesome_vimrc.sh", dirs.HomeDir)); err != nil {
+			return err
+		}
 	}
 
-	if err := localio.RunCommandPipeOutput(fmt.Sprintf("cd %s && bash .vim_runtime/install_awesome_vimrc.sh", dirs.HomeDir)); err != nil {
-		return err
+	if exists, err := localio.Exists(fmt.Sprintf("%s/.vim_runtime/my_plugins/YouCompleteMe", dirs.HomeDir)); err == nil && !exists {
+		// install YCM
+		if err = localio.GitClone("https://github.com/ycm-core/YouCompleteMe.git", fmt.Sprintf("%s/.vim_runtime/my_plugins/YouCompleteMe", dirs.HomeDir)); err != nil {
+			return err
+		}
+
+		pythonPath, _ := localio.CommandExists("python3")
+		if err = localio.RunCommandPipeOutput(fmt.Sprintf("cd %s/.vim_runtime/my_plugins/YouCompleteMe && git submodule update --init --recursive && %s install.py --all || true", dirs.HomeDir, pythonPath)); err != nil {
+			return err
+		}
 	}
 
-	// install YCM
-	if err := localio.GitClone("https://github.com/ycm-core/YouCompleteMe.git", fmt.Sprintf("%s/.vim_runtime/my_plugins/YouCompleteMe", dirs.HomeDir)); err != nil {
-		return err
-	}
-
-	pythonPath, _ := localio.CommandExists("python3")
-	if err := localio.RunCommandPipeOutput(fmt.Sprintf("cd %s/.vim_runtime/my_plugins/YouCompleteMe && git submodule update --init --recursive && %s install.py --all || true", dirs.HomeDir, pythonPath)); err != nil {
-		return err
-	}
 	// vim-yaml plugin
 	if err := localio.GitClone("https://github.com/stephpy/vim-yaml.git", fmt.Sprintf("%s/.vim_runtime/my_plugins/vim-yaml", dirs.HomeDir)); err != nil {
 		return err

@@ -146,6 +146,7 @@ try
     if
         has('gui_running') set guioptions-=e
     endif
+
     let g:lightline#bufferline#clickable = 1
     " in order for tabs to be clickable, need to set mouse to a mode
     "FZF settings
@@ -167,5 +168,7 @@ try
     " Disbale visual mode warnings from vim-visual-multi
     let g:VM_show_warnings = 0
 
+    " Block vim-multiple-cursors as it is deprecated eol use vim-visual-multi instead
+    let g:pathogen_blacklist = ['vim-multiple-cursors']
 catch
 endtry
