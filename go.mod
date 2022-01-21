@@ -11,7 +11,7 @@ require (
 	github.com/klauspost/cpuid/v2 v2.0.9
 	github.com/schollz/progressbar/v3 v3.8.5
 	github.com/stretchr/testify v1.7.0
-	github.com/tidwall/gjson v1.12.1
+	github.com/tidwall/gjson v1.13.0
 	golang.org/x/oauth2 v0.0.0-20180821212333-d2e6202438be
 	gopkg.in/ini.v1 v1.66.2
 )
