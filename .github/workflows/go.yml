@@ -89,6 +89,7 @@ jobs:
       # Run Tests
       - name: Tests
         run: |
+          make -f MakeFile build
           make -f MakeFile test || true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
