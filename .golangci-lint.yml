@@ -6,10 +6,11 @@ linters:
   enable:
     #- bodyclose
     - deadcode
-    #- depguard
+    - depguard
     #- dogsled
     #- dupl
     - errcheck
+    - errorlint
     #- exhaustive
     #- funlen
     - gas
@@ -33,7 +34,8 @@ linters:
     #- misspell
     #- nakedret
     #- noctx
-    #- nolintlint
+    - nolintlint
+    #- revive
     #- rowserrcheck
     #- scopelint
     - staticcheck
@@ -41,7 +43,7 @@ linters:
     #- stylecheck
     - typecheck
     - unconvert
-    #- unparam
+    - unparam
     - unused
     - varcheck
     #- whitespace

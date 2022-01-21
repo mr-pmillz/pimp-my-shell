@@ -20,6 +20,7 @@ func TestEmbedFileCopy(t *testing.T) {
 	if err != nil {
 		t.Errorf("EmbedFileStringAppendToDest() error = %v", err)
 	}
+	defer myConfigFS.Close()
 	type args struct {
 		dst string
 		src fs.File

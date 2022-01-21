@@ -29,7 +29,7 @@ func runTmux() error {
 		// Check if "PimpMyShell" session already exists.
 		exists, err := server.HasSession("PimpMyShell")
 		if err != nil {
-			msg := fmt.Errorf("Can't check 'PimpMyShell' session: %s", err)
+			msg := fmt.Errorf("Can't check 'PimpMyShell' session: %w", err)
 			fmt.Println(msg)
 			return err
 		}
@@ -55,7 +55,7 @@ func runTmux() error {
 		// Setup this configuration.
 		err = conf.Apply()
 		if err != nil {
-			msg := fmt.Errorf("Can't apply prepared configuration: %s", err)
+			msg := fmt.Errorf("Can't apply prepared configuration: %w", err)
 			fmt.Println(msg)
 			return err
 		}
@@ -63,7 +63,7 @@ func runTmux() error {
 		// Attach to created session
 		err = session.AttachSession()
 		if err != nil {
-			msg := fmt.Errorf("Can't attached to created session: %s", err)
+			msg := fmt.Errorf("Can't attached to created session: %w", err)
 			fmt.Println(msg)
 			return err
 		}
@@ -127,6 +127,7 @@ func InstallOhMyTmux(osType string, dirs *localio.Directories, packages *localio
 	if err != nil {
 		return err
 	}
+	defer tmuxConfFS.Close()
 
 	if err := localio.EmbedFileCopy("~/.tmux.conf.local", tmuxConfFS); err != nil {
 		return err

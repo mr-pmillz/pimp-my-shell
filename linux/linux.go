@@ -21,6 +21,7 @@ func CustomTilixBookmarks() error {
 		if err != nil {
 			return err
 		}
+		defer bookmarksJSON.Close()
 		if err = localio.EmbedFileCopy("~/.config/tilix/bookmarks.json", bookmarksJSON); err != nil {
 			return err
 		}

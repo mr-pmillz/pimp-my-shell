@@ -87,16 +87,19 @@ func InstallVimPlugins(osType string, dirs *localio.Directories) error {
 	if err != nil {
 		return err
 	}
+	defer myConfigFS.Close()
 
 	vimrcFS, err := myConfigs.Open("templates/.vimrc")
 	if err != nil {
 		return err
 	}
+	defer vimrcFS.Close()
 
 	updateVimCustomPlugins, err := myConfigs.Open("templates/update.sh")
 	if err != nil {
 		return err
 	}
+	defer updateVimCustomPlugins.Close()
 
 	if err = localio.EmbedFileCopy("~/.vim_runtime/my_configs.vim", myConfigFS); err != nil {
 		return err
