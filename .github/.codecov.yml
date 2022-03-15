@@ -1,0 +1,4 @@
+coverage:
+  range: 30..55
+  round: up
+  precision: 2

@@ -3,7 +3,6 @@
 [![Donate](https://img.shields.io/badge/Donate-PayPal-yellow.svg)](https://www.paypal.com/donate?business=YR6C4WB5CDZZL&no_recurring=0&item_name=contribute+to+open+source&currency_code=USD)
 [![Donate with Bitcoin](https://en.cryptobadges.io/badge/micro/3Cd54T1EB6WHRcechq1dRCGF6vY2HHhkdk)](https://en.cryptobadges.io/donate/3Cd54T1EB6WHRcechq1dRCGF6vY2HHhkdk)
 [![Donate with Ethereum](https://en.cryptobadges.io/badge/micro/0x064AA753EF36e5641E2Ee3C9BbC117F6aFe35F62)](https://en.cryptobadges.io/donate/0x064AA753EF36e5641E2Ee3C9BbC117F6aFe35F62)
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/cffe102aadbd4f4394754f0c259cc527)](https://www.codacy.com/gh/mr-pmillz/pimp-my-shell/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=mr-pmillz/pimp-my-shell&amp;utm_campaign=Badge_Grade)
 [![Go Report Card](https://goreportcard.com/badge/github.com/mr-pmillz/pimp-my-shell)](https://goreportcard.com/report/github.com/mr-pmillz/pimp-my-shell)
 ![GitHub all releases](https://img.shields.io/github/downloads/mr-pmillz/pimp-my-shell/total?style=social)
 ![GitHub repo size](https://img.shields.io/github/repo-size/mr-pmillz/pimp-my-shell?style=plastic)
@@ -52,6 +51,14 @@ Download the latest release for your system from [Releases](https://github.com/m
 - or clone the repo and run `go build` to build the binary.
   - If you're going to build from source, this project requires >= go v1.17.X
   - This project only works on MacOSX and Linux Ubuntu/Debian systems currently
+
+### MacOS Users Ensure that you have x-code CommandLineTools installed
+
+Vim YouCompleteMe plugin requires this for C lang completion
+
+```shell
+xcode-select --install
+```
 
 ## Usage
 
