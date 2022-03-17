@@ -90,7 +90,7 @@ func TestInstallVimAwesome(t *testing.T) {
 			osType: "linux",
 			dirs:   dirs,
 			packages: &localio.InstalledPackages{
-				AptInstalledPackages:  &localio.AptInstalled{Name: []string{"bat", "lsd", "gotop", "delta"}},
+				AptInstalledPackages:  &localio.AptInstalled{Name: []string{"bat", "lsd", "delta"}},
 				BrewInstalledPackages: nil,
 			}}, false},
 		{"Linux 2", args{

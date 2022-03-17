@@ -27,14 +27,14 @@ func TestInstallNerdFontsLSD(t *testing.T) {
 			packages: &localio.InstalledPackages{
 				AptInstalledPackages: nil,
 				BrewInstalledPackages: &localio.BrewInstalled{
-					Names: []string{"bat", "lsd", "gnu-sed", "gotop", "yamllint", "git-delta"}, CaskFullNames: []string{"bat"}, Taps: []string{"homebrew/core", "cjbassi/gotop"},
+					Names: []string{"bat", "lsd", "gnu-sed", "yamllint", "git-delta"}, CaskFullNames: []string{"bat"}, Taps: []string{"homebrew/core", "cjbassi/gotop"},
 				},
 			}}, false},
 		{"Test InstallNerdFontsLSD Linux", args{
 			osType: "linux",
 			dirs:   dirs,
 			packages: &localio.InstalledPackages{
-				AptInstalledPackages:  &localio.AptInstalled{Name: []string{"bat", "lsd", "gotop", "delta"}},
+				AptInstalledPackages:  &localio.AptInstalled{Name: []string{"bat", "lsd", "delta"}},
 				BrewInstalledPackages: nil,
 			}}, false},
 	}
