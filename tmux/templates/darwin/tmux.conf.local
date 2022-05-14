@@ -276,6 +276,9 @@ unbind C-a
 # bind C-a send-prefix
 # move status line to top
 #set -g status-position top
+#
+# clear screen but not history so you can still scroll back
+bind -n C-l send-keys 'C-l'
 
 # Extra Customizations
 # Mouse Settings

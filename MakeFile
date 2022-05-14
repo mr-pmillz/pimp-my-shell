@@ -7,13 +7,13 @@ RICHGO := $(shell command -v richgo 2>/dev/null)
 GOTESTFMT := $(shell command -v gotestfmt 2>/dev/null)
 MIN_GOLANGCI_LINT_VERSION := 001043000
 
-.PHONY: fmt lint build test clean compile chmodX compress
+.PHONY: fmt lint build test clean compile compress
 
 default: all
 
 all: fmt lint build test release
 
-release: clean build compile chmodX compress
+release: clean build compile compress
 
 fmt:
 	$(info ******************** checking formatting ********************)
@@ -60,19 +60,13 @@ clean:
 build:
 	go env -w GOFLAGS=-mod=mod
 	go mod tidy
-	go build -v .
+	go build -v -trimpath -ldflags="-s -w" .
 
 compile:
-	GOOS=linux GOARCH=amd64 go build -o bin/linux/amd64/pimp-my-shell-$(CURRENT_TAG)-linux-amd64 main.go
-	GOOS=linux GOARCH=arm64 go build -o bin/linux/arm64/pimp-my-shell-$(CURRENT_TAG)-linux-arm64 main.go
-	GOOS=darwin GOARCH=amd64 go build -o bin/darwin/amd64/pimp-my-shell-$(CURRENT_TAG)-x86_64-apple-darwin_amd64 main.go
-	GOOS=darwin GOARCH=arm64 go build -o bin/darwin/arm64/pimp-my-shell-$(CURRENT_TAG)-x86_64-apple-darwin_arm64 main.go
-
-chmodX:
-	chmod +x bin/linux/amd64/pimp-my-shell-$(CURRENT_TAG)-linux-amd64
-	chmod +x bin/linux/arm64/pimp-my-shell-$(CURRENT_TAG)-linux-arm64
-	chmod +x bin/darwin/amd64/pimp-my-shell-$(CURRENT_TAG)-x86_64-apple-darwin_amd64
-	chmod +x bin/darwin/arm64/pimp-my-shell-$(CURRENT_TAG)-x86_64-apple-darwin_arm64
+	GOOS=linux GOARCH=amd64 go build -o bin/linux/amd64/pimp-my-shell-$(CURRENT_TAG)-linux-amd64 -trimpath -ldflags="-s -w" main.go
+	GOOS=linux GOARCH=arm64 go build -o bin/linux/arm64/pimp-my-shell-$(CURRENT_TAG)-linux-arm64 -trimpath -ldflags="-s -w" main.go
+	GOOS=darwin GOARCH=amd64 go build -o bin/darwin/amd64/pimp-my-shell-$(CURRENT_TAG)-x86_64-apple-darwin_amd64 -trimpath -ldflags="-s -w" main.go
+	GOOS=darwin GOARCH=arm64 go build -o bin/darwin/arm64/pimp-my-shell-$(CURRENT_TAG)-x86_64-apple-darwin_arm64 -trimpath -ldflags="-s -w" main.go
 
 compress:
 	gzip -9 bin/linux/amd64/pimp-my-shell-$(CURRENT_TAG)-linux-amd64
