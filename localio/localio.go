@@ -188,7 +188,7 @@ func DownloadAndInstallLatestVersionOfGolang(homeDir string) error {
 	latestGoVersion := string(goversion)
 
 	switch GetCPUType() {
-	case "AMD64":
+	case "ARM64":
 		armGoURL := fmt.Sprintf("https://dl.google.com/go/%s.linux-arm64.tar.gz", latestGoVersion)
 		dest := fmt.Sprintf("%s/%s", homeDir, path.Base(armGoURL))
 		if err = DownloadFile(dest, armGoURL); err != nil {
@@ -199,7 +199,7 @@ func DownloadAndInstallLatestVersionOfGolang(homeDir string) error {
 			return err
 		}
 
-	case "ARM64":
+	case "AMD64":
 		amdGoURL := fmt.Sprintf("https://dl.google.com/go/%s.linux-amd64.tar.gz", latestGoVersion)
 		dest := fmt.Sprintf("%s/%s", homeDir, path.Base(amdGoURL))
 		if err = DownloadFile(dest, amdGoURL); err != nil {
