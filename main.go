@@ -60,7 +60,7 @@ func pimpMyShell(osType string, dirs *localio.Directories, installedPackages *lo
 			return err
 		}
 
-		if err := linux.CustomTilixBookmarks(); err != nil {
+		if err := linux.CustomTerminalBookmarks(); err != nil {
 			return err
 		}
 		// Install the latest version of golang

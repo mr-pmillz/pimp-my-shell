@@ -1,0 +1,8 @@
+<qterminal>
+    <group name="custom">
+        <command name="Upgrade Python2" value="python -c &quot;import pty;pty.spawn('/bin/bash')&quot;" />
+        <command name="Upgrade Python3" value="python3 -c &quot;import pty;pty.spawn('/bin/bash')&quot;" />
+        <command name="Upgrade TTY 1" value="printf &quot;\n\n(Rows,Cols)\n &quot;;printf '\e[1;91m&#37;-6s\e[m' $(stty size);printf &quot;\n\nTerm= \e[91m$TERM\e[0m\n\n&quot;;stty raw -echo;fg;" />
+        <command name="Upgrade TTY 2" value="export SHELL=bash;export TERM=xterm-256color;stty rows 20 columns 100;\echo ;echo ;read -p &quot;Enter Rows:&quot; ROWS;read -p &quot;Enter Cols:&quot; COLS;stty rows $ROWS columns $COLS &amp;&amp; clear" />
+    </group>
+</qterminal>

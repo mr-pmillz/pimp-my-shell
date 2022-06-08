@@ -3,6 +3,7 @@ package linux
 import (
 	"embed"
 	"fmt"
+	"os"
 
 	"github.com/mr-pmillz/pimp-my-shell/localio"
 )
@@ -10,21 +11,27 @@ import (
 //go:embed templates/*
 var configFiles embed.FS
 
-// CustomTilixBookmarks copies the upgrade your pty commands for quick usage when upgrading a netcat shell
-func CustomTilixBookmarks() error {
+// CustomTerminalBookmarks copies the upgrade your pty commands for quick usage when upgrading a netcat shell
+func CustomTerminalBookmarks() error {
 	if !localio.CorrectOS("linux") {
 		return nil
 	}
-	if exists, err := localio.Exists("~/.config/tilix/bookmarks.json"); err == nil && !exists {
-		fmt.Println("[+] Setting up Custom Tilix Bookmarks")
-		bookmarksJSON, err := configFiles.Open("templates/bookmarks.json")
-		if err != nil {
-			return err
+	desktopSession := os.Getenv("DESKTOP_SESSION")
+	switch desktopSession {
+	case "lightdm-xsession":
+		if exists, err := localio.Exists("~/.config/qterminal.org/qterminal_bookmarks.xml"); err == nil && !exists {
+			fmt.Println("[+] Setting up Custom Terminal Bookmarks")
+			bookmarksJSON, err := configFiles.Open("templates/bookmarks.xml")
+			if err != nil {
+				return err
+			}
+			defer bookmarksJSON.Close()
+			if err = localio.EmbedFileCopy("~/.config/qterminal.org/qterminal_bookmarks.xml", bookmarksJSON); err != nil {
+				return err
+			}
 		}
-		defer bookmarksJSON.Close()
-		if err = localio.EmbedFileCopy("~/.config/tilix/bookmarks.json", bookmarksJSON); err != nil {
-			return err
-		}
+	case "gnome":
+		// Do nothing for now
 	}
 
 	return nil
