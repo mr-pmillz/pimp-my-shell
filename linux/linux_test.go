@@ -7,12 +7,12 @@ func TestCustomTilixBookmarks(t *testing.T) {
 		name    string
 		wantErr bool
 	}{
-		{"Test CustomTilixBookmarks", false},
+		{"Test CustomTerminalBookmarks", false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if err := CustomTilixBookmarks(); (err != nil) != tt.wantErr {
-				t.Errorf("CustomTilixBookmarks() error = %v, wantErr %v", err, tt.wantErr)
+			if err := CustomTerminalBookmarks(); (err != nil) != tt.wantErr {
+				t.Errorf("CustomTerminalBookmarks() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}
