@@ -56,9 +56,10 @@ func pimpMyShell(osType string, dirs *localio.Directories, installedPackages *lo
 			return err
 		}
 	case "linux":
-		if err := localio.AptInstall(installedPackages, "zsh", "tilix", "apt-transport-https"); err != nil {
+		if err := localio.AptInstall(installedPackages, "zsh", "apt-transport-https"); err != nil {
 			return err
 		}
+
 		if err := linux.CustomTilixBookmarks(); err != nil {
 			return err
 		}
