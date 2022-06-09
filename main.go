@@ -64,7 +64,7 @@ func pimpMyShell(osType string, dirs *localio.Directories, installedPackages *lo
 			return err
 		}
 		// Install the latest version of golang
-		if err := localio.DownloadAndInstallLatestVersionOfGolang(dirs.HomeDir); err != nil {
+		if err := localio.DownloadAndInstallLatestVersionOfGolang(dirs.HomeDir, installedPackages); err != nil {
 			return err
 		}
 	}

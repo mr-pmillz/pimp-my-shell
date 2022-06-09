@@ -167,53 +167,56 @@ func GetCPUType() string {
 }
 
 // DownloadAndInstallLatestVersionOfGolang Only for linux x86_64. Mac uses homebrew
-func DownloadAndInstallLatestVersionOfGolang(homeDir string) error {
-	if !CorrectOS(linux) {
+func DownloadAndInstallLatestVersionOfGolang(homeDir string, packages *InstalledPackages) error {
+	if CorrectOS(linux) {
+		if err := AptInstall(packages, "golang"); err != nil {
+			return err
+		}
+		return nil
+	} else {
+		req, err := http.NewRequest("GET", "https://golang.org/VERSION?m=text", nil)
+		if err != nil {
+			return err
+		}
+
+		resp, err := http.DefaultClient.Do(req)
+		if err != nil {
+			return err
+		}
+		defer resp.Body.Close()
+		goversion, err := io.ReadAll(resp.Body)
+		if err != nil {
+			return err
+		}
+		latestGoVersion := string(goversion)
+
+		switch GetCPUType() {
+		case "ARM64":
+			armGoURL := fmt.Sprintf("https://dl.google.com/go/%s.linux-arm64.tar.gz", latestGoVersion)
+			dest := fmt.Sprintf("%s/%s", homeDir, path.Base(armGoURL))
+			if err = DownloadFile(dest, armGoURL); err != nil {
+				return err
+			}
+			// // Now extract the go binary. pimp-my-shell ensures that ~/.zshrc will already have the path setup for you
+			if err = RunCommandPipeOutput(fmt.Sprintf("sudo rm -rf /usr/local/go 2>/dev/null && sudo tar -C /usr/local -xzf %s || true", dest)); err != nil {
+				return err
+			}
+
+		case "AMD64":
+			amdGoURL := fmt.Sprintf("https://dl.google.com/go/%s.linux-amd64.tar.gz", latestGoVersion)
+			dest := fmt.Sprintf("%s/%s", homeDir, path.Base(amdGoURL))
+			if err = DownloadFile(dest, amdGoURL); err != nil {
+				return err
+			}
+
+			if err = RunCommandPipeOutput(fmt.Sprintf("sudo rm -rf /usr/local/go 2>/dev/null && sudo tar -C /usr/local -xzf %s || true", dest)); err != nil {
+				return err
+			}
+		default:
+			fmt.Println("[-] Couldn't download and install golang Unsupported CPU... Pimp-My-Shell only supports 64 bit")
+		}
 		return nil
 	}
-	req, err := http.NewRequest("GET", "https://golang.org/VERSION?m=text", nil)
-	if err != nil {
-		return err
-	}
-
-	resp, err := http.DefaultClient.Do(req)
-	if err != nil {
-		return err
-	}
-	defer resp.Body.Close()
-	goversion, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return err
-	}
-	latestGoVersion := string(goversion)
-
-	switch GetCPUType() {
-	case "ARM64":
-		armGoURL := fmt.Sprintf("https://dl.google.com/go/%s.linux-arm64.tar.gz", latestGoVersion)
-		dest := fmt.Sprintf("%s/%s", homeDir, path.Base(armGoURL))
-		if err = DownloadFile(dest, armGoURL); err != nil {
-			return err
-		}
-		// // Now extract the go binary. pimp-my-shell ensures that ~/.zshrc will already have the path setup for you
-		if err = RunCommandPipeOutput(fmt.Sprintf("sudo rm -rf /usr/local/go 2>/dev/null && sudo tar -C /usr/local -xzf %s || true", dest)); err != nil {
-			return err
-		}
-
-	case "AMD64":
-		amdGoURL := fmt.Sprintf("https://dl.google.com/go/%s.linux-amd64.tar.gz", latestGoVersion)
-		dest := fmt.Sprintf("%s/%s", homeDir, path.Base(amdGoURL))
-		if err = DownloadFile(dest, amdGoURL); err != nil {
-			return err
-		}
-
-		if err = RunCommandPipeOutput(fmt.Sprintf("sudo rm -rf /usr/local/go 2>/dev/null && sudo tar -C /usr/local -xzf %s || true", dest)); err != nil {
-			return err
-		}
-	default:
-		fmt.Println("[-] Couldn't download and install golang Unsupported CPU... Pimp-My-Shell only supports 64 bit")
-	}
-
-	return nil
 }
 
 // RunCommands ...
