@@ -123,10 +123,12 @@ func TestDownloadAndInstallLatestVersionOfGolang(t *testing.T) {
 	if err != nil {
 		t.Errorf("failed to create Directories type: %v", err)
 	}
-	pkgs, err := NewAptInstalled()
+	installedPkgs := &InstalledPackages{}
+	aptPackages, err := NewAptInstalled()
 	if err != nil {
 		t.Errorf("failed to get AptInstalledPackages: %v", err)
 	}
+	installedPkgs.AptInstalledPackages = aptPackages
 	type args struct {
 		homeDir  string
 		packages *InstalledPackages
@@ -136,7 +138,7 @@ func TestDownloadAndInstallLatestVersionOfGolang(t *testing.T) {
 		args    args
 		wantErr bool
 	}{
-		{name: "TestDownloadAndInstallLatestVersionOfGolang 1", args: args{homeDir: dirs.HomeDir, packages: pkgs}, wantErr: false},
+		{name: "TestDownloadAndInstallLatestVersionOfGolang 1", args: args{homeDir: dirs.HomeDir, packages: installedPkgs}, wantErr: false},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
