@@ -48,8 +48,8 @@ test:
 		go test -json -v ./... 2>&1 | tee coverage/gotest.log | gotestfmt
     else
         ifndef RICHGO
-			$(warning "could not find richgo in $(PATH), running: go get github.com/kyoh86/richgo")
-			$(shell go get -u github.com/kyoh86/richgo)
+			$(warning "could not find richgo in $(PATH), running: go install github.com/kyoh86/richgo@latest")
+			$(shell go install github.com/kyoh86/richgo@latest)
         endif
 		richgo test -v ./...
     endif

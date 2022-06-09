@@ -51,7 +51,7 @@ func InstallCheat(osType string, dirs *localio.Directories, packages *localio.In
 		if _, exists := localio.CommandExists("cheat"); !exists {
 			fmt.Println("[+] Installing cheat")
 			if _, exists = localio.CommandExists("go"); exists {
-				if err := localio.RunCommandPipeOutput("go get -u github.com/cheat/cheat/cmd/cheat"); err != nil {
+				if err := localio.RunCommandPipeOutput("go install github.com/cheat/cheat/cmd/cheat@latest"); err != nil {
 					return err
 				}
 			}
