@@ -13,10 +13,16 @@ func TestInstallExtraPackages(t *testing.T) {
 	if err != nil {
 		t.Errorf("failed to create Directories type: %v", err)
 	}
+
 	osType := runtime.GOOS
 	switch osType {
 	case "linux":
-		if err = localio.DownloadAndInstallLatestVersionOfGolang(dirs.HomeDir); err != nil {
+		packages, err := localio.NewAptInstalled()
+		if err != nil {
+			t.Errorf("failed to get AptInstalledPackages: %v", err)
+		}
+
+		if err = localio.DownloadAndInstallLatestVersionOfGolang(dirs.HomeDir, packages); err != nil {
 			t.Errorf("couldn't download and install golang: %v", err)
 		}
 		if err = localio.RunCommandPipeOutput("go version"); err != nil {

@@ -32,10 +32,6 @@ func InstallExtraPackages(osType string, dirs *localio.Directories, packages *lo
 		if err := localio.BrewInstallProgram("gnu-sed", "gsed", packages); err != nil {
 			return err
 		}
-		// install gotop
-		//if err := localio.BrewInstallProgram("gotop", "gotop", packages); err != nil {
-		//	return err
-		//}
 		// install yamllint
 		if err := localio.BrewInstallProgram("yamllint", "yamllint", packages); err != nil {
 			return err
@@ -106,15 +102,6 @@ func InstallExtraPackages(osType string, dirs *localio.Directories, packages *lo
 				return err
 			}
 		}
-		// install gotop
-		//if _, exists := localio.CommandExists("go"); exists {
-		//	if _, exists = localio.CommandExists("gotop"); !exists {
-		//		if err := localio.RunCommandPipeOutput("go install github.com/xxxserxxx/gotop/v4/cmd/gotop@latest"); err != nil {
-		//			return err
-		//		}
-		//	}
-		//}
-
 		// install cowsay, bat, fd-find
 		if err := localio.AptInstall(packages, "cowsay", "bat", "fd-find"); err != nil {
 			return err
