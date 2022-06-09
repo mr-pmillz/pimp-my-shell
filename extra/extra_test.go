@@ -17,12 +17,14 @@ func TestInstallExtraPackages(t *testing.T) {
 	osType := runtime.GOOS
 	switch osType {
 	case "linux":
-		packages, err := localio.NewAptInstalled()
+		installedPkgs := &localio.InstalledPackages{}
+		aptPackages, err := localio.NewAptInstalled()
 		if err != nil {
 			t.Errorf("failed to get AptInstalledPackages: %v", err)
 		}
+		installedPkgs.AptInstalledPackages = aptPackages
 
-		if err = localio.DownloadAndInstallLatestVersionOfGolang(dirs.HomeDir, packages); err != nil {
+		if err = localio.DownloadAndInstallLatestVersionOfGolang(dirs.HomeDir, installedPkgs); err != nil {
 			t.Errorf("couldn't download and install golang: %v", err)
 		}
 		if err = localio.RunCommandPipeOutput("go version"); err != nil {
