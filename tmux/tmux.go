@@ -40,8 +40,8 @@ func runTmux() error {
 
 		// Prepare configuration for a new session with some windows.
 		session := gotmux.Session{Name: "PimpMyShell"}
-		w1 := gotmux.Window{Name: "Human", Id: 0}
-		w2 := gotmux.Window{Name: "Element", Id: 1}
+		w1 := gotmux.Window{Name: "Quite", Id: 0}
+		w2 := gotmux.Window{Name: "Crucial", Id: 1}
 		session.AddWindow(w1)
 		session.AddWindow(w2)
 		server.AddSession(session)
