@@ -3,6 +3,7 @@ package vim
 import (
 	"embed"
 	"fmt"
+	"runtime"
 
 	"github.com/google/periph/host/distro"
 	"github.com/mr-pmillz/pimp-my-shell/localio"
@@ -173,7 +174,11 @@ func InstallVimAwesome(osType string, dirs *localio.Directories, packages *local
 			if err := localio.RunCommandPipeOutput("sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys \"3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF\" || true"); err != nil {
 				return err
 			}
-			if err := localio.RunCommandPipeOutput("echo \"deb https://download.mono-project.com/repo/ubuntu stable-focal main\" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list || true"); err != nil {
+			if err := localio.RunCommandPipeOutput("sudo apt-key export D3D831EF | sudo gpg --dearmour -o /usr/share/keyrings/xamarin-public-jenkins.gpg || true"); err != nil {
+				return err
+			}
+			archType := runtime.GOARCH
+			if err := localio.RunCommandPipeOutput(fmt.Sprintf("echo \"deb [arch=%s signed-by=/usr/share/keyrings/xamarin-public-jenkins.gpg] https://download.mono-project.com/repo/ubuntu stable-focal main\" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list || true", archType)); err != nil {
 				return err
 			}
 			if err := localio.RunCommandPipeOutput("sudo apt-get update -y"); err != nil {
@@ -194,7 +199,11 @@ func InstallVimAwesome(osType string, dirs *localio.Directories, packages *local
 			if err := localio.RunCommandPipeOutput("sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys \"3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF\" || true"); err != nil {
 				return err
 			}
-			if err := localio.RunCommandPipeOutput("echo \"deb https://download.mono-project.com/repo/debian stable-buster main\" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list || true"); err != nil {
+			if err := localio.RunCommandPipeOutput("sudo apt-key export D3D831EF | sudo gpg --dearmour -o /usr/share/keyrings/xamarin-public-jenkins.gpg || true"); err != nil {
+				return err
+			}
+			archType := runtime.GOARCH
+			if err := localio.RunCommandPipeOutput(fmt.Sprintf("echo \"deb [arch=%s signed-by=/usr/share/keyrings/xamarin-public-jenkins.gpg] https://download.mono-project.com/repo/debian stable-buster main\" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list || true", archType)); err != nil {
 				return err
 			}
 			if err := localio.RunCommandPipeOutput("sudo apt-get update -y"); err != nil {
