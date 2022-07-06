@@ -4,12 +4,16 @@ try
     syntax enable
     filetype plugin indent on
     "Set Dracula to the default Theme
+    " For Light mode, switch to peaksea and set background=light
     color dracula
+    " color peaksea
     let g:dracula_colorterm = 0
     let g:dracula_italic = 0
     " Show Line Numbers
     set nu
     " Set Background to dark mode
+    " For Light mode, switch to color to peaksea and set background=light
+    " set background=light
     set background=dark
 
     " disable autopairs

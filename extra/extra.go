@@ -24,7 +24,37 @@ func InstallExtraPackages(osType string, dirs *localio.Directories, packages *lo
 		if err := localio.BrewInstallProgram("lsd", "lsd", packages); err != nil {
 			return err
 		}
-		// install cowsay because it's Pimpin'
+		// create lsd config, light and dark themes
+		if err := os.MkdirAll(fmt.Sprintf("%s/.config/lsd/themes", dirs.HomeDir), 0750); err != nil {
+			return err
+		}
+		lsdConfig, err := extraConfigs.Open("templates/lsd_config.yaml")
+		if err != nil {
+			return err
+		}
+		exists, err := localio.Exists("~/.config/lsd/config.yaml")
+		if err == nil && !exists {
+			if err = localio.EmbedFileCopy("~/.config/lsd/config.yaml", lsdConfig); err != nil {
+				return err
+			}
+		}
+
+		lsdDarkTheme, err := extraConfigs.Open("templates/lsd_default_theme.yaml")
+		if err != nil {
+			return err
+		}
+		if err = localio.EmbedFileCopy("~/.config/lsd/themes/default.yaml", lsdDarkTheme); err != nil {
+			return err
+		}
+
+		lsdLightTheme, err := extraConfigs.Open("templates/lsd_light_theme.yaml")
+		if err != nil {
+			return err
+		}
+		if err = localio.EmbedFileCopy("~/.config/lsd/themes/light.yaml", lsdLightTheme); err != nil {
+			return err
+		}
+		// install cowsay
 		if err := localio.BrewInstallProgram("cowsay", "cowsay", packages); err != nil {
 			return err
 		}
@@ -102,6 +132,37 @@ func InstallExtraPackages(osType string, dirs *localio.Directories, packages *lo
 				return err
 			}
 		}
+		// create lsd config, light and dark themes
+		if err := os.MkdirAll(fmt.Sprintf("%s/.config/lsd/themes", dirs.HomeDir), 0750); err != nil {
+			return err
+		}
+		lsdConfig, err := extraConfigs.Open("templates/lsd_config.yaml")
+		if err != nil {
+			return err
+		}
+		exists, err := localio.Exists("~/.config/lsd/config.yaml")
+		if err == nil && !exists {
+			if err = localio.EmbedFileCopy("~/.config/lsd/config.yaml", lsdConfig); err != nil {
+				return err
+			}
+		}
+
+		lsdDarkTheme, err := extraConfigs.Open("templates/lsd_default_theme.yaml")
+		if err != nil {
+			return err
+		}
+		if err = localio.EmbedFileCopy("~/.config/lsd/themes/default.yaml", lsdDarkTheme); err != nil {
+			return err
+		}
+
+		lsdLightTheme, err := extraConfigs.Open("templates/lsd_light_theme.yaml")
+		if err != nil {
+			return err
+		}
+		if err = localio.EmbedFileCopy("~/.config/lsd/themes/light.yaml", lsdLightTheme); err != nil {
+			return err
+		}
+
 		// install cowsay, bat, fd-find
 		if err := localio.AptInstall(packages, "cowsay", "bat", "fd-find"); err != nil {
 			return err
