@@ -9,7 +9,7 @@ require (
 	github.com/google/periph v3.6.8+incompatible
 	github.com/jubnzv/go-tmux v0.0.0-20210107170159-c6ae3ccbe820
 	github.com/klauspost/cpuid/v2 v2.0.11
-	github.com/schollz/progressbar/v3 v3.8.6
+	github.com/schollz/progressbar/v3 v3.11.0
 	github.com/stretchr/testify v1.7.0
 	github.com/tidwall/gjson v1.14.0
 	golang.org/x/oauth2 v0.0.0-20180821212333-d2e6202438be
@@ -40,8 +40,8 @@ require (
 	github.com/xanzy/ssh-agent v0.3.0 // indirect
 	golang.org/x/crypto v0.0.0-20220131195533-30dcbda58838 // indirect
 	golang.org/x/net v0.0.0-20211112202133-69e39bad7dc2 // indirect
-	golang.org/x/sys v0.0.0-20220128215802-99c3d69c2c27 // indirect
-	golang.org/x/term v0.0.0-20210927222741-03fcf44c2211 // indirect
+	golang.org/x/sys v0.0.0-20220829200755-d48e67d00261 // indirect
+	golang.org/x/term v0.0.0-20220722155259-a9ba230a4035 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c // indirect
