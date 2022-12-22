@@ -5,15 +5,15 @@ import (
 	"log"
 	"runtime"
 
-	"github.com/mr-pmillz/pimp-my-shell/cheat"
-	"github.com/mr-pmillz/pimp-my-shell/extra"
-	"github.com/mr-pmillz/pimp-my-shell/linux"
-	"github.com/mr-pmillz/pimp-my-shell/localio"
-	"github.com/mr-pmillz/pimp-my-shell/macosx"
-	"github.com/mr-pmillz/pimp-my-shell/nerdfonts"
-	"github.com/mr-pmillz/pimp-my-shell/tmux"
-	"github.com/mr-pmillz/pimp-my-shell/vim"
-	"github.com/mr-pmillz/pimp-my-shell/zsh"
+	"github.com/mr-pmillz/pimp-my-shell/v2/cheat"
+	"github.com/mr-pmillz/pimp-my-shell/v2/extra"
+	"github.com/mr-pmillz/pimp-my-shell/v2/linux"
+	"github.com/mr-pmillz/pimp-my-shell/v2/localio"
+	"github.com/mr-pmillz/pimp-my-shell/v2/macosx"
+	"github.com/mr-pmillz/pimp-my-shell/v2/nerdfonts"
+	"github.com/mr-pmillz/pimp-my-shell/v2/tmux"
+	"github.com/mr-pmillz/pimp-my-shell/v2/vim"
+	"github.com/mr-pmillz/pimp-my-shell/v2/zsh"
 )
 
 // pimpMyShell runs all the installation setup tasks

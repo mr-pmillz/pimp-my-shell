@@ -8,7 +8,7 @@ import (
 	"path"
 	"strings"
 
-	"github.com/mr-pmillz/pimp-my-shell/localio"
+	"github.com/mr-pmillz/pimp-my-shell/v2/localio"
 
 	"github.com/google/go-github/v39/github"
 	"golang.org/x/oauth2"

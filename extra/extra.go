@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/mr-pmillz/pimp-my-shell/githubapi"
-	"github.com/mr-pmillz/pimp-my-shell/localio"
+	"github.com/mr-pmillz/pimp-my-shell/v2/githubapi"
+	"github.com/mr-pmillz/pimp-my-shell/v2/localio"
 	"gopkg.in/ini.v1"
 )
 

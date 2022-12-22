@@ -7,7 +7,7 @@ import (
 	"os"
 	"text/template"
 
-	"github.com/mr-pmillz/pimp-my-shell/localio"
+	"github.com/mr-pmillz/pimp-my-shell/v2/localio"
 )
 
 type cheatConfigOptions struct {

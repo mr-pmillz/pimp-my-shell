@@ -6,7 +6,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/mr-pmillz/pimp-my-shell/localio"
+	"github.com/mr-pmillz/pimp-my-shell/v2/localio"
 )
 
 func TestInstallCheat(t *testing.T) {

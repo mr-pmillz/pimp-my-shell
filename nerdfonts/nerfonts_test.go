@@ -3,7 +3,7 @@ package nerdfonts
 import (
 	"testing"
 
-	"github.com/mr-pmillz/pimp-my-shell/localio"
+	"github.com/mr-pmillz/pimp-my-shell/v2/localio"
 )
 
 func TestInstallNerdFontsLSD(t *testing.T) {

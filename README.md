@@ -36,13 +36,13 @@ Table of Contents
 If you have a version of golang >= 16.X you can install with
 
 ```shell
-go install github.com/mr-pmillz/pimp-my-shell@latest
+go install github.com/mr-pmillz/pimp-my-shell/v2@latest
 ```
 
 If using an older version of golang
 
 ```shell
-go get github.com/mr-pmillz/pimp-my-shell@latest
+go get github.com/mr-pmillz/pimp-my-shell/v2@latest
 ```
 
  ### Manual installation

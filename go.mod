@@ -1,4 +1,4 @@
-module github.com/mr-pmillz/pimp-my-shell
+module github.com/mr-pmillz/pimp-my-shell/v2
 
 go 1.19
 

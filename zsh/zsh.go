@@ -9,8 +9,8 @@ import (
 	"strings"
 
 	"github.com/Masterminds/semver"
-	"github.com/mr-pmillz/pimp-my-shell/localio"
-	"github.com/mr-pmillz/pimp-my-shell/osrelease"
+	"github.com/mr-pmillz/pimp-my-shell/v2/localio"
+	"github.com/mr-pmillz/pimp-my-shell/v2/osrelease"
 )
 
 //go:embed templates/*

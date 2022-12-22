@@ -3,7 +3,7 @@ package macosx
 import (
 	"testing"
 
-	"github.com/mr-pmillz/pimp-my-shell/localio"
+	"github.com/mr-pmillz/pimp-my-shell/v2/localio"
 )
 
 func TestInstallHomebrew(t *testing.T) {

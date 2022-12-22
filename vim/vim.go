@@ -6,7 +6,7 @@ import (
 	"runtime"
 
 	"github.com/google/periph/host/distro"
-	"github.com/mr-pmillz/pimp-my-shell/localio"
+	"github.com/mr-pmillz/pimp-my-shell/v2/localio"
 )
 
 //go:embed templates/*

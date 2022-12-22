@@ -6,7 +6,7 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/mr-pmillz/pimp-my-shell/localio"
+	"github.com/mr-pmillz/pimp-my-shell/v2/localio"
 	"github.com/stretchr/testify/assert"
 )
 

@@ -6,7 +6,7 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/mr-pmillz/pimp-my-shell/localio"
+	"github.com/mr-pmillz/pimp-my-shell/v2/localio"
 )
 
 // Test_updateZSHPlugins is a basic test checking for errors, it doesn't validate the correct plugins

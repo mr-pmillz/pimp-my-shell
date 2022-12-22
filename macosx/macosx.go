@@ -3,7 +3,7 @@ package macosx
 import (
 	"fmt"
 
-	"github.com/mr-pmillz/pimp-my-shell/localio"
+	"github.com/mr-pmillz/pimp-my-shell/v2/localio"
 )
 
 // InstallHomebrew if Not already installed
