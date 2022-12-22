@@ -674,7 +674,7 @@ func TestStartTmuxSession(t *testing.T) {
 			t.Errorf("BrewInstallProgram() error = %v", err)
 		}
 	default:
-		//Do Nothing
+		// Do Nothing
 	}
 	tests := []struct {
 		name    string

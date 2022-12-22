@@ -19,7 +19,7 @@ import (
 	"time"
 
 	"github.com/go-git/go-git/v5"
-	. "github.com/go-git/go-git/v5/_examples"
+	gitex "github.com/go-git/go-git/v5/_examples"
 	"github.com/klauspost/cpuid/v2"
 	"github.com/schollz/progressbar/v3"
 	"github.com/tidwall/gjson"
@@ -33,12 +33,12 @@ const (
 // GitClone clones a public git repo url to directory
 func GitClone(url, directory string) error {
 	if exists, err := Exists(directory); err == nil && !exists {
-		Info("git clone %s %s", url, directory)
+		gitex.Info("git clone %s %s", url, directory)
 		_, err := git.PlainClone(directory, false, &git.CloneOptions{
 			URL:      url,
 			Progress: os.Stdout,
 		})
-		CheckIfError(err)
+		gitex.CheckIfError(err)
 	} else {
 		fmt.Printf("[+] Repo: %s already exists at %s, skipping... \n", url, directory)
 	}
@@ -157,11 +157,12 @@ func DownloadFile(dest, url string) error {
 // GetCPUType Returns the CPU type for the current runtime environment
 func GetCPUType() string {
 	cpuid.Detect()
-	if cpuid.CPU.VendorID.String() == "AMD" || cpuid.CPU.VendorID.String() == "Intel" && cpuid.CPU.CacheLine == 64 {
+	switch {
+	case cpuid.CPU.VendorID.String() == "AMD" || cpuid.CPU.VendorID.String() == "Intel" && cpuid.CPU.CacheLine == 64:
 		return "AMD64"
-	} else if cpuid.CPU.VendorID.String() == "ARM" && cpuid.CPU.CacheLine == 64 {
+	case cpuid.CPU.VendorID.String() == "ARM" && cpuid.CPU.CacheLine == 64:
 		return "ARM64"
-	} else {
+	default:
 		return ""
 	}
 }
@@ -173,50 +174,47 @@ func DownloadAndInstallLatestVersionOfGolang(homeDir string, packages *Installed
 			return err
 		}
 		return nil
-	} else {
-		req, err := http.NewRequest("GET", "https://golang.org/VERSION?m=text", nil)
-		if err != nil {
-			return err
-		}
-
-		resp, err := http.DefaultClient.Do(req)
-		if err != nil {
-			return err
-		}
-		defer resp.Body.Close()
-		goversion, err := io.ReadAll(resp.Body)
-		if err != nil {
-			return err
-		}
-		latestGoVersion := string(goversion)
-
-		switch GetCPUType() {
-		case "ARM64":
-			armGoURL := fmt.Sprintf("https://dl.google.com/go/%s.linux-arm64.tar.gz", latestGoVersion)
-			dest := fmt.Sprintf("%s/%s", homeDir, path.Base(armGoURL))
-			if err = DownloadFile(dest, armGoURL); err != nil {
-				return err
-			}
-			// // Now extract the go binary. pimp-my-shell ensures that ~/.zshrc will already have the path setup for you
-			if err = RunCommandPipeOutput(fmt.Sprintf("sudo rm -rf /usr/local/go 2>/dev/null && sudo tar -C /usr/local -xzf %s || true", dest)); err != nil {
-				return err
-			}
-
-		case "AMD64":
-			amdGoURL := fmt.Sprintf("https://dl.google.com/go/%s.linux-amd64.tar.gz", latestGoVersion)
-			dest := fmt.Sprintf("%s/%s", homeDir, path.Base(amdGoURL))
-			if err = DownloadFile(dest, amdGoURL); err != nil {
-				return err
-			}
-
-			if err = RunCommandPipeOutput(fmt.Sprintf("sudo rm -rf /usr/local/go 2>/dev/null && sudo tar -C /usr/local -xzf %s || true", dest)); err != nil {
-				return err
-			}
-		default:
-			fmt.Println("[-] Couldn't download and install golang Unsupported CPU... Pimp-My-Shell only supports 64 bit")
-		}
-		return nil
 	}
+	req, err := http.NewRequest("GET", "https://golang.org/VERSION?m=text", nil)
+	if err != nil {
+		return err
+	}
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+	goversion, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return err
+	}
+	latestGoVersion := string(goversion)
+	switch GetCPUType() {
+	case "ARM64":
+		armGoURL := fmt.Sprintf("https://dl.google.com/go/%s.linux-arm64.tar.gz", latestGoVersion)
+		dest := fmt.Sprintf("%s/%s", homeDir, path.Base(armGoURL))
+		if err = DownloadFile(dest, armGoURL); err != nil {
+			return err
+		}
+		// // Now extract the go binary. pimp-my-shell ensures that ~/.zshrc will already have the path setup for you
+		if err = RunCommandPipeOutput(fmt.Sprintf("sudo rm -rf /usr/local/go 2>/dev/null && sudo tar -C /usr/local -xzf %s || true", dest)); err != nil {
+			return err
+		}
+
+	case "AMD64":
+		amdGoURL := fmt.Sprintf("https://dl.google.com/go/%s.linux-amd64.tar.gz", latestGoVersion)
+		dest := fmt.Sprintf("%s/%s", homeDir, path.Base(amdGoURL))
+		if err = DownloadFile(dest, amdGoURL); err != nil {
+			return err
+		}
+
+		if err = RunCommandPipeOutput(fmt.Sprintf("sudo rm -rf /usr/local/go 2>/dev/null && sudo tar -C /usr/local -xzf %s || true", dest)); err != nil {
+			return err
+		}
+	default:
+		fmt.Println("[-] Couldn't download and install golang Unsupported CPU... Pimp-My-Shell only supports 64 bit")
+	}
+	return nil
 }
 
 // RunCommands ...
@@ -463,7 +461,7 @@ func RunCommandPipeOutput(command string) error {
 	}
 
 	if err = cmd.Wait(); err != nil {
-		fmt.Fprintf(os.Stderr, "Error waiting for Cmd %s\n", err)
+		_, _ = fmt.Fprintf(os.Stderr, "Error waiting for Cmd %s\n", err)
 		return err
 	}
 

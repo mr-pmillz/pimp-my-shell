@@ -31,7 +31,7 @@ func TestInstallExtraPackages(t *testing.T) {
 			t.Errorf("couldn't get go version: %v", err)
 		}
 	default:
-		//DoNothing
+		// DoNothing
 	}
 
 	type args struct {

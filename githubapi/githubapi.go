@@ -95,6 +95,8 @@ func getLatestReleasesFromGithubRepo(owner, repo string) (*ReleaseAssets, error)
 }
 
 // DownloadLatestRelease ...
+//
+//nolint:gocognit
 func DownloadLatestRelease(osType string, dirs *localio.Directories, owner, repo string) (string, error) {
 	releaseAssets, err := getLatestReleasesFromGithubRepo(owner, repo)
 	if err != nil {

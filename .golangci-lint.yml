@@ -4,25 +4,26 @@ run:
 linters:
   disable-all: true
   enable:
-    #- bodyclose
-    - deadcode
-    - depguard
+    - bodyclose
+    #- deadcode
+    #- depguard
     #- dogsled
-    #- dupl
-    - errcheck
+    - dupl
     - errorlint
+    - exportloopref
     #- exhaustive
     #- funlen
-    - gas
+    #- gas
     #- gochecknoinits
     - goconst
-    #- gocritic
+    - gocognit
+    - gocritic
     #- gocyclo
     #- gofmt
-    - goimports
+    #- goimports
     #- golint
     #- gomnd
-    #- goprintffuncname
+    - goprintffuncname
     - gosec
     - gosimple
     - govet
@@ -34,19 +35,20 @@ linters:
     #- misspell
     #- nakedret
     #- noctx
-    - nolintlint
-    #- revive
+    #- nolintlint
+    # - prealloc
+    - revive
     #- rowserrcheck
     #- scopelint
     - staticcheck
-    - structcheck
-    #- stylecheck
+    #- structcheck
+    - stylecheck
     - typecheck
     - unconvert
-    - unparam
+    #- unparam
     - unused
-    - varcheck
-    #- whitespace
+    #- varcheck
+    - whitespace
   fast: false
 
 linters-settings:
@@ -54,8 +56,5 @@ linters-settings:
     checks: ["all", "-S1028"]
   staticcheck:
     checks: ["all"]
-  gosec:
-    # To specify a set of rules to explicitly exclude.
-    # Available rules: https://github.com/securego/gosec#available-rules
-    excludes:
-      - G306
+  stylecheck:
+    checks: ["all", "-ST1005"]

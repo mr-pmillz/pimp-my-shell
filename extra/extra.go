@@ -14,6 +14,8 @@ import (
 var extraConfigs embed.FS
 
 // InstallExtraPackages ...
+//
+//nolint:gocognit
 func InstallExtraPackages(osType string, dirs *localio.Directories, packages *localio.InstalledPackages) error {
 	switch osType {
 	case "darwin":
@@ -83,7 +85,7 @@ func InstallExtraPackages(osType string, dirs *localio.Directories, packages *lo
 			if err := localio.BrewInstallProgram("fzf", "fzf", packages); err != nil {
 				return err
 			}
-			//To install useful key bindings and fuzzy completion:
+			// To install useful key bindings and fuzzy completion:
 			// /usr/local/opt/fzf/install --all
 			if exists, err := localio.Exists("/usr/local/opt/fzf/install"); err == nil && exists {
 				if err = localio.RunCommandPipeOutput("/usr/local/opt/fzf/install --all"); err != nil {

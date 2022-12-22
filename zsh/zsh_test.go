@@ -20,6 +20,10 @@ func Test_updateZSHPlugins(t *testing.T) {
 	if err != nil {
 		t.Errorf("Couldnt resolve zshrcTestTemplateSingleLinePlugin path: %v", err)
 	}
+	zshrcTestTemplatePluginsEmpty, err := localio.ResolveAbsPath("test/zshrc-test-plugins-empty.zshrc")
+	if err != nil {
+		t.Errorf("Couldnt resolve test/zshrc-test-plugins-empty.zshrc path: %v", err)
+	}
 	type args struct {
 		zshrcPath string
 	}
@@ -30,7 +34,8 @@ func Test_updateZSHPlugins(t *testing.T) {
 	}{
 		{name: "Test_updateZSHPlugins Multi-line 1", args: args{zshrcTestTemplatePlugins}, wantErr: false},
 		{name: "Test_updateZSHPlugins Single-line 2", args: args{zshrcTestTemplateSingleLinePlugin}, wantErr: false},
-		{name: "Test_updateZSHPlugins Single-line 2", args: args{"/fakepath/doesn/t/exist/Fakepath/"}, wantErr: true},
+		{name: "Test_updateZSHPlugins plugins Empty 3", args: args{zshrcTestTemplatePluginsEmpty}, wantErr: false},
+		{name: "Test_updateZSHPlugins Fake Path", args: args{"/fakepath/doesn/t/exist/Fakepath/"}, wantErr: true},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

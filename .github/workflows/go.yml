@@ -6,43 +6,30 @@ on:
       - '*'
   pull_request:
 
+permissions:
+  contents: write
+  # packages: write
+  # issues: write
+
 jobs:
   build:
     strategy:
       matrix:
-        go-version: [1.17.x]
+        go-version: [1.19.x]
         os: [ubuntu-latest, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       # Setup Go
       - name: Setup Go
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v3
         with:
           go-version: ${{ matrix.go-version }}
-
-      - id: go-cache-paths
-        run: |
-          echo "::set-output name=gobuild::$(go env GOCACHE)"
-          echo "::set-output name=gomod::$(go env GOMODCACHE)"
-
-      # Cache go build cache
-      - name: Go Build Cache
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.go-cache-paths.outputs.gobuild }}
-          key: ${{ runner.os }}-gobuild-${{ hashFiles('**/go.sum') }}
-
-      # Cache go mod cache
-      - name: Go Mod Cache
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.go-cache-paths.outputs.gomod }}
-          key: ${{ runner.os }}-gomod-${{ hashFiles('**/go.sum') }}
+          cache: true
 
       - name: Install dependencies
-        run: go get github.com/mattn/go-isatty@v0.0.12
+        run: go get github.com/mattn/go-isatty@v0.0.16
 
       # Run build of the application
       - name: Run build
@@ -52,39 +39,21 @@ jobs:
   test:
     strategy:
       matrix:
-        go-version: [1.17.x]
+        go-version: [1.19.x]
         os: [ubuntu-latest, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       # Setup Go
       - name: Setup Go
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v3
         with:
           go-version: ${{ matrix.go-version }}
-
-      - id: go-cache-paths
-        run: |
-          echo "::set-output name=gobuild::$(go env GOCACHE)"
-          echo "::set-output name=gomod::$(go env GOMODCACHE)"
-
-      # Cache go build cache
-      - name: Go Build Cache
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.go-cache-paths.outputs.gobuild }}
-          key: ${{ runner.os }}-gobuild-${{ hashFiles('**/go.sum') }}
-
-      # Cache go mod cache
-      - name: Go Mod Cache
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.go-cache-paths.outputs.gomod }}
-          key: ${{ runner.os }}-gomod-${{ hashFiles('**/go.sum') }}
+          cache: true
 
       - name: Install dependencies
-        run: go get github.com/mattn/go-isatty@v0.0.12
+        run: go get github.com/mattn/go-isatty@v0.0.16
 
       # Run Tests
       - name: Tests
@@ -96,7 +65,7 @@ jobs:
 
       # Upload the original go test log as an artifact for later review.
       - name: Upload test log
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: always()
         with:
           name: test-log
@@ -106,39 +75,21 @@ jobs:
   run-pimp-my-shell:
     strategy:
       matrix:
-        go-version: [1.17.x]
+        go-version: [1.19.x]
         os: [ubuntu-latest, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Setup Go
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v3
         with:
           go-version: ${{ matrix.go-version }}
-
-      - id: go-cache-paths
-        run: |
-          echo "::set-output name=gobuild::$(go env GOCACHE)"
-          echo "::set-output name=gomod::$(go env GOMODCACHE)"
-
-      # Cache go build cache
-      - name: Go Build Cache
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.go-cache-paths.outputs.gobuild }}
-          key: ${{ runner.os }}-gobuild-${{ hashFiles('**/go.sum') }}
-
-      # Cache go mod cache
-      - name: Go Mod Cache
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.go-cache-paths.outputs.gomod }}
-          key: ${{ runner.os }}-gomod-${{ hashFiles('**/go.sum') }}
+          cache: true
 
       - name: Go Build
         run: |
-          go get github.com/mattn/go-isatty@v0.0.12
+          go get github.com/mattn/go-isatty@v0.0.16
           make -f MakeFile build
 
       - name: Run pimp-my-shell
@@ -149,31 +100,6 @@ jobs:
           echo "::group::Final ZSHRC"
           cat "$HOME/.zshrc"
           echo "::endgroup::"
-
-
-  generate-milestone:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0 # Required due to the way Git works, without it this action won't be able to find any or the correct tags
-      - name: Get Previous tag
-        id: previoustag
-        uses: WyriHaximus/github-action-get-previous-tag@v1
-        with:
-          fallback: v1.0.0 # Optional fallback tag to use when no tag can be found
-      - name: Get next minor version
-        id: semvers
-        uses: WyriHaximus/github-action-next-semvers@v1
-        with:
-          version: ${{ steps.previoustag.outputs.tag }}
-      - name: Create new milestone
-        id: createmilestone
-        uses: WyriHaximus/github-action-create-milestone@v1
-        with:
-          title: ${{ steps.semvers.outputs.patch }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   # ================
   # RELEASE JOB
@@ -186,69 +112,36 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
-          fetch-depth: 1000
+          fetch-depth: 0
+      - run: git fetch --force --tags
 
       - name: Setup Go
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v3
         with:
-          go-version: 1.17.x
-
-      - id: go-cache-paths
-        run: |
-          echo "::set-output name=gobuild::$(go env GOCACHE)"
-          echo "::set-output name=gomod::$(go env GOMODCACHE)"
-
-      # Cache go build cache
-      - name: Go Build Cache
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.go-cache-paths.outputs.gobuild }}
-          key: ${{ runner.os }}-gobuild-${{ hashFiles('**/go.sum') }}
-
-      # Cache go mod cache
-      - name: Go Mod Cache
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.go-cache-paths.outputs.gomod }}
-          key: ${{ runner.os }}-gomod-${{ hashFiles('**/go.sum') }}
+          go-version: 1.19.x
+          cache: true
 
       - name: Install dependencies
-        run: go get github.com/mattn/go-isatty@v0.0.12
+        run: go get github.com/mattn/go-isatty@v0.0.16
 
-      - name: Generate Binaries
-        id: binaries
+      - name: Set GOPATH
         run: |
-          make -f MakeFile release
+          echo "GOPATH=$(go env GOPATH)/bin" >> $GITHUB_ENV
 
-      - name: Get current tag name
-        run: |
-          echo "TAG=${GITHUB_REF/refs\/tags\//}" >> $GITHUB_ENV
-          echo "PREVIOUS_TAG=$(git describe --abbrev=0 --tags $(git rev-list --tags --skip=1 --max-count=1))" >> $GITHUB_ENV
-
-      - name: "Build Changelog"
-        id: github_release
-        uses: mikepenz/release-changelog-builder-action@v1
+      - name: Run GoReleaser
+        uses: goreleaser/goreleaser-action@v4
+        if: startsWith(github.ref, 'refs/tags/v')
         with:
-          configuration: ".github/configuration_repo.json"
-          owner: "mr-pmillz"
-          repo: "pimp-my-shell"
-          fromTag: ${{ env.PREVIOUS_TAG }}
-          toTag: ${{ env.TAG }}
+          distribution: goreleaser
+          version: latest
+          args: release --rm-dist
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Create Release
-        if: success()
-        uses: softprops/action-gh-release@v1
+      - name: Upload assets
+        uses: actions/upload-artifact@v3
         with:
-          body: ${{steps.github_release.outputs.changelog}}
-          prerelease: ${{ contains(github.ref, '-rc') || contains(github.ref, '-b') || contains(github.ref, '-a') }}
-          files: |
-            bin/linux/amd64/pimp-my-shell-${{ env.TAG }}-linux-amd64.gz
-            bin/linux/arm64/pimp-my-shell-${{ env.TAG }}-linux-arm64.gz
-            bin/darwin/amd64/pimp-my-shell-${{ env.TAG }}-x86_64-apple-darwin_amd64.gz
-            bin/darwin/arm64/pimp-my-shell-${{ env.TAG }}-x86_64-apple-darwin_arm64.gz
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          name: pimp-my-shell
+          path: dist/*

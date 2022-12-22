@@ -13,6 +13,8 @@ import (
 var myConfigs embed.FS
 
 // InstallVimPlugins ...
+//
+//nolint:gocognit
 func InstallVimPlugins(osType string, dirs *localio.Directories) error {
 	if exists, err := localio.Exists(fmt.Sprintf("%s/.vim_runtime", dirs.HomeDir)); err == nil && !exists {
 		// install awesome vim
@@ -129,6 +131,8 @@ func InstallVimPlugins(osType string, dirs *localio.Directories) error {
 }
 
 // InstallVimAwesome ...
+//
+//nolint:gocognit
 func InstallVimAwesome(osType string, dirs *localio.Directories, packages *localio.InstalledPackages) error {
 	switch osType {
 	case "darwin":

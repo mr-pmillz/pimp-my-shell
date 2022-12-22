@@ -8,6 +8,8 @@ import (
 )
 
 // InstallNerdFontsLSD ...
+//
+//nolint:gocognit
 func InstallNerdFontsLSD(osType string, dirs *localio.Directories, packages *localio.InstalledPackages) error {
 	switch osType {
 	case "darwin":

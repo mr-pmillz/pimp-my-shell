@@ -3,7 +3,6 @@ package zsh
 import (
 	"embed"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"regexp"
 	"sort"
@@ -19,14 +18,21 @@ var zshConfigs embed.FS
 
 func updateZSHPlugins(zshrcPath string) error {
 	var re = regexp.MustCompile(`(?m)^plugins=\(\s*((?:[a-z][a-z0-9_-]+\s*)+)\)$`)
-	input, err := ioutil.ReadFile(zshrcPath)
+	input, err := os.ReadFile(zshrcPath)
 	if err != nil {
 		return err
 	}
 	newPlugins := []string{"git", "zsh-syntax-highlighting", "tmux", "golang", "zsh-autosuggestions", "virtualenv", "ansible", "docker", "docker-compose", "terraform", "kubectl", "helm", "fzf", "fd"}
 	currentlyInstalledPlugins := re.FindStringSubmatch(string(input))
-	//fmt.Printf("Plugins: %+v\n", currentlyInstalledPlugins[1])
-	installedPlugins := strings.Fields(currentlyInstalledPlugins[1])
+	// fmt.Printf("Plugins: %+v\n", currentlyInstalledPlugins[1])
+	// Fixes https://github.com/mr-pmillz/pimp-my-shell/issues/53
+	var installedPlugins []string
+	switch {
+	case len(currentlyInstalledPlugins) == 0 || len(currentlyInstalledPlugins) == 1:
+		installedPlugins = []string{}
+	default:
+		installedPlugins = strings.Fields(currentlyInstalledPlugins[1])
+	}
 
 	for _, plugin := range newPlugins {
 		if !localio.Contains(installedPlugins, plugin) {
@@ -35,12 +41,11 @@ func updateZSHPlugins(zshrcPath string) error {
 	}
 	sort.Strings(installedPlugins)
 
-	//fmt.Printf("InstalledPlugins: %+v\n", installedPlugins)
+	// fmt.Printf("InstalledPlugins: %+v\n", installedPlugins)
 	pluginsToAdd := strings.Join(installedPlugins, "\n\t")
 	updatedZshrcFile := re.ReplaceAllString(string(input), fmt.Sprintf("plugins=(\n\t%s\n)", pluginsToAdd))
 
-	err = ioutil.WriteFile(zshrcPath, []byte(updatedZshrcFile), 0644)
-	if err != nil {
+	if err = os.WriteFile(zshrcPath, []byte(updatedZshrcFile), 0644); err != nil { //nolint:gosec
 		return err
 	}
 
@@ -52,6 +57,8 @@ func updateZSHPlugins(zshrcPath string) error {
 const zshExtraConfigPrependTemplate = "templates/zshrc_extra_prepend.zsh"
 
 // InstallOhMyZsh ...
+//
+//nolint:gocognit
 func InstallOhMyZsh(osType string, dirs *localio.Directories) error {
 	// install ohmyzsh if not already installed
 	if exists, err := localio.Exists(fmt.Sprintf("%s/.oh-my-zsh", dirs.HomeDir)); err == nil && !exists {
@@ -115,7 +122,6 @@ func InstallOhMyZsh(osType string, dirs *localio.Directories) error {
 		if err := localio.EmbedFileCopy("~/.oh-my-zsh/custom/aliases.zsh", aliasesConfig); err != nil {
 			return err
 		}
-
 	}
 
 	if exists, err := localio.Exists("~/.oh-my-zsh/custom/man-pages.zsh"); err == nil && !exists {
@@ -167,19 +173,15 @@ func InstallOhMyZsh(osType string, dirs *localio.Directories) error {
 		if err := localio.EmbedFileStringPrependToDest(zshExtraPrependConfig, "~/.zshrc"); err != nil {
 			return err
 		}
-
 		zshExtraConfigTemplate := fmt.Sprintf("templates/%s/zshrc_extra.zsh", osType)
 		zshExtraConfig, err := zshConfigs.ReadFile(zshExtraConfigTemplate)
 		if err != nil {
 			return err
 		}
-
 		if err := localio.EmbedFileStringAppendToDest(zshExtraConfig, "~/.zshrc"); err != nil {
 			return err
 		}
-
 	}
-
 	// install zsh-autosuggestions
 	if exists, err := localio.Exists(fmt.Sprintf("%s/.oh-my-zsh/custom/plugins/zsh-autosuggestions", dirs.HomeDir)); err == nil && !exists {
 		if err = localio.GitClone("https://github.com/zsh-users/zsh-autosuggestions", fmt.Sprintf("%s/.oh-my-zsh/custom/plugins/zsh-autosuggestions", dirs.HomeDir)); err != nil {

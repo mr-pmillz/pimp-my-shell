@@ -10,37 +10,19 @@ jobs:
   coverage-reporter:
     strategy:
       matrix:
-        go-version: [1.17.x]
+        go-version: [1.19.x]
         os: [ubuntu-latest, macos-latest]
     runs-on: ${{ matrix.os }}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       # Setup Go
       - name: Setup Go
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v3
         with:
           go-version: ${{ matrix.go-version }}
-
-      - id: go-cache-paths
-        run: |
-          echo "::set-output name=gobuild::$(go env GOCACHE)"
-          echo "::set-output name=gomod::$(go env GOMODCACHE)"
-
-      # Cache go build cache
-      - name: Go Build Cache
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.go-cache-paths.outputs.gobuild }}
-          key: ${{ runner.os }}-gobuild-${{ hashFiles('**/go.sum') }}
-
-      # Cache go mod cache
-      - name: Go Mod Cache
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.go-cache-paths.outputs.gomod }}
-          key: ${{ runner.os }}-gomod-${{ hashFiles('**/go.sum') }}
+          cache: true
 
       # Remove apt repos that are known to break from time to time
       # See https://github.com/actions/virtual-environments/issues/323
@@ -60,7 +42,7 @@ jobs:
           go test ./... -v -race -coverprofile=./coverage/${{ runner.os }}-coverage.txt -covermode=atomic || true
 
       - name: Codecov
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: ./coverage/${{ runner.os }}-coverage.txt
