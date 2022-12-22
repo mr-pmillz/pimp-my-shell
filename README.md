@@ -1,8 +1,6 @@
 # Pimp-My-Shell
 
 [![Donate](https://img.shields.io/badge/Donate-PayPal-yellow.svg)](https://www.paypal.com/donate?business=YR6C4WB5CDZZL&no_recurring=0&item_name=contribute+to+open+source&currency_code=USD)
-[![Donate with Bitcoin](https://en.cryptobadges.io/badge/micro/3Cd54T1EB6WHRcechq1dRCGF6vY2HHhkdk)](https://en.cryptobadges.io/donate/3Cd54T1EB6WHRcechq1dRCGF6vY2HHhkdk)
-[![Donate with Ethereum](https://en.cryptobadges.io/badge/micro/0x064AA753EF36e5641E2Ee3C9BbC117F6aFe35F62)](https://en.cryptobadges.io/donate/0x064AA753EF36e5641E2Ee3C9BbC117F6aFe35F62)
 [![Go Report Card](https://goreportcard.com/badge/github.com/mr-pmillz/pimp-my-shell)](https://goreportcard.com/report/github.com/mr-pmillz/pimp-my-shell)
 ![GitHub all releases](https://img.shields.io/github/downloads/mr-pmillz/pimp-my-shell/total?style=social)
 ![GitHub repo size](https://img.shields.io/github/repo-size/mr-pmillz/pimp-my-shell?style=plastic)
