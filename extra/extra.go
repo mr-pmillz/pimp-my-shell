@@ -95,7 +95,7 @@ func InstallExtraPackages(osType string, dirs *localio.Directories, packages *lo
 		}
 		// install pip for python3 https://bootstrap.pypa.io/get-pip.py and python requests module
 		if _, exists := localio.CommandExists("python3"); !exists {
-			if err := localio.BrewInstallProgram("python@3.9", "python3", packages); err != nil {
+			if err := localio.BrewInstallProgram("python@3.11", "python3", packages); err != nil {
 				return err
 			}
 		}

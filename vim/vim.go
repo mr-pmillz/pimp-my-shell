@@ -149,7 +149,7 @@ func InstallVimAwesome(osType string, dirs *localio.Directories, packages *local
 		if err := localio.BrewInstallProgram("pkg-config", "pkg-config", packages); err != nil {
 			return err
 		}
-		if err := localio.BrewInstallProgram("python@3.9", "python3", packages); err != nil {
+		if err := localio.BrewInstallProgram("python@3.11", "python3", packages); err != nil {
 			return err
 		}
 		if err := localio.BrewInstallProgram("mono", "mono", packages); err != nil {
