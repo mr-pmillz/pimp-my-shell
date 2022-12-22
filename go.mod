@@ -10,7 +10,7 @@ require (
 	github.com/jubnzv/go-tmux v0.0.0-20210107170159-c6ae3ccbe820
 	github.com/klauspost/cpuid/v2 v2.2.2
 	github.com/schollz/progressbar/v3 v3.12.2
-	github.com/stretchr/testify v1.7.0
+	github.com/stretchr/testify v1.8.1
 	github.com/tidwall/gjson v1.14.4
 	golang.org/x/oauth2 v0.3.0
 	gopkg.in/ini.v1 v1.67.0
@@ -49,6 +49,6 @@ require (
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/protobuf v1.28.1 // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect
-	gopkg.in/yaml.v3 v3.0.0 // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
 	periph.io/x/periph v3.6.8+incompatible // indirect
 )
