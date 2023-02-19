@@ -48,6 +48,7 @@ func InstallExtraPackages(osType string, dirs *localio.Directories, packages *lo
 		if err = localio.EmbedFileCopy("~/.config/lsd/themes/default.yaml", lsdDarkTheme); err != nil {
 			return err
 		}
+		defer lsdDarkTheme.Close()
 
 		lsdLightTheme, err := extraConfigs.Open("templates/lsd_light_theme.yaml")
 		if err != nil {
@@ -56,6 +57,7 @@ func InstallExtraPackages(osType string, dirs *localio.Directories, packages *lo
 		if err = localio.EmbedFileCopy("~/.config/lsd/themes/light.yaml", lsdLightTheme); err != nil {
 			return err
 		}
+		defer lsdLightTheme.Close()
 		// install cowsay
 		if err := localio.BrewInstallProgram("cowsay", "cowsay", packages); err != nil {
 			return err
@@ -76,6 +78,21 @@ func InstallExtraPackages(osType string, dirs *localio.Directories, packages *lo
 		if err := localio.BrewInstallProgram("bat", "bat", packages); err != nil {
 			return err
 		}
+		// setup bat config
+		if err := os.MkdirAll(fmt.Sprintf("%s/.config/bat", dirs.HomeDir), 0750); err != nil {
+			return err
+		}
+		batConfig, err := extraConfigs.Open("templates/bat_config")
+		if err != nil {
+			return err
+		}
+		exists, err := localio.Exists("~/.config/bat/config")
+		if err == nil && !exists {
+			if err = localio.EmbedFileCopy("~/.config/bat/config", batConfig); err != nil {
+				return err
+			}
+		}
+		defer batConfig.Close()
 		// install fd
 		if err := localio.BrewInstallProgram("fd", "fd", packages); err != nil {
 			return err
@@ -169,6 +186,21 @@ func InstallExtraPackages(osType string, dirs *localio.Directories, packages *lo
 		if err := localio.AptInstall(packages, "cowsay", "bat", "fd-find"); err != nil {
 			return err
 		}
+		// setup bat config
+		if err := os.MkdirAll(fmt.Sprintf("%s/.config/bat", dirs.HomeDir), 0750); err != nil {
+			return err
+		}
+		batConfig, err := extraConfigs.Open("templates/bat_config")
+		if err != nil {
+			return err
+		}
+		exists, err := localio.Exists("~/.config/bat/config")
+		if err == nil && !exists {
+			if err = localio.EmbedFileCopy("~/.config/bat/config", batConfig); err != nil {
+				return err
+			}
+		}
+		defer batConfig.Close()
 
 		// add batcat to path as bat
 		if err := os.MkdirAll(fmt.Sprintf("%s/.local/bin", dirs.HomeDir), 0750); err != nil {

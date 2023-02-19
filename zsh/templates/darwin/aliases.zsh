@@ -12,3 +12,4 @@ alias gll="git log --all --stat --pretty=tformat:'%Cred%h%Creset -%C(yellow)%d%C
 alias gln="git --no-pager log --all --stat --pretty=tformat:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ad) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative -n 10"
 alias clp="pbcopy < $1"
 alias fzfbat="fzf --preview 'bat --style numbers,changes --color=always {}' | head -500"
+alias ip='ip --color=auto'
