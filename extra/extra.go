@@ -86,8 +86,7 @@ func InstallExtraPackages(osType string, dirs *localio.Directories, packages *lo
 		if err != nil {
 			return err
 		}
-		exists, err := localio.Exists("~/.config/bat/config")
-		if err == nil && !exists {
+		if exists, err := localio.Exists("~/.config/bat/config"); err == nil && !exists {
 			if err = localio.EmbedFileCopy("~/.config/bat/config", batConfig); err != nil {
 				return err
 			}
@@ -194,8 +193,7 @@ func InstallExtraPackages(osType string, dirs *localio.Directories, packages *lo
 		if err != nil {
 			return err
 		}
-		exists, err := localio.Exists("~/.config/bat/config")
-		if err == nil && !exists {
+		if exists, err := localio.Exists("~/.config/bat/config"); err == nil && !exists {
 			if err = localio.EmbedFileCopy("~/.config/bat/config", batConfig); err != nil {
 				return err
 			}
