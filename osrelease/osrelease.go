@@ -26,7 +26,6 @@ func Read() (osrelease map[string]string, err error) {
 // ReadFile Similar to Read(), but takes the name of a file to load instead
 func ReadFile(filename string) (osrelease map[string]string, err error) {
 	osrelease = make(map[string]string)
-	err = nil
 
 	lines, err := parseFile(filename)
 	if err != nil {
