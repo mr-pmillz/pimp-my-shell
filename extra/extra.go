@@ -59,27 +59,27 @@ func InstallExtraPackages(osType string, dirs *localio.Directories, packages *lo
 		}
 		defer lsdLightTheme.Close()
 		// install cowsay
-		if err := localio.BrewInstallProgram("cowsay", "cowsay", packages); err != nil {
+		if err = localio.BrewInstallProgram("cowsay", "cowsay", packages); err != nil {
 			return err
 		}
 		// install gnu-sed because mac BSD sed doesn't work very good
-		if err := localio.BrewInstallProgram("gnu-sed", "gsed", packages); err != nil {
+		if err = localio.BrewInstallProgram("gnu-sed", "gsed", packages); err != nil {
 			return err
 		}
 		// install yamllint
-		if err := localio.BrewInstallProgram("yamllint", "yamllint", packages); err != nil {
+		if err = localio.BrewInstallProgram("yamllint", "yamllint", packages); err != nil {
 			return err
 		}
 		// install git-delta
-		if err := localio.BrewInstallProgram("git-delta", "delta", packages); err != nil {
+		if err = localio.BrewInstallProgram("git-delta", "delta", packages); err != nil {
 			return err
 		}
 		// install bat
-		if err := localio.BrewInstallProgram("bat", "bat", packages); err != nil {
+		if err = localio.BrewInstallProgram("bat", "bat", packages); err != nil {
 			return err
 		}
 		// setup bat config
-		if err := os.MkdirAll(fmt.Sprintf("%s/.config/bat", dirs.HomeDir), 0750); err != nil {
+		if err = os.MkdirAll(fmt.Sprintf("%s/.config/bat", dirs.HomeDir), 0750); err != nil {
 			return err
 		}
 		batConfig, err := extraConfigs.Open("templates/bat_config")
@@ -93,7 +93,7 @@ func InstallExtraPackages(osType string, dirs *localio.Directories, packages *lo
 		}
 		defer batConfig.Close()
 		// install fd
-		if err := localio.BrewInstallProgram("fd", "fd", packages); err != nil {
+		if err = localio.BrewInstallProgram("fd", "fd", packages); err != nil {
 			return err
 		}
 		// install fzf
@@ -111,28 +111,29 @@ func InstallExtraPackages(osType string, dirs *localio.Directories, packages *lo
 		}
 		// install pip for python3 https://bootstrap.pypa.io/get-pip.py and python requests module
 		if _, exists := localio.CommandExists("python3"); !exists {
-			if err := localio.BrewInstallProgram("python@3.11", "python3", packages); err != nil {
+			if err = localio.BrewInstallProgram("python@3.11", "python3", packages); err != nil {
 				return err
 			}
 		}
 		// download get-pip
 		if _, exists := localio.CommandExists("python3"); exists {
-			if err := localio.DownloadFile(fmt.Sprintf("%s/get-pip.py", dirs.HomeDir), "https://bootstrap.pypa.io/get-pip.py"); err != nil {
+			if err = localio.DownloadFile(fmt.Sprintf("%s/get-pip.py", dirs.HomeDir), "https://bootstrap.pypa.io/get-pip.py"); err != nil {
 				return err
 			}
-			if err := localio.RunCommandPipeOutput(fmt.Sprintf("cd %s && python3 get-pip.py || true", dirs.HomeDir)); err != nil {
+			if err = localio.RunCommandPipeOutput(fmt.Sprintf("cd %s && python3 get-pip.py || true", dirs.HomeDir)); err != nil {
 				return err
 			}
-			if err := localio.RunCommandPipeOutput("python3 -m pip install requests psutil --user || true"); err != nil {
-				return err
+			// install psutil
+			if err = localio.PipInstall([]string{"requests", "psutil"}); err != nil {
+				return localio.LogError(err)
 			}
 			// Shows cpu core temperatures in bpytop
-			if err := localio.BrewInstallProgram("hacker1024/hacker1024/coretemp", "coretemp", packages); err != nil {
+			if err = localio.BrewInstallProgram("hacker1024/hacker1024/coretemp", "coretemp", packages); err != nil {
 				return err
 			}
 			// install bpytop
-			if err := localio.RunCommandPipeOutput("python3 -m pip install bpytop --user || true"); err != nil {
-				return err
+			if err = localio.PipInstall([]string{"bpytop"}); err != nil {
+				return localio.LogError(err)
 			}
 		}
 
@@ -229,9 +230,9 @@ func InstallExtraPackages(osType string, dirs *localio.Directories, packages *lo
 			if err = localio.RunCommandPipeOutput(fmt.Sprintf("sudo dpkg --no-pager -i %s", debPackage)); err != nil {
 				return err
 			}
-			if err = localio.RunCommandPipeOutput("sudo apt-get -y -q install -f"); err != nil {
-				return err
-			}
+			// if err = localio.RunCommandPipeOutput("sudo apt-get -y -q install -f"); err != nil {
+			//	return err
+			// }
 		}
 
 		// download get-pip
@@ -242,20 +243,18 @@ func InstallExtraPackages(osType string, dirs *localio.Directories, packages *lo
 			if err := localio.RunCommandPipeOutput(fmt.Sprintf("cd %s && python3 get-pip.py || true", dirs.HomeDir)); err != nil {
 				return err
 			}
-			if err := localio.RunCommandPipeOutput("python3 -m pip install requests psutil --user || true"); err != nil {
-				return err
+			// install psutil
+			if err = localio.PipInstall([]string{"requests", "psutil"}); err != nil {
+				return localio.LogError(err)
 			}
 			// install bpytop
-			if err := localio.RunCommandPipeOutput("python3 -m pip install bpytop --user || true"); err != nil {
-				return err
+			if err = localio.PipInstall([]string{"bpytop"}); err != nil {
+				return localio.LogError(err)
 			}
 		}
 	}
-	if err := updateGitConfig(); err != nil {
-		return err
-	}
 
-	return nil
+	return updateGitConfig()
 }
 
 // updateGitConfig ...

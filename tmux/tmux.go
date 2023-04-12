@@ -133,9 +133,5 @@ func InstallOhMyTmux(osType string, dirs *localio.Directories, packages *localio
 		return err
 	}
 
-	if err = localio.RunCommandPipeOutput(fmt.Sprintf("cd %s && git clone https://github.com/tmux-plugins/tpm .tmux/plugins/tpm", dirs.HomeDir)); err != nil {
-		return err
-	}
-
-	return nil
+	return localio.RunCommandPipeOutput(fmt.Sprintf("cd %s && git clone https://github.com/tmux-plugins/tpm .tmux/plugins/tpm", dirs.HomeDir))
 }

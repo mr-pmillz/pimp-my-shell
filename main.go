@@ -112,11 +112,7 @@ func pimpMyShell(osType string, dirs *localio.Directories, installedPackages *lo
         "*$bd$$$$      '*$$$$$$$$$$$o+#"
              """"          """""""`)
 
-	if err := tmux.StartTMUX(); err != nil {
-		return err
-	}
-
-	return nil
+	return tmux.StartTMUX()
 }
 
 func main() {
@@ -128,7 +124,7 @@ func main() {
 	os := runtime.GOOS
 	switch os {
 	case "windows":
-		fmt.Println("[-] Doesn't work for Windows")
+		fmt.Println("[-] Doesn't work for Windows yet...")
 	case "darwin":
 		fmt.Println("[+] Pimping your Mac Terminal")
 		if err = macosx.InstallHomebrew(dirs); err != nil {

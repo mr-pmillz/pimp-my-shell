@@ -784,3 +784,71 @@ func TestGitClone(t *testing.T) {
 		}
 	})
 }
+
+func Test_parseVersionWithRegex(t *testing.T) {
+	type args struct {
+		versionString string
+		regx          string
+	}
+	tests := []struct {
+		name string
+		args args
+		want string
+	}{
+		{name: "Test Pip Version Parse", args: args{
+			versionString: "pip 23.0 from /usr/lib/python3/dist-packages/pip (python 3.11)",
+			regx:          `pip (\d+\.\d+)`,
+		}, want: "23.0"},
+		{name: "Test Python3 Version Parse", args: args{
+			versionString: "Python 3.11.2",
+			regx:          `Python (\d+\.\d+\.\d+)`,
+		}, want: "3.11.2"},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := parseVersionWithRegex(tt.args.versionString, tt.args.regx); got != tt.want {
+				t.Errorf("parseVersionWithRegex() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_versionGreaterOrEqual(t *testing.T) {
+	type args struct {
+		versionString    string
+		minVersionString string
+	}
+	tests := []struct {
+		name string
+		args args
+		want bool
+	}{
+		{name: "check if python3 version is greater than or equal to 3.11.0", args: args{
+			versionString:    "3.11.2",
+			minVersionString: "3.11.0",
+		}, want: true},
+		{name: "check if python3 version is greater than or equal to 3.11", args: args{
+			versionString:    "3.11.2",
+			minVersionString: "3.11",
+		}, want: true},
+		{name: "check if pip version is greater than or equal to 22.2.2", args: args{
+			versionString:    "23.0",
+			minVersionString: "22.2.2",
+		}, want: true},
+		{name: "2 check if pip version is greater than or equal to 22.2.2", args: args{
+			versionString:    "23.0.1",
+			minVersionString: "22.2.2",
+		}, want: true},
+		{name: "2 check if pip version is greater than or equal to 22.2.3", args: args{
+			versionString:    "22.2.2",
+			minVersionString: "22.2.3",
+		}, want: false},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := VersionGreaterOrEqual(tt.args.versionString, tt.args.minVersionString); got != tt.want {
+				t.Errorf("VersionGreaterOrEqual() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

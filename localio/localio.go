@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"bytes"
 	"context"
+	"errors"
 	"fmt"
 	"io"
 	"io/fs"
@@ -11,16 +12,21 @@ import (
 	"net/http"
 	"os"
 	"os/exec"
+	"os/signal"
 	"os/user"
 	"path"
 	"path/filepath"
+	"regexp"
 	"runtime"
+	"strconv"
 	"strings"
 	"time"
 
 	"github.com/go-git/go-git/v5"
 	gitex "github.com/go-git/go-git/v5/_examples"
 	"github.com/klauspost/cpuid/v2"
+	"github.com/projectdiscovery/gologger"
+	"github.com/projectdiscovery/gologger/levels"
 	"github.com/schollz/progressbar/v3"
 	"github.com/tidwall/gjson"
 )
@@ -170,10 +176,7 @@ func GetCPUType() string {
 // DownloadAndInstallLatestVersionOfGolang Only for linux x86_64. Mac uses homebrew
 func DownloadAndInstallLatestVersionOfGolang(homeDir string, packages *InstalledPackages) error {
 	if CorrectOS(linux) {
-		if err := AptInstall(packages, "golang"); err != nil {
-			return err
-		}
-		return nil
+		return AptInstall(packages, "golang")
 	}
 	req, err := http.NewRequest("GET", "https://golang.org/VERSION?m=text", nil)
 	if err != nil {
@@ -313,11 +316,7 @@ func EmbedFileStringPrependToDest(data []byte, dest string) error {
 		return err
 	}
 
-	if err = NewRecord(fileDest).PrependStringToFile(string(data)); err != nil {
-		return err
-	}
-
-	return nil
+	return NewRecord(fileDest).PrependStringToFile(string(data))
 }
 
 // Record is a type for prepending string text to a file
@@ -389,11 +388,7 @@ func (r *Record) PrependStringToFile(content string) error {
 		}
 	}
 
-	if err = writer.Flush(); err != nil {
-		return err
-	}
-
-	return nil
+	return writer.Flush()
 }
 
 // ExecCMD Execute a command
@@ -414,42 +409,76 @@ func ExecCMD(command string) (string, error) {
 	return string(out), nil
 }
 
-// RunCommandPipeOutput ...
+// TimeTrack ...
+func TimeTrack(start time.Time, name string) {
+	elapsed := time.Since(start)
+	Infof("%s \ntook: %s\n", name, elapsed)
+}
+
+// RunCommandPipeOutput runs a bash command and pipes the output to stdout and stderr in realtime
+//
+//nolint:gocognit
 func RunCommandPipeOutput(command string) error {
-	fmt.Printf("[+] %s\n", command)
+	defer TimeTrack(time.Now(), command)
+	timeout := 120
+
 	bashPath, err := exec.LookPath("bash")
 	if err != nil {
-		return err
+		return LogError(err)
 	}
-
-	timeout := 60
 
 	var cancel context.CancelFunc
 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(timeout)*time.Minute)
 	defer cancel()
 
 	cmd := exec.CommandContext(ctx, bashPath, "-c", command)
-	stdout, err := cmd.StdoutPipe()
+
+	stdoutPipe, err := cmd.StdoutPipe()
 	if err != nil {
-		return err
+		return LogError(err)
+	}
+	stderrPipe, err := cmd.StderrPipe()
+	if err != nil {
+		return LogError(err)
 	}
 
-	stderr, err := cmd.StderrPipe()
-	if err != nil {
-		return err
-	}
+	// Start goroutines for reading command output and colorizing it.
+	stdoutReader := bufio.NewReader(stdoutPipe)
+	stderrReader := bufio.NewReader(stderrPipe)
 
-	errScanner := bufio.NewScanner(stderr)
 	go func() {
-		for errScanner.Scan() {
-			fmt.Printf("%s\n", errScanner.Text())
+		for {
+			line, _, err := stdoutReader.ReadLine()
+			if err != nil {
+				if !errors.Is(err, io.EOF) {
+					LogWarningf("Error reading stdout: %v", err)
+				}
+				break
+			}
+			if _, err = os.Stdout.Write(line); err != nil {
+				return
+			}
+			if _, err = os.Stdout.Write([]byte{'\n'}); err != nil {
+				return
+			}
 		}
 	}()
 
-	scanner := bufio.NewScanner(stdout)
 	go func() {
-		for scanner.Scan() {
-			fmt.Printf("%s\n", scanner.Text())
+		for {
+			line, _, err := stderrReader.ReadLine()
+			if err != nil {
+				if !errors.Is(err, io.EOF) {
+					LogWarningf("Error reading stdout: %v", err)
+				}
+				break
+			}
+			if _, err = os.Stderr.Write(line); err != nil {
+				return
+			}
+			if _, err = os.Stderr.Write([]byte{'\n'}); err != nil {
+				return
+			}
 		}
 	}()
 
@@ -457,12 +486,35 @@ func RunCommandPipeOutput(command string) error {
 	cmd.Env = append(cmd.Env, "MONO_GAC_PREFIX=\"/usr/local\"")
 	cmd.Env = append(cmd.Env, "DEBIAN_FRONTEND=noninteractive")
 	if err = cmd.Start(); err != nil {
-		return err
+		return LogError(err)
 	}
 
+	// Create a channel to receive the signal interrupt
+	interrupt := make(chan os.Signal, 1)
+	signal.Notify(interrupt, os.Interrupt)
+
+	// Use a goroutine to wait for the signal interrupt
+	go func() {
+		<-interrupt
+		LogWarningf("[!] CTRL^C Detected. Stopping the current running command and exiting...\n%s", command)
+		cancel() // Cancel the context
+		// Wait for the command to finish before exiting
+		if err = cmd.Wait(); err != nil {
+			os.Exit(0)
+		}
+		os.Exit(1)
+	}()
+
+	// Wait for the command to finish
 	if err = cmd.Wait(); err != nil {
+		// If timeout exceeded, log a warning and return a timeout error
+		if errors.Is(ctx.Err(), context.DeadlineExceeded) {
+			timeoutMsg := fmt.Sprintf("Timeout exceeded (%d minutes) for command: %s", timeout, command)
+			LogWarningf(timeoutMsg)
+			return errors.New(timeoutMsg)
+		}
 		_, _ = fmt.Fprintf(os.Stderr, "Error waiting for Cmd %s\n", err)
-		return err
+		return LogError(err)
 	}
 
 	return nil
@@ -475,11 +527,7 @@ func StartTmuxSession() error {
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
-	if err := cmd.Run(); err != nil {
-		return err
-	}
-
-	return nil
+	return cmd.Run()
 }
 
 // Directories ...
@@ -534,10 +582,7 @@ func BrewInstallProgram(brewName, binaryName string, packages *InstalledPackages
 	}
 	log.Printf("[+] Installing %s\nbrew install %s\n", binaryName, brewName)
 	command := fmt.Sprintf("brew install %s || true", brewName)
-	if err := RunCommandPipeOutput(command); err != nil {
-		return err
-	}
-	return nil
+	return RunCommandPipeOutput(command)
 }
 
 // BrewTap ...
@@ -550,10 +595,7 @@ func BrewTap(brewTap string, packages *InstalledPackages) error {
 	}
 	log.Printf("[+] Tapping %s\nbrew tap %s\n", brewTap, brewTap)
 	command := fmt.Sprintf("brew tap %s", brewTap)
-	if err := RunCommandPipeOutput(command); err != nil {
-		return err
-	}
-	return nil
+	return RunCommandPipeOutput(command)
 }
 
 // BrewInstallCaskProgram ...
@@ -566,10 +608,7 @@ func BrewInstallCaskProgram(brewName, brewFullName string, packages *InstalledPa
 	}
 	log.Printf("[+] Installing %s\nbrew install --cask %s\n", brewName, brewName)
 	command := fmt.Sprintf("brew install --cask %s", brewName)
-	if err := RunCommandPipeOutput(command); err != nil {
-		return err
-	}
-	return nil
+	return RunCommandPipeOutput(command)
 }
 
 // InstalledPackages ...
@@ -614,9 +653,8 @@ func AptInstall(packages *InstalledPackages, aptName ...string) error {
 	for _, name := range aptName {
 		if Contains(packages.AptInstalledPackages.Name, name) {
 			continue
-		} else {
-			notInstalled = append(notInstalled, name)
 		}
+		notInstalled = append(notInstalled, name)
 	}
 	if len(notInstalled) >= 1 {
 		packagesToInstall := strings.Join(notInstalled, " ")
@@ -662,4 +700,209 @@ func NewBrewInstalled() (*BrewInstalled, error) {
 	}
 
 	return brewInfo, nil
+}
+
+// LogWarningf logs a warning to stdout
+func LogWarningf(format string, args ...interface{}) {
+	gologger.DefaultLogger.SetMaxLevel(levels.LevelWarning)
+	gologger.Warning().Label("WARN").Msgf(format, args...)
+}
+
+// Infof ...
+func Infof(format string, args ...interface{}) {
+	gologger.DefaultLogger.SetMaxLevel(levels.LevelInfo)
+	gologger.Info().Label("INFO").Msgf(format, args...)
+}
+
+// LogError ...
+func LogError(err error) error {
+	pc, file, line, ok := runtime.Caller(1)
+	if !ok {
+		LogWarningf("Failed to retrieve Caller information")
+	}
+	fn := runtime.FuncForPC(pc).Name()
+	gologger.DefaultLogger.SetMaxLevel(levels.LevelError)
+	gologger.Error().Msgf("Error in function %s, called from %s:%d:\n %v", fn, file, line, err)
+	return err
+}
+
+type PipInstalled struct {
+	Name     []string
+	Versions PythonVersions
+}
+
+type PythonVersions struct {
+	Python3Version string
+	PipVersion     string
+}
+
+// PipInstall ...
+func PipInstall(packagesToInstall []string) error {
+	installedPipPackages, err := NewPipInstalled()
+	if err != nil {
+		return LogError(err)
+	}
+
+	if err = InstallPipPackages(installedPipPackages, packagesToInstall...); err != nil {
+		return LogError(err)
+	}
+	return nil
+}
+
+// InstallPipPackages ...
+func InstallPipPackages(installedPackages *PipInstalled, pkgName ...string) error {
+	var notInstalled []string
+	for _, name := range pkgName {
+		if !Contains(installedPackages.Name, name) {
+			notInstalled = append(notInstalled, name)
+		}
+	}
+	if len(notInstalled) >= 1 {
+		packagesToInstall := strings.Join(notInstalled, " ")
+		if IsRoot() {
+			command := fmt.Sprintf("python3 -m pip install %s || true", packagesToInstall)
+			if err := RunCommandPipeOutput(command); err != nil {
+				return LogError(err)
+			}
+		} else {
+			var cmd string
+			if VersionGreaterOrEqual(installedPackages.Versions.Python3Version, "3.11.0") || VersionGreaterOrEqual(installedPackages.Versions.PipVersion, "22.2.3") {
+				cmd = fmt.Sprintf("python3 -m pip install %s --break-system-packages || true", packagesToInstall)
+			} else {
+				cmd = fmt.Sprintf("python3 -m pip install %s --user || true", packagesToInstall)
+			}
+			if err := RunCommandPipeOutput(cmd); err != nil {
+				return LogError(err)
+			}
+		}
+	}
+
+	return nil
+}
+
+// IsRoot checks if the current user is root or not
+func IsRoot() bool {
+	currentUser, err := user.Current()
+	if err != nil {
+		log.Fatalf("[isRoot] Unable to get current user: %s", err)
+	}
+	return currentUser.Username == "root"
+}
+
+// NewPipInstalled returns a slice of all the installed python3 pip packages
+func NewPipInstalled() (*PipInstalled, error) {
+	pip := &PipInstalled{}
+	cmd := "python3 -m pip list | awk '{print $1}'"
+	pipPackages, err := ExecCMD(cmd)
+	if err != nil {
+		return nil, LogError(err)
+	}
+	installedList := strings.Split(pipPackages, "\n")
+	pip.Name = append(pip.Name, installedList...)
+	v, err := GetPythonAndPipVersion()
+	if err != nil {
+		return nil, LogError(err)
+	}
+	pip.Versions.PipVersion = v.PipVersion
+	pip.Versions.Python3Version = v.Python3Version
+
+	return pip, nil
+}
+
+// GetPythonAndPipVersion ...
+func GetPythonAndPipVersion() (*PythonVersions, error) {
+	v := &PythonVersions{}
+
+	pythonVersionCMD := "python3 --version"
+	pythonVersion, err := ExecCMD(pythonVersionCMD)
+	if err != nil {
+		return nil, LogError(err)
+	}
+
+	pythonVersionStr := parseVersionWithRegex(pythonVersion, `Python (\d+\.\d+\.\d+)`)
+	v.Python3Version = pythonVersionStr
+
+	pipVersionCMD := "python3 -m pip -V"
+	pipVersion, err := ExecCMD(pipVersionCMD)
+	if err != nil {
+		return nil, LogError(err)
+	}
+
+	pipVersionStr := parseVersionWithRegex(pipVersion, `pip (\d+\.\d+)`)
+	v.PipVersion = pipVersionStr
+
+	return v, nil
+}
+
+// parseVersionWithRegex ...
+func parseVersionWithRegex(versionString, regx string) string {
+	re := regexp.MustCompile(regx)
+	match := re.FindStringSubmatch(versionString)
+	if len(match) > 1 {
+		return match[1]
+	}
+	return ""
+}
+
+type Version struct {
+	Major int
+	Minor int
+	Patch int
+}
+
+// VersionGreaterOrEqual ...
+func VersionGreaterOrEqual(versionString string, minVersionString string) bool {
+	version, err := parseVersion(versionString)
+	if err != nil {
+		return false
+	}
+	minVersion, err := parseVersion(minVersionString)
+	if err != nil {
+		return false
+	}
+
+	// Compare the major version numbers
+	if version.Major > minVersion.Major {
+		return true
+	} else if version.Major < minVersion.Major {
+		return false
+	}
+
+	// Compare the minor version numbers
+	if version.Minor > minVersion.Minor {
+		return true
+	} else if version.Minor < minVersion.Minor {
+		return false
+	}
+
+	// Compare the patch version numbers
+	if version.Patch >= minVersion.Patch {
+		return true
+	}
+	return false
+}
+
+// parseVersion ...
+func parseVersion(versionString string) (*Version, error) {
+	re := regexp.MustCompile(`(\d+)\.(\d+)(?:\.(\d+))?`)
+	match := re.FindStringSubmatch(versionString)
+	if len(match) < 3 {
+		return nil, fmt.Errorf("invalid version string")
+	}
+	major, err := strconv.Atoi(match[1])
+	if err != nil {
+		return nil, err
+	}
+	minor, err := strconv.Atoi(match[2])
+	if err != nil {
+		return nil, err
+	}
+	var patch int
+	if len(match) == 4 && match[3] != "" {
+		patch, err = strconv.Atoi(match[3])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return &Version{Major: major, Minor: minor, Patch: patch}, nil
 }

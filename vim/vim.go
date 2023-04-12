@@ -123,11 +123,8 @@ func InstallVimPlugins(osType string, dirs *localio.Directories) error {
 	if err = localio.RunCommandPipeOutput("vim +GoInstallBinaries +qa || true"); err != nil {
 		return err
 	}
-	if err = localio.RunCommandPipeOutput("reset || true"); err != nil {
-		return err
-	}
 
-	return nil
+	return localio.RunCommandPipeOutput("reset || true")
 }
 
 // InstallVimAwesome ...
@@ -240,9 +237,6 @@ func InstallVimAwesome(osType string, dirs *localio.Directories, packages *local
 			return err
 		}
 	}
-	if err := InstallVimPlugins(osType, dirs); err != nil {
-		return err
-	}
 
-	return nil
+	return InstallVimPlugins(osType, dirs)
 }

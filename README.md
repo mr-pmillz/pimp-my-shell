@@ -1,6 +1,5 @@
 # Pimp-My-Shell
 
-[![Donate](https://img.shields.io/badge/Donate-PayPal-yellow.svg)](https://www.paypal.com/donate?business=YR6C4WB5CDZZL&no_recurring=0&item_name=contribute+to+open+source&currency_code=USD)
 [![Go Report Card](https://goreportcard.com/badge/github.com/mr-pmillz/pimp-my-shell)](https://goreportcard.com/report/github.com/mr-pmillz/pimp-my-shell)
 ![GitHub all releases](https://img.shields.io/github/downloads/mr-pmillz/pimp-my-shell/total?style=social)
 ![GitHub repo size](https://img.shields.io/github/repo-size/mr-pmillz/pimp-my-shell?style=plastic)
@@ -9,7 +8,6 @@
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/mr-pmillz/pimp-my-shell?style=plastic)
 [![Twitter](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2Fmr-pmillz%2Fpimp-my-shell)](https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fmr-pmillz%2Fpimp-my-shell)
 [![CI](https://github.com/mr-pmillz/pimp-my-shell/actions/workflows/go.yml/badge.svg)](https://github.com/mr-pmillz/pimp-my-shell/actions/workflows/go.yml)
-[![codecov](https://codecov.io/gh/mr-pmillz/pimp-my-shell/branch/master/graph/badge.svg?token=8NOCNMK0OE)](https://codecov.io/gh/mr-pmillz/pimp-my-shell)
 
 Table of Contents
 =================

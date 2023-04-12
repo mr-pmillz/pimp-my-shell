@@ -196,9 +196,5 @@ func InstallOhMyZsh(osType string, dirs *localio.Directories) error {
 		}
 	}
 
-	if err = updateZSHPlugins(fmt.Sprintf("%s/.zshrc", dirs.HomeDir)); err != nil {
-		return err
-	}
-
-	return nil
+	return updateZSHPlugins(fmt.Sprintf("%s/.zshrc", dirs.HomeDir))
 }
