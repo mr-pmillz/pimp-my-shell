@@ -1,8 +1,4 @@
 # zsh-syntax-highlighting colors
-ZSH_HIGHLIGHT_HIGHLIGHTERS=(
-    main
-    brackets
-)
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)
 ZSH_HIGHLIGHT_STYLES[default]=none
 ZSH_HIGHLIGHT_STYLES[unknown-token]=fg=white,underline
