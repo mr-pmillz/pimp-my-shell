@@ -258,8 +258,8 @@ bind '"' split-window -c "#{pane_current_path}"
 bind % split-window -h -c "#{pane_current_path}"
 bind c new-window -c "#{pane_current_path}"
 unbind -T copy-mode-vi Enter
-bind-key -T copy-mode-vi Enter send-keys -X copy-pipe-and-cancel "xclip -selection c -r"
-bind-key -T copy-mode-vi MouseDragEnd1Pane send-keys -X copy-pipe-and-cancel "xclip -in -selection c -r"
+bind-key -T copy-mode-vi Enter send-keys -X copy-pipe-and-cancel "xclip -i -sel p -f | xclip -i -sel c"
+bind-key -T copy-mode-vi MouseDragEnd1Pane send-keys -X copy-pipe-and-cancel "xclip -i -sel p -f | xclip -i -sel c"
 set -g activity-action other
 set -g assume-paste-time 1
 set -g base-index 0
