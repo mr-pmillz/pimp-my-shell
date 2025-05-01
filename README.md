@@ -9,6 +9,8 @@
 [![Twitter](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2Fmr-pmillz%2Fpimp-my-shell)](https://twitter.com/intent/tweet?text=Wow:&url=https%3A%2F%2Fgithub.com%2Fmr-pmillz%2Fpimp-my-shell)
 [![CI](https://github.com/mr-pmillz/pimp-my-shell/actions/workflows/go.yml/badge.svg)](https://github.com/mr-pmillz/pimp-my-shell/actions/workflows/go.yml)
 
+:no_entry: [DEPRECATED] This repository is no longer maintained. Pimp-My-Shell has been ported to an Ansible Role that is currently private. It will be made public sometime in 2025.
+
 Table of Contents
 =================
 
